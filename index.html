@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>K4MILLZ</title>
 <link rel="icon" type="image/x-icon" href="K4M.ico">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Playfair+Display&family=Quicksand&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
 /* ===== GLOBAL ===== */
@@ -28,6 +29,7 @@ nav{
   padding:12px;
   border-bottom:2px solid #d63384;
   z-index:100;
+  display:none; /* on masque la nav sur la landing */
 }
 nav a{
   margin:0 20px;
@@ -40,41 +42,64 @@ nav a:hover{
   color:#4d004d;
 }
 
-/* ===== HEADER ===== */
-header{
-  padding:120px 20px 80px;
-  position:relative;
+/* ===== LANDING PAGE ===== */
+#landing{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  padding:20px;
 }
-h1{
+#landing h1{
   font-size:80px;
   letter-spacing:8px;
   color:#d63384;
   font-family:'Playfair Display',serif;
-  display:inline-block;
   position:relative;
+  margin-bottom:20px;
 }
-h1::after{
+#landing h1::after{
   content:"";
   position:absolute;
   top:-10px;
   right:-50px;
   width:50px;
   height:50px;
-  background-image:url('uwusite.png'); /* nœud */
+  background-image:url('uwusite.png');
   background-size:contain;
   background-repeat:no-repeat;
 }
-.tagline{
+#landing p{
   font-size:28px;
   font-style:italic;
   color:#4d004d;
+  margin-bottom:40px;
+}
+.landing-button{
+  display:block;
+  background:#d63384;
+  color:white;
+  border:none;
+  border-radius:12px;
+  padding:15px 40px;
+  font-size:22px;
+  margin:15px;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+.landing-button:hover{
+  transform:scale(1.05);
+  background:#4d004d;
 }
 
 /* ===== SECTIONS ===== */
 .section{
-  padding:60px 20px;
+  padding:80px 20px;
   max-width:1100px;
   margin:auto;
+  display:none; /* masquées au départ */
 }
 .section h2{
   font-size:40px;
@@ -87,7 +112,7 @@ h1::after{
 .portfolio{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:30px; /* plus d'espace entre images */
+  gap:30px;
   justify-items:center;
 }
 .portfolio img{
@@ -117,25 +142,6 @@ h1::after{
 .portfolio img:hover::after{
   opacity:1;
 }
-
-/* ===== ANIMATIONS FLOTANTES ===== */
-@keyframes float{
-  0%{transform:translateY(0);}
-  50%{transform:translateY(-10px);}
-  100%{transform:translateY(0);}
-}
-.float-heart, .float-bow, .float-star, .float-palette, .float-paint{
-  position:absolute;
-  animation:float 5s ease-in-out infinite;
-  pointer-events:none;
-}
-
-/* Couleurs spécifiques */
-.float-heart{color:#ff99cc; font-size:16px;}
-.float-bow{color:#ff66cc; font-size:16px;}
-.float-star{color:#FFD700; font-size:16px;}
-.float-palette{color:#ffcc66; font-size:16px;}
-.float-paint{color:#ff9966; font-size:16px;}
 
 /* ===== CITATION & SIGNATURE ===== */
 .citation{
@@ -170,40 +176,62 @@ h1::after{
 
 /* ===== RESPONSIVE ===== */
 @media (max-width:768px){
-  h1{font-size:60px; letter-spacing:6px;}
-  .tagline{font-size:22px;}
+  #landing h1{font-size:60px; letter-spacing:6px;}
+  #landing p{font-size:22px;}
   .section h2{font-size:32px;}
   .citation{font-size:28px;}
   .signature{font-size:18px;}
   .contact a{font-size:18px;}
   .portfolio img{max-width:180px;}
+  .landing-button{font-size:20px; padding:12px 30px;}
 }
 
 @media (max-width:480px){
-  h1{font-size:48px; letter-spacing:4px;}
-  .tagline{font-size:18px;}
+  #landing h1{font-size:48px; letter-spacing:4px;}
+  #landing p{font-size:18px;}
   .section h2{font-size:24px;}
   .citation{font-size:22px;}
   .signature{font-size:16px;}
   .contact a{font-size:16px;}
   .portfolio img{max-width:140px;}
+  .landing-button{font-size:18px; padding:10px 25px;}
 }
+
+/* ===== ANIMATIONS FLOTANTES ===== */
+@keyframes float{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-10px);}
+  100%{transform:translateY(0);}
+}
+.float-heart, .float-bow, .float-star, .float-palette, .float-paint{
+  position:absolute;
+  animation:float 5s ease-in-out infinite;
+  pointer-events:none;
+}
+.float-heart{color:#ff99cc; font-size:16px;}
+.float-bow{color:#ff66cc; font-size:16px;}
+.float-star{color:#FFD700; font-size:16px;}
+.float-palette{color:#ffcc66; font-size:16px;}
+.float-paint{color:#ff9966; font-size:16px;}
 </style>
 </head>
 <body>
 
-<!-- Navigation -->
+<!-- LANDING PAGE -->
+<div id="landing">
+  <h1>K4MILLZ</h1>
+  <p>L’art en image</p>
+  <button class="landing-button" data-target="about">À propos</button>
+  <button class="landing-button" data-target="portfolio">Portfolio</button>
+  <button class="landing-button" data-target="contact">Contact</button>
+</div>
+
+<!-- NAVIGATION -->
 <nav>
   <a href="#about">À propos</a>
   <a href="#portfolio">Portfolio</a>
   <a href="#contact">Contact</a>
 </nav>
-
-<!-- HEADER -->
-<header>
-  <h1>K4MILLZ</h1>
-  <p class="tagline">L’ART EN IMAGE</p>
-</header>
 
 <!-- À propos -->
 <section id="about" class="section">
@@ -212,6 +240,8 @@ h1::after{
 <p>Je suis passionnée par le monde de l'art et tout ce qui touche à la créativité.</p>
 <p>Si vous voulez suivre mon univers, je vous invite à venir sur mon compte Instagram en bas de la page.</p>
 <p>Merci de me soutenir chaque jour. Au revoir et n'oubliez pas, explorez votre créativité.</p>
+<p class="citation">Le meilleur des arts, c'est celui qu'on a au fond de soi.</p>
+<p class="signature">— K4MILLZ</p>
 </section>
 
 <!-- Portfolio -->
@@ -234,23 +264,18 @@ h1::after{
 </div>
 </section>
 
-<!-- Citation -->
-<p class="citation">
-Le meilleur des arts, c'est celui qu'on a au fond de soi.
-</p>
-<p class="signature">
-— K4MILLZ
-</p>
-
 <!-- Contact -->
-<div id="contact" class="contact">
+<section id="contact" class="section">
+<h2>Contact</h2>
+<div class="contact">
 <a href="mailto:k4millzpro@gmail.com">k4millzpro@gmail.com</a>
 <a href="https://www.instagram.com/k4mill_z/" target="_blank">📸 Instagram : @k4mill_z</a>
 </div>
+</section>
 
 <!-- Footer note -->
 <p class="footer-note">
-Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles, ou des photos prises par mes amis, mais toujours avec moi ou de moi. La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
+Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles. La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
 </p>
 
 <!-- Animations flottantes -->
@@ -282,6 +307,47 @@ function createAnim(elType){
 for(let i=0;i<80;i++){
   createAnim();
 }
+
+// ===== Navigation entre landing et sections =====
+const buttons = document.querySelectorAll('.landing-button');
+const sections = document.querySelectorAll('.section');
+const nav = document.querySelector('nav');
+const landing = document.getElementById('landing');
+
+buttons.forEach(btn => {
+  btn.addEventListener('click', ()=>{
+    const target = btn.getAttribute('data-target');
+    // Masquer landing
+    landing.style.display = 'none';
+    // Afficher nav
+    nav.style.display = 'block';
+    // Afficher section cible
+    sections.forEach(sec => {
+      if(sec.id === target){
+        sec.style.display = 'block';
+        sec.scrollIntoView({behavior:'smooth'});
+      } else {
+        sec.style.display = 'none';
+      }
+    });
+  });
+});
+
+// Affichage via nav
+nav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const target = link.getAttribute('href').substring(1);
+    sections.forEach(sec => {
+      if(sec.id === target){
+        sec.style.display = 'block';
+        sec.scrollIntoView({behavior:'smooth'});
+      } else {
+        sec.style.display = 'none';
+      }
+    });
+  });
+});
 </script>
 
 </body>
