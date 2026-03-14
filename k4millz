@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mon Portfolio Photo</title>
+</head>
+
+<body>
+
+<h1>Camille Photo</h1>
+
+<p>Photographe - portraits et paysages</p>
+
+<h2>Mes photos</h2>
+
+<img src="photo1.jpg" width="300">
+<img src="photo2.jpg" width="300">
+
+<h2>Contact</h2>
+
+<p>Email : tonmail@email.com</p>
+<p>Instagram : @toncompte</p>
+
+</body>
+</html>
