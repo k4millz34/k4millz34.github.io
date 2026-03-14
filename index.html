@@ -18,7 +18,38 @@ body{
   overflow-x:hidden;
   scroll-behavior:smooth;
   position:relative;
-  transition:background 0.8s, color 0.8s;
+  transition: background 0.8s, color 0.8s, filter 1s;
+}
+
+/* DARK MODE */
+body.dark-mode{
+  background:#1a1a1a;
+  color:#ffe6f0;
+}
+body.dark-mode nav{
+  background:#330033dd;
+  border-bottom:2px solid #ff66cc;
+}
+body.dark-mode nav a{
+  color:#ff66cc;
+}
+body.dark-mode nav a:hover{
+  color:#ff99cc;
+}
+body.dark-mode .landing-button, body.dark-mode #filter-toggle, body.dark-mode #dark-toggle{
+  background:#4d004d;
+  color:#ffe6f0;
+}
+body.dark-mode .landing-button:hover, body.dark-mode #filter-toggle:hover, body.dark-mode #dark-toggle:hover{
+  background:#ff66cc;
+  color:#1a1a1a;
+  box-shadow:0 0 20px #ff99cc,0 0 40px #ff66cc;
+}
+body.dark-mode .section h2{
+  color:#ff66cc;
+}
+body.dark-mode .contact a{
+  color:#ff99cc;
 }
 
 /* NAVIGATION */
@@ -109,10 +140,10 @@ nav a:hover{
 }
 
 /* Dark mode toggle */
-#dark-toggle{
+#dark-toggle, #filter-toggle{
   margin-top:20px;
   cursor:pointer;
-  font-size:20px;
+  font-size:18px;
   padding:10px 20px;
   border-radius:12px;
   border:none;
@@ -121,10 +152,10 @@ nav a:hover{
   box-shadow:0 5px 15px rgba(0,0,0,0.2);
   transition:0.3s;
 }
-#dark-toggle:hover{
+#dark-toggle:hover, #filter-toggle:hover{
   transform:scale(1.1);
   background:#4d004d;
-  box-shadow:0 0 25px #ff66cc, 0 0 50px #ff99cc;
+  box-shadow:0 0 25px #ff66cc,0 0 50px #ff99cc;
 }
 
 /* SECTIONS */
@@ -244,22 +275,35 @@ nav a:hover{
   .landing-button{font-size:18px; padding:10px 25px;}
 }
 
-/* ANIMATIONS FLOTANTES */
+/* ANIMATIONS FLOTANTES SUBTILES */
 @keyframes float{
   0%{transform:translateY(0);}
-  50%{transform:translateY(-10px);}
+  50%{transform:translateY(-8px);}
   100%{transform:translateY(0);}
 }
 .float-heart, .float-bow, .float-star, .float-palette, .float-paint{
   position:absolute;
   animation:float 5s ease-in-out infinite;
   pointer-events:none;
+  opacity:0.3;
+  font-size:14px;
 }
-.float-heart{color:#ff99cc; font-size:16px;}
-.float-bow{color:#ff66cc; font-size:16px;}
-.float-star{color:#FFD700; font-size:16px;}
-.float-palette{color:#ffcc66; font-size:16px;}
-.float-paint{color:#ff9966; font-size:16px;}
+.float-heart{color:#ff99cc;}
+.float-bow{color:#ff66cc;}
+.float-star{color:#FFD700;}
+.float-palette{color:#ffcc66;}
+.float-paint{color:#ff9966;}
+
+/* Micro animations au scroll */
+.section-element{
+  opacity:0;
+  transform:translateY(20px);
+  transition:all 0.8s ease-out;
+}
+.section-element.visible{
+  opacity:1;
+  transform:translateY(0);
+}
 </style>
 </head>
 <body>
@@ -274,14 +318,15 @@ nav a:hover{
     <button class="landing-button" data-target="contact">Contact</button>
   </div>
   <button id="dark-toggle">Mode Dark / Light</button>
+  <button id="filter-toggle">Filtre artistique</button>
 </div>
 
 <!-- NAVIGATION -->
 <nav>
-  <a href="#" data-target="landing">Accueil</a>
-  <a href="#about" data-target="about">À propos</a>
-  <a href="#portfolio" data-target="portfolio">Portfolio</a>
-  <a href="#contact" data-target="contact">Contact</a>
+  <a href="#" class="nav-link" data-target="landing">Accueil</a>
+  <a href="#" class="nav-link" data-target="about">À propos</a>
+  <a href="#" class="nav-link" data-target="portfolio">Portfolio</a>
+  <a href="#" class="nav-link" data-target="contact">Contact</a>
 </nav>
 
 <!-- À propos -->
@@ -290,9 +335,7 @@ nav a:hover{
 <p>Bonjour, je m'appelle Camille, j'ai 14 ans et je suis une jeune artiste photographe.</p>
 <p>Je suis passionnée par le monde de l'art et tout ce qui touche à la créativité.</p>
 <p>Si vous voulez suivre mon univers, je vous invite à venir sur mon compte Instagram en bas de la page.</p>
-<p>Merci de me soutenir chaque jour. Explorez votre créativité !</p>
-<p class="citation">Le meilleur des arts, c'est celui qu'on a au fond de soi.</p>
-<p class="signature">— K4MILLZ</p>
+<p>Merci de me soutenir chaque jour. Au revoir et n'oubliez pas, explorez votre créativité.</p>
 </section>
 
 <!-- Portfolio -->
@@ -315,22 +358,98 @@ nav a:hover{
 </div>
 </section>
 
+<!-- Citation -->
+<p class="citation">Le meilleur des arts, c'est celui qu'on a au fond de soi.</p>
+<p class="signature">— K4MILLZ</p>
+
 <!-- Contact -->
-<section id="contact" class="section">
-<h2>Contact</h2>
-<div class="contact">
+<div id="contact" class="contact section">
 <a href="mailto:k4millzpro@gmail.com">k4millzpro@gmail.com</a>
 <a href="https://www.instagram.com/k4mill_z/" target="_blank">📸 Instagram : @k4mill_z</a>
 </div>
-</section>
 
-<!-- Footer exact -->
+<!-- Footer note -->
 <p class="footer-note">
 Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles, ou des photos prises par mes amis, mais toujours avec moi ou de moi. La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
 </p>
 
+<!-- Micro pop audio -->
+<audio id="click-sound" src="micro-pop.mp3" preload="auto"></audio>
+
 <script>
-/* Emoji flottants sur côtés (moins nombreux) */
+// ================= NAVIGATION =================
+const sections = document.querySelectorAll('.section');
+const landing = document.getElementById('landing');
+const nav = document.querySelector('nav');
+
+function showSection(id){
+  if(id === 'landing'){
+    landing.style.display = 'flex';
+    nav.style.display = 'none';
+    sections.forEach(s=>s.style.display='none');
+  } else {
+    landing.style.display='none';
+    nav.style.display='flex';
+    sections.forEach(s=>{
+      s.style.display = (s.id===id)?'block':'none';
+      setTimeout(()=>s.classList.add('visible'),50);
+      s.querySelectorAll('h2, p, .portfolio img').forEach(el=>{
+        el.classList.add('section-element');
+      });
+    });
+  }
+}
+
+// Landing buttons
+document.querySelectorAll('.landing-button').forEach(btn=>{
+  btn.addEventListener('click', ()=> showSection(btn.dataset.target));
+});
+
+// Nav links
+document.querySelectorAll('.nav-link').forEach(link=>{
+  link.addEventListener('click', e=>{
+    e.preventDefault();
+    showSection(link.dataset.target);
+  });
+});
+
+// ================= DARK MODE =================
+document.getElementById('dark-toggle').addEventListener('click', ()=>{
+  document.body.classList.toggle('dark-mode');
+});
+
+// ================= FILTER ARTISTIQUE =================
+document.getElementById('filter-toggle').addEventListener('click', ()=>{
+  document.body.classList.toggle('filter-active');
+});
+
+// ================= MICRO POP =================
+const interactiveButtons = document.querySelectorAll('.landing-button, #dark-toggle, #filter-toggle, nav a');
+interactiveButtons.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const sound = document.getElementById('click-sound');
+    sound.volume = 0.05;
+    sound.currentTime=0;
+    sound.play();
+    btn.style.transform='scale(1.02)';
+    setTimeout(()=>{btn.style.transform='scale(1)';},200);
+  });
+});
+
+// ================= ANIMATIONS AU SCROLL =================
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+},{threshold:0.2});
+
+document.querySelectorAll('.section h2, .section p, .portfolio img').forEach(el=>{
+  observer.observe(el);
+});
+
+// ================= ANIMATIONS FLOTANTES SUBTILES =================
 const animTypes = [
   {char:'❤', class:'float-heart', color:'#ff99cc'},
   {char:'🎀', class:'float-bow', color:'#ff66cc'},
@@ -338,82 +457,24 @@ const animTypes = [
   {char:'🎨', class:'float-palette', color:'#ffcc66'},
   {char:'🖌️', class:'float-paint', color:'#ff9966'}
 ];
-function createAnim(){
+
+function createAnim(elType){
   const el = document.createElement('div');
   const type = animTypes[Math.floor(Math.random()*animTypes.length)];
   el.className = type.class;
   el.innerHTML = type.char;
-  el.style.position = 'absolute';
-  el.style.left = Math.random()<0.5 ? Math.random()*20 + '%' : 80 + Math.random()*20 + '%';
-  el.style.top = Math.random()*100 + '%';
-  el.style.fontSize = (12+Math.random()*16)+'px';
-  el.style.color = type.color;
-  el.style.opacity = 0.7 + Math.random()*0.3;
-  el.style.animation = `float ${5+Math.random()*5}s ease-in-out infinite`;
+  el.style.position='absolute';
+  el.style.top=Math.random()*100+'%';
+  el.style.left=Math.random()*100+'%';
+  el.style.fontSize=(12+Math.random()*10)+'px';
+  el.style.opacity=0.2+Math.random()*0.3;
+  el.style.animation=`float ${5+Math.random()*5}s ease-in-out infinite`;
   document.body.appendChild(el);
 }
-// 25 emojis flottants au lieu de 45
-for(let i=0;i<25;i++) createAnim();
 
-/* Navigation landing -> sections */
-const buttons = document.querySelectorAll('.landing-button');
-const sections = document.querySelectorAll('.section');
-const nav = document.querySelector('nav');
-const landing = document.getElementById('landing');
-buttons.forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const target = btn.getAttribute('data-target');
-    landing.style.display='none';
-    nav.style.display='block';
-    sections.forEach(sec=>{
-      if(sec.id===target){sec.style.display='block'; sec.classList.add('visible'); sec.querySelector('h2').classList.add('visible'); sec.querySelectorAll('p').forEach(p=>p.classList.add('visible'));}
-      else{sec.style.display='none'; sec.classList.remove('visible'); sec.querySelector('h2').classList.remove('visible'); sec.querySelectorAll('p').forEach(p=>p.classList.remove('visible'));}
-    });
-  });
-});
-nav.querySelectorAll('a').forEach(link=>{
-  link.addEventListener('click', e=>{
-    e.preventDefault();
-    const target = link.getAttribute('data-target');
-    if(target==='landing'){
-      landing.style.display='flex';
-      nav.style.display='none';
-      sections.forEach(sec=>{sec.style.display='none'; sec.classList.remove('visible'); sec.querySelector('h2').classList.remove('visible'); sec.querySelectorAll('p').forEach(p=>p.classList.remove('visible'))});
-      window.scrollTo({top:0, behavior:'smooth'});
-    } else {
-      landing.style.display='none';
-      sections.forEach(sec=>{
-        if(sec.id===target){sec.style.display='block'; sec.classList.add('visible'); sec.querySelector('h2').classList.add('visible'); sec.querySelectorAll('p').forEach(p=>p.classList.add('visible'));}
-        else{sec.style.display='none'; sec.classList.remove('visible'); sec.querySelector('h2').classList.remove('visible'); sec.querySelectorAll('p').forEach(p=>p.classList.remove('visible'));}
-      });
-      nav.style.display='block';
-    }
-  });
-});
-
-/* Dark/light toggle */
-document.getElementById('dark-toggle').addEventListener('click', ()=>{
-  document.body.classList.toggle('dark-mode');
-});
-
-/* Particle trail au curseur (moins nombreux) */
-let trailCounter = 0;
-document.addEventListener('mousemove', e=>{
-  if(trailCounter++ % 5 !== 0) return; // réduire le nombre d'emojis
-  const trail = document.createElement('div');
-  const type = animTypes[Math.floor(Math.random()*animTypes.length)];
-  trail.innerHTML = type.char;
-  trail.style.position='absolute';
-  trail.style.left=e.clientX+'px';
-  trail.style.top=e.clientY+'px';
-  trail.style.fontSize=(10+Math.random()*10)+'px';
-  trail.style.opacity=0.7;
-  trail.style.pointerEvents='none';
-  trail.style.color=type.color;
-  trail.className=type.class;
-  document.body.appendChild(trail);
-  setTimeout(()=>trail.remove(),2000);
-});
+// Générer 10 emojis flottants seulement (très subtil)
+for(let i=0;i<10;i++){ createAnim(); }
 </script>
+
 </body>
 </html>
