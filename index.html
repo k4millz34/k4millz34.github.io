@@ -29,7 +29,7 @@ nav{
   padding:12px;
   border-bottom:2px solid #d63384;
   z-index:100;
-  display:none; /* on masque la nav sur la landing */
+  display:none;
 }
 nav a{
   margin:0 20px;
@@ -76,22 +76,26 @@ nav a:hover{
   color:#4d004d;
   margin-bottom:40px;
 }
+/* boutons horizontaux */
+.button-row{
+  display:flex;
+  gap:30px;
+}
 .landing-button{
-  display:block;
   background:#d63384;
   color:white;
   border:none;
   border-radius:12px;
   padding:15px 40px;
   font-size:22px;
-  margin:15px;
   cursor:pointer;
-  transition:0.3s;
+  transition:0.3s, box-shadow 0.3s;
   box-shadow:0 5px 15px rgba(0,0,0,0.2);
 }
 .landing-button:hover{
-  transform:scale(1.05);
+  transform:scale(1.1);
   background:#4d004d;
+  box-shadow:0 0 25px #ff66cc, 0 0 50px #ff99cc;
 }
 
 /* ===== SECTIONS ===== */
@@ -99,7 +103,7 @@ nav a:hover{
   padding:80px 20px;
   max-width:1100px;
   margin:auto;
-  display:none; /* masquées au départ */
+  display:none;
 }
 .section h2{
   font-size:40px;
@@ -184,8 +188,8 @@ nav a:hover{
   .contact a{font-size:18px;}
   .portfolio img{max-width:180px;}
   .landing-button{font-size:20px; padding:12px 30px;}
+  .button-row{gap:20px; flex-direction:column;}
 }
-
 @media (max-width:480px){
   #landing h1{font-size:48px; letter-spacing:4px;}
   #landing p{font-size:18px;}
@@ -197,7 +201,7 @@ nav a:hover{
   .landing-button{font-size:18px; padding:10px 25px;}
 }
 
-/* ===== ANIMATIONS FLOTANTES ===== */
+/* ===== ANIMATIONS FLOTANTES SUR LES CÔTÉS ===== */
 @keyframes float{
   0%{transform:translateY(0);}
   50%{transform:translateY(-10px);}
@@ -221,9 +225,11 @@ nav a:hover{
 <div id="landing">
   <h1>K4MILLZ</h1>
   <p>L’art en image</p>
-  <button class="landing-button" data-target="about">À propos</button>
-  <button class="landing-button" data-target="portfolio">Portfolio</button>
-  <button class="landing-button" data-target="contact">Contact</button>
+  <div class="button-row">
+    <button class="landing-button" data-target="about">À propos</button>
+    <button class="landing-button" data-target="portfolio">Portfolio</button>
+    <button class="landing-button" data-target="contact">Contact</button>
+  </div>
 </div>
 
 <!-- NAVIGATION -->
@@ -239,7 +245,7 @@ nav a:hover{
 <p>Bonjour, je m'appelle Camille, j'ai 14 ans et je suis une jeune artiste photographe.</p>
 <p>Je suis passionnée par le monde de l'art et tout ce qui touche à la créativité.</p>
 <p>Si vous voulez suivre mon univers, je vous invite à venir sur mon compte Instagram en bas de la page.</p>
-<p>Merci de me soutenir chaque jour. Au revoir et n'oubliez pas, explorez votre créativité.</p>
+<p>Merci de me soutenir chaque jour. Explorez votre créativité !</p>
 <p class="citation">Le meilleur des arts, c'est celui qu'on a au fond de soi.</p>
 <p class="signature">— K4MILLZ</p>
 </section>
@@ -288,14 +294,15 @@ const animTypes = [
   {char:'🖌️', class:'float-paint', color:'#ff9966'}
 ];
 
-function createAnim(elType){
+function createAnim(){
   const el = document.createElement('div');
   const type = animTypes[Math.floor(Math.random()*animTypes.length)];
   el.className = type.class;
   el.innerHTML = type.char;
   el.style.position = 'absolute';
+  // uniquement sur les côtés
+  el.style.left = (Math.random()<0.5? Math.random()*15 : 85+Math.random()*15)+'%';
   el.style.top = Math.random()*100 + '%';
-  el.style.left = Math.random()*100 + '%';
   el.style.fontSize = (12+Math.random()*16)+'px';
   el.style.color = type.color;
   el.style.opacity = 0.7 + Math.random()*0.3;
@@ -303,12 +310,12 @@ function createAnim(elType){
   document.body.appendChild(el);
 }
 
-// Générer 80 animations flottantes
-for(let i=0;i<80;i++){
+// Générer 60 animations flottantes sur les côtés
+for(let i=0;i<60;i++){
   createAnim();
 }
 
-// ===== Navigation entre landing et sections =====
+// Navigation landing -> sections
 const buttons = document.querySelectorAll('.landing-button');
 const sections = document.querySelectorAll('.section');
 const nav = document.querySelector('nav');
@@ -317,34 +324,23 @@ const landing = document.getElementById('landing');
 buttons.forEach(btn => {
   btn.addEventListener('click', ()=>{
     const target = btn.getAttribute('data-target');
-    // Masquer landing
     landing.style.display = 'none';
-    // Afficher nav
     nav.style.display = 'block';
-    // Afficher section cible
     sections.forEach(sec => {
-      if(sec.id === target){
-        sec.style.display = 'block';
-        sec.scrollIntoView({behavior:'smooth'});
-      } else {
-        sec.style.display = 'none';
-      }
+      sec.style.display = sec.id === target ? 'block' : 'none';
+      if(sec.id === target) sec.scrollIntoView({behavior:'smooth'});
     });
   });
 });
 
-// Affichage via nav
-nav.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', (e)=>{
+// Nav links
+nav.querySelectorAll('a').forEach(link=>{
+  link.addEventListener('click', e=>{
     e.preventDefault();
     const target = link.getAttribute('href').substring(1);
-    sections.forEach(sec => {
-      if(sec.id === target){
-        sec.style.display = 'block';
-        sec.scrollIntoView({behavior:'smooth'});
-      } else {
-        sec.style.display = 'none';
-      }
+    sections.forEach(sec=>{
+      sec.style.display = sec.id===target?'block':'none';
+      if(sec.id===target) sec.scrollIntoView({behavior:'smooth'});
     });
   });
 });
