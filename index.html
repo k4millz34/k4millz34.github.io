@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>uwusite - Portfolio</title>
+<title>K4MILLZ - Portfolio</title>
 <link rel="icon" type="image/x-icon" href="K4M.ico">
 
 <style>
@@ -16,8 +16,6 @@ body{
   overflow-x:hidden;
   scroll-behavior:smooth;
   position:relative;
-  max-height:100vh; /* scroll limité */
-  overflow-y:hidden;
 }
 
 /* NAVIGATION */
@@ -169,7 +167,7 @@ h1::after{
 </nav>
 
 <header>
-<h1>uwusite</h1>
+<h1>K4MILLZ</h1>
 <p class="tagline">L’ART EN IMAGE</p>
 </header>
 
@@ -196,7 +194,7 @@ Le meilleur des arts, c'est celui qu'on a au fond de soi.
 </p>
 
 <p class="signature">
-— uwusite
+— K4MILLZ
 </p>
 
 <p class="footer-note">
@@ -205,7 +203,7 @@ La conception technique et certaines parties du code ont été réalisées avec 
 </p>
 
 <script>
-// Générer cœurs, nœuds et particules flottants
+// Animations flottantes
 for(let i=0;i<60;i++){
   let el=document.createElement("div");
   let type=Math.random()>0.5?"heart":"bow";
@@ -223,6 +221,15 @@ for(let i=0;i<40;i++){
   p.style.animationDuration=(8+Math.random()*5)+"s";
   document.body.appendChild(p);
 }
+
+// Scroll limité à la fin de la citation
+const citation = document.querySelector('.citation');
+window.addEventListener('scroll', () => {
+  const maxScroll = citation.offsetTop + citation.offsetHeight + 20; // marge 20px
+  if (window.scrollY > maxScroll) {
+    window.scrollTo(0, maxScroll);
+  }
+});
 </script>
 
 </body>
