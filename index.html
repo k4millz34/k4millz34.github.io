@@ -45,12 +45,6 @@ body.dark-mode .landing-button:hover, body.dark-mode #filter-toggle:hover, body.
   color:#1a1a1a;
   box-shadow:0 0 20px #ff99cc,0 0 40px #ff66cc;
 }
-body.dark-mode .section h2{
-  color:#ff66cc;
-}
-body.dark-mode .contact a{
-  color:#ff99cc;
-}
 
 /* NAVIGATION */
 nav{
@@ -121,6 +115,7 @@ nav a:hover{
 .button-row{
   display:flex;
   gap:30px;
+  flex-wrap:wrap;
 }
 .landing-button{
   background:#d63384;
@@ -275,26 +270,21 @@ nav a:hover{
   .landing-button{font-size:18px; padding:10px 25px;}
 }
 
-/* ANIMATIONS FLOTANTES SUBTILES */
+/* EMOJIS FLOTANTS SUR LES COTES */
 @keyframes float{
   0%{transform:translateY(0);}
   50%{transform:translateY(-8px);}
   100%{transform:translateY(0);}
 }
-.float-heart, .float-bow, .float-star, .float-palette, .float-paint{
+.float{
   position:absolute;
   animation:float 5s ease-in-out infinite;
   pointer-events:none;
   opacity:0.3;
   font-size:14px;
 }
-.float-heart{color:#ff99cc;}
-.float-bow{color:#ff66cc;}
-.float-star{color:#FFD700;}
-.float-palette{color:#ffcc66;}
-.float-paint{color:#ff9966;}
 
-/* Micro animations au scroll */
+/* ANIMATION SCROLL */
 .section-element{
   opacity:0;
   transform:translateY(20px);
@@ -393,9 +383,6 @@ function showSection(id){
     sections.forEach(s=>{
       s.style.display = (s.id===id)?'block':'none';
       setTimeout(()=>s.classList.add('visible'),50);
-      s.querySelectorAll('h2, p, .portfolio img').forEach(el=>{
-        el.classList.add('section-element');
-      });
     });
   }
 }
@@ -446,34 +433,49 @@ const observer = new IntersectionObserver((entries)=>{
 },{threshold:0.2});
 
 document.querySelectorAll('.section h2, .section p, .portfolio img').forEach(el=>{
+  el.classList.add('section-element');
   observer.observe(el);
 });
 
-// ================= ANIMATIONS FLOTANTES SUBTILES =================
+// ================= EMOJIS FLOTANTS SUR LES COTES =================
 const animTypes = [
-  {char:'❤', class:'float-heart', color:'#ff99cc'},
-  {char:'🎀', class:'float-bow', color:'#ff66cc'},
-  {char:'⭐', class:'float-star', color:'#FFD700'},
-  {char:'🎨', class:'float-palette', color:'#ffcc66'},
-  {char:'🖌️', class:'float-paint', color:'#ff9966'}
+  {char:'❤', class:'float', color:'#ff99cc'},
+  {char:'🎀', class:'float', color:'#ff66cc'},
+  {char:'⭐', class:'float', color:'#FFD700'},
+  {char:'🎨', class:'float', color:'#ffcc66'},
+  {char:'🖌️', class:'float', color:'#ff9966'}
 ];
 
-function createAnim(elType){
+function createAnim(){
   const el = document.createElement('div');
   const type = animTypes[Math.floor(Math.random()*animTypes.length)];
   el.className = type.class;
   el.innerHTML = type.char;
-  el.style.position='absolute';
-  el.style.top=Math.random()*100+'%';
-  el.style.left=Math.random()*100+'%';
-  el.style.fontSize=(12+Math.random()*10)+'px';
-  el.style.opacity=0.2+Math.random()*0.3;
+  el.style.color = type.color;
+  el.style.top=Math.random()*90+'%';
+  el.style.left=Math.random()<0.5?Math.random()*15+'%':(85+Math.random()*15)+'%'; // gauche ou droite
+  el.style.fontSize=(12+Math.random()*8)+'px';
+  el.style.opacity=0.2+Math.random()*0.2;
   el.style.animation=`float ${5+Math.random()*5}s ease-in-out infinite`;
   document.body.appendChild(el);
 }
 
-// Générer 10 emojis flottants seulement (très subtil)
-for(let i=0;i<10;i++){ createAnim(); }
+// Générer 12 emojis seulement (subtil)
+for(let i=0;i<12;i++){ createAnim(); }
+
+// ================= CURSOR EFFECT =================
+document.addEventListener('mousemove', e=>{
+  const emoji = document.createElement('div');
+  emoji.innerHTML = animTypes[Math.floor(Math.random()*animTypes.length)].char;
+  emoji.style.position='absolute';
+  emoji.style.top=(e.clientY + Math.random()*30 -15)+'px';
+  emoji.style.left=(e.clientX + Math.random()*30 -15)+'px';
+  emoji.style.fontSize='12px';
+  emoji.style.opacity='0.15';
+  emoji.style.pointerEvents='none';
+  document.body.appendChild(emoji);
+  setTimeout(()=>emoji.remove(),1000);
+});
 </script>
 
 </body>
