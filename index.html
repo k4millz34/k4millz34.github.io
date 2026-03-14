@@ -87,7 +87,7 @@ h1::after{
 .portfolio{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:20px;
+  gap:30px; /* plus d'espace entre images */
   justify-items:center;
 }
 .portfolio img{
@@ -118,19 +118,24 @@ h1::after{
   opacity:1;
 }
 
-/* ===== ANIMATIONS DE FOND ===== */
+/* ===== ANIMATIONS FLOTANTES ===== */
 @keyframes float{
   0%{transform:translateY(0);}
   50%{transform:translateY(-10px);}
   100%{transform:translateY(0);}
 }
-.float-heart, .float-bow{
+.float-heart, .float-bow, .float-star, .float-palette, .float-paint{
   position:absolute;
-  font-size:16px;
   animation:float 5s ease-in-out infinite;
+  pointer-events:none;
 }
-.float-heart{color:#ff99cc;}
-.float-bow{color:#ff66cc;}
+
+/* Couleurs spécifiques */
+.float-heart{color:#ff99cc; font-size:16px;}
+.float-bow{color:#ff66cc; font-size:16px;}
+.float-star{color:#FFD700; font-size:16px;}
+.float-palette{color:#ffcc66; font-size:16px;}
+.float-paint{color:#ff9966; font-size:16px;}
 
 /* ===== CITATION & SIGNATURE ===== */
 .citation{
@@ -194,6 +199,7 @@ h1::after{
   <a href="#contact">Contact</a>
 </nav>
 
+<!-- HEADER -->
 <header>
   <h1>K4MILLZ</h1>
   <p class="tagline">L’ART EN IMAGE</p>
@@ -247,13 +253,36 @@ Le meilleur des arts, c'est celui qu'on a au fond de soi.
 Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles, ou des photos prises par mes amis, mais toujours avec moi ou de moi. La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
 </p>
 
-<!-- Animations flottantes en arrière-plan -->
-<div class="float-heart" style="top:10%; left:5%;">❤</div>
-<div class="float-heart" style="top:40%; left:80%;">❤</div>
-<div class="float-bow" style="top:20%; left:30%;">🎀</div>
-<div class="float-bow" style="top:60%; left:60%;">🎀</div>
-<div class="float-heart" style="top:70%; left:15%;">❤</div>
-<div class="float-bow" style="top:85%; left:40%;">🎀</div>
+<!-- Animations flottantes -->
+<script>
+const animTypes = [
+  {char:'❤', class:'float-heart', color:'#ff99cc'},
+  {char:'🎀', class:'float-bow', color:'#ff66cc'},
+  {char:'⭐', class:'float-star', color:'#FFD700'},
+  {char:'🎨', class:'float-palette', color:'#ffcc66'},
+  {char:'🖌️', class:'float-paint', color:'#ff9966'}
+];
+
+function createAnim(elType){
+  const el = document.createElement('div');
+  const type = animTypes[Math.floor(Math.random()*animTypes.length)];
+  el.className = type.class;
+  el.innerHTML = type.char;
+  el.style.position = 'absolute';
+  el.style.top = Math.random()*100 + '%';
+  el.style.left = Math.random()*100 + '%';
+  el.style.fontSize = (12+Math.random()*16)+'px';
+  el.style.color = type.color;
+  el.style.opacity = 0.7 + Math.random()*0.3;
+  el.style.animation = `float ${5+Math.random()*5}s ease-in-out infinite`;
+  document.body.appendChild(el);
+}
+
+// Générer 80 animations flottantes
+for(let i=0;i<80;i++){
+  createAnim();
+}
+</script>
 
 </body>
 </html>
