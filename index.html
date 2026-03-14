@@ -136,7 +136,12 @@ h1::after{
 .bow{color:#ff66cc;font-size:16px;}
 .particle{width:6px;height:6px;background:rgba(255,255,255,0.5);border-radius:50%;}
 
-/* ===== PHOTOS EN ARRIÈRE-PLAN ===== */
+/* ===== PHOTOS EN ARRIÈRE-PLAN FIXES ===== */
+.bg-photo{
+  position:absolute;
+  z-index:1;
+  pointer-events:none;
+}
 .bg-photo img{
   border:10px solid #fff;
   border-bottom-width:30px;
@@ -144,11 +149,7 @@ h1::after{
   width:200px;
   height:auto;
   object-fit:cover;
-  position:absolute;
-  transform-origin:center;
   box-shadow:0 5px 15px rgba(0,0,0,0.2);
-  z-index:1;
-  pointer-events:none;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -212,24 +213,35 @@ La conception technique et certaines parties du code ont été réalisées avec 
 </p>
 
 <script>
-// PHOTOS EN ARRIÈRE-PLAN
-const bgPhotos = [
-  "IMG_1057.jpg","IMG_1158.jpg","IMG_1367_1.jpg","IMG_1444v2.jpg",
-  "1.jpeg","2.jpeg","3.jpeg","4.jpeg","5.jpeg","6.jpeg","7.jpeg","8.jpeg","9.jpeg"
+// ===== POSITIONS FIXES DES PHOTOS EN ARRIÈRE-PLAN =====
+const bgPositions = [
+  {src:"IMG_1057.jpg",top:"5vh",left:"5vw",rot:-10},
+  {src:"IMG_1158.jpg",top:"5vh",left:"50vw",rot:12},
+  {src:"IMG_1367_1.jpg",top:"25vh",left:"20vw",rot:-5},
+  {src:"IMG_1444v2.jpg",top:"30vh",left:"65vw",rot:8},
+  {src:"1.jpeg",top:"50vh",left:"10vw",rot:-12},
+  {src:"2.jpeg",top:"55vh",left:"40vw",rot:5},
+  {src:"3.jpeg",top:"60vh",left:"70vw",rot:-8},
+  {src:"4.jpeg",top:"70vh",left:"20vw",rot:10},
+  {src:"5.jpeg",top:"75vh",left:"55vw",rot:-15},
+  {src:"6.jpeg",top:"80vh",left:"80vw",rot:5},
+  {src:"7.jpeg",top:"10vh",left:"75vw",rot:-5},
+  {src:"8.jpeg",top:"15vh",left:"35vw",rot:12},
+  {src:"9.jpeg",top:"40vh",left:"5vw",rot:0}
 ];
-bgPhotos.forEach(src=>{
+bgPositions.forEach(item=>{
   const div=document.createElement('div');
   div.className='bg-photo';
+  div.style.top=item.top;
+  div.style.left=item.left;
   const img=document.createElement('img');
-  img.src=src;
-  img.style.top=Math.random()*70+'vh';
-  img.style.left=Math.random()*80+'vw';
-  img.style.transform='rotate('+(Math.random()*30-15)+'deg)';
+  img.src=item.src;
+  img.style.transform='rotate('+item.rot+'deg)';
   div.appendChild(img);
   document.body.appendChild(div);
 });
 
-// ANIMATIONS FLOTTANTES
+// ===== ANIMATIONS FLOTTANTES =====
 for(let i=0;i<60;i++){
   let el=document.createElement("div");
   let type=Math.random()>0.5?"heart":"bow";
