@@ -7,6 +7,7 @@
 <link rel="icon" type="image/x-icon" href="K4M.ico">
 
 <style>
+/* ===== GLOBAL ===== */
 body{
   margin:0;
   font-family:'Quicksand',sans-serif;
@@ -18,7 +19,7 @@ body{
   position:relative;
 }
 
-/* NAVIGATION */
+/* ===== NAVIGATION ===== */
 nav{
   position:fixed;
   top:0;
@@ -39,7 +40,7 @@ nav a:hover{
   color:#4d004d;
 }
 
-/* HEADER */
+/* ===== HEADER ===== */
 header{
   padding:120px 20px 80px;
   position:relative;
@@ -70,7 +71,7 @@ h1::after{
   color:#4d004d;
 }
 
-/* SECTIONS */
+/* ===== SECTIONS ===== */
 .section{
   padding:60px 20px;
   max-width:1100px;
@@ -85,7 +86,7 @@ h1::after{
   margin-bottom:20px;
 }
 
-/* CITATION & SIGNATURE */
+/* ===== CITATION & SIGNATURE ===== */
 .citation{
   font-family:'Great Vibes',cursive;
   font-size:34px;
@@ -105,7 +106,7 @@ h1::after{
   z-index:10;
 }
 
-/* CONTACT */
+/* ===== CONTACT ===== */
 .contact{
   position:relative;
   z-index:10;
@@ -117,7 +118,7 @@ h1::after{
   color:#d63384;
 }
 
-/* FOOTER NOTE */
+/* ===== FOOTER NOTE ===== */
 .footer-note{
   font-size:12px;
   opacity:0.7;
@@ -126,7 +127,7 @@ h1::after{
   z-index:10;
 }
 
-/* PARTICULES / ANIMATIONS */
+/* ===== PARTICULES / ANIMATIONS ===== */
 .particle, .heart, .bow{
   position:absolute;
   opacity:0.8;
@@ -135,7 +136,7 @@ h1::after{
 .bow{color:#ff66cc;font-size:16px;}
 .particle{width:6px;height:6px;background:rgba(255,255,255,0.5);border-radius:50%;}
 
-/* Photos en arrière-plan (fixes, effet tombant mais immobiles) */
+/* ===== PHOTOS EN ARRIÈRE-PLAN ===== */
 .bg-photo img{
   border:10px solid #fff;
   border-bottom-width:30px;
@@ -148,6 +149,27 @@ h1::after{
   box-shadow:0 5px 15px rgba(0,0,0,0.2);
   z-index:1;
   pointer-events:none;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:768px){
+  h1{font-size:60px; letter-spacing:6px;}
+  .tagline{font-size:22px;}
+  .section h2{font-size:32px;}
+  .citation{font-size:28px;}
+  .signature{font-size:18px;}
+  .contact a{font-size:18px;}
+  .bg-photo img{width:140px;}
+}
+
+@media (max-width:480px){
+  h1{font-size:48px; letter-spacing:4px;}
+  .tagline{font-size:18px;}
+  .section h2{font-size:24px;}
+  .citation{font-size:22px;}
+  .signature{font-size:16px;}
+  .contact a{font-size:16px;}
+  .bg-photo img{width:100px;}
 }
 </style>
 </head>
@@ -185,20 +207,20 @@ Le meilleur des arts, c'est celui qu'on a au fond de soi.
 </div>
 
 <p class="footer-note">
-Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles ou des photos de moi prises par un de mes amis.
+Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles, ou des photos prises par mes amis, mais toujours avec moi ou de moi.
 La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
 </p>
 
 <script>
-// Photos en arrière-plan fixes
+// PHOTOS EN ARRIÈRE-PLAN
 const bgPhotos = [
   "IMG_1057.jpg","IMG_1158.jpg","IMG_1367_1.jpg","IMG_1444v2.jpg",
   "1.jpeg","2.jpeg","3.jpeg","4.jpeg","5.jpeg","6.jpeg","7.jpeg","8.jpeg","9.jpeg"
 ];
-bgPhotos.forEach((src)=>{
-  const div = document.createElement('div');
+bgPhotos.forEach(src=>{
+  const div=document.createElement('div');
   div.className='bg-photo';
-  const img = document.createElement('img');
+  const img=document.createElement('img');
   img.src=src;
   img.style.top=Math.random()*70+'vh';
   img.style.left=Math.random()*80+'vw';
@@ -207,7 +229,7 @@ bgPhotos.forEach((src)=>{
   document.body.appendChild(div);
 });
 
-// Animations flottantes (séparées des photos)
+// ANIMATIONS FLOTTANTES
 for(let i=0;i<60;i++){
   let el=document.createElement("div");
   let type=Math.random()>0.5?"heart":"bow";
