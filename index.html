@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>K4MILLZ</title>
+<title>K4MILLZ - Portfolio</title>
 <link rel="icon" type="image/x-icon" href="K4M.ico">
 
 <style>
@@ -43,6 +43,7 @@ nav a:hover{
 header{
   padding:120px 20px 80px;
   position:relative;
+  z-index:10;
 }
 h1{
   font-size:80px;
@@ -59,7 +60,7 @@ h1::after{
   right:-50px;
   width:50px;
   height:50px;
-  background-image:url('uwusite.png'); /* ton nœud */
+  background-image:url('uwusite.png'); /* nœud */
   background-size:contain;
   background-repeat:no-repeat;
 }
@@ -75,6 +76,7 @@ h1::after{
   max-width:1100px;
   margin:auto;
   position:relative;
+  z-index:10;
 }
 .section h2{
   font-size:40px;
@@ -84,46 +86,14 @@ h1::after{
   position:relative;
 }
 
-/* GALERIE */
-.gallery{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:20px;
-  margin-top:30px;
-}
-.gallery a{
-  display:block;
-  border:6px double #FFD700; 
-  border-radius:12px;
-  overflow:hidden;
-  box-shadow:0 10px 25px rgba(0,0,0,0.2);
-  transition:transform 0.3s, box-shadow 0.3s;
-}
-.gallery a:hover{
-  transform:scale(1.05) translateY(-5px);
-  box-shadow:0 15px 35px rgba(0,0,0,0.3);
-}
-.gallery img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-/* CONTACT */
-.contact a{
-  display:block;
-  margin:10px;
-  font-size:20px;
-  color:#d63384;
-}
-
 /* CITATION & SIGNATURE */
 .citation{
   font-family:'Great Vibes',cursive;
   font-size:34px;
   margin-top:80px;
   color:#4d004d;
+  position:relative;
+  z-index:10;
 }
 .signature{
   font-family:'Cinzel',serif;
@@ -132,6 +102,20 @@ h1::after{
   max-width:900px;
   margin:auto;
   margin-bottom:40px;
+  position:relative;
+  z-index:10;
+}
+
+/* CONTACT */
+.contact{
+  position:relative;
+  z-index:10;
+}
+.contact a{
+  display:block;
+  margin:10px;
+  font-size:20px;
+  color:#d63384;
 }
 
 /* FOOTER NOTE */
@@ -139,22 +123,33 @@ h1::after{
   font-size:12px;
   opacity:0.7;
   margin-bottom:40px;
+  position:relative;
+  z-index:10;
 }
 
 /* PARTICULES / ANIMATIONS */
-.particle, .heart, .bow, .emoji{
+.particle, .heart, .bow, .emoji, .bg-photo{
   position:absolute;
   opacity:0.8;
-  animation:float 10s linear infinite;
 }
 .heart{color:#ff99cc;font-size:14px;}
 .bow{color:#ff66cc;font-size:16px;}
 .particle{width:6px;height:6px;background:rgba(255,255,255,0.5);border-radius:50%;}
 .emoji{font-size:18px;pointer-events:none;}
 
-@keyframes float{
-  0%{transform:translateY(100vh) translateX(0);}
-  100%{transform:translateY(-10vh) translateX(50px);}
+/* Photos en arrière-plan */
+.bg-photo img{
+  border:10px solid #fff;
+  border-bottom-width:30px; /* bord plus large en bas */
+  border-radius:8px;
+  width:200px;
+  height:auto;
+  object-fit:cover;
+  position:absolute;
+  transform-origin:center;
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+  z-index:1;
+  pointer-events:none;
 }
 </style>
 </head>
@@ -162,7 +157,6 @@ h1::after{
 
 <nav>
 <a href="#about">À propos</a>
-<a href="#portfolio">Mes réalisations</a>
 <a href="#contact">Contact</a>
 </nav>
 
@@ -179,16 +173,6 @@ h1::after{
 <p>Merci de me soutenir chaque jour. Au revoir et n'oubliez pas, explorez votre créativité.</p>
 </section>
 
-<section id="portfolio" class="section">
-<h2>Mes réalisations</h2>
-<div class="gallery">
-<a href="IMG_1057.jpg"><img src="IMG_1057.jpg"></a>
-<a href="IMG_1158.jpg"><img src="IMG_1158.jpg"></a>
-<a href="IMG_1367_1.jpg"><img src="IMG_1367_1.jpg"></a>
-<a href="IMG_1444v2.jpg"><img src="IMG_1444v2.jpg"></a>
-</div>
-</section>
-
 <p class="citation">
 Le meilleur des arts, c'est celui qu'on a au fond de soi.
 </p>
@@ -197,12 +181,34 @@ Le meilleur des arts, c'est celui qu'on a au fond de soi.
 — K4MILLZ
 </p>
 
+<div class="contact">
+<a href="mailto:k4millzpro@gmail.com">k4millzpro@gmail.com</a>
+<a href="https://www.instagram.com/k4mill_z/" target="_blank">📸 Instagram : @k4mill_z</a>
+</div>
+
 <p class="footer-note">
-Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles.
+Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles ou des photo de moi prise par des amie.
 La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
 </p>
 
 <script>
+// Photos en arrière-plan
+const bgPhotos = [
+  "IMG_1057.jpg","IMG_1158.jpg","IMG_1367_1.jpg","IMG_1444v2.jpg",
+  "1.jpeg","2.jpeg","3.jpeg","4.jpeg","5.jpeg","6.jpeg","7.jpeg","8.jpeg","9.jpeg"
+];
+bgPhotos.forEach((src)=>{
+  const div = document.createElement('div');
+  div.className='bg-photo';
+  const img = document.createElement('img');
+  img.src=src;
+  img.style.top=Math.random()*70+'vh';
+  img.style.left=Math.random()*80+'vw';
+  img.style.transform='rotate('+(Math.random()*30-15)+'deg)';
+  div.appendChild(img);
+  document.body.appendChild(div);
+});
+
 // Animations flottantes
 for(let i=0;i<60;i++){
   let el=document.createElement("div");
@@ -218,6 +224,7 @@ for(let i=0;i<40;i++){
   let p=document.createElement("div");
   p.className="particle";
   p.style.left=Math.random()*100+"vw";
+  p.style.top=Math.random()*100+"vh";
   p.style.animationDuration=(8+Math.random()*5)+"s";
   document.body.appendChild(p);
 }
