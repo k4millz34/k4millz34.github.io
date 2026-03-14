@@ -16,7 +16,6 @@ body{
   text-align:center;
   overflow-x:hidden;
   scroll-behavior:smooth;
-  position:relative;
 }
 
 /* ===== NAVIGATION ===== */
@@ -43,16 +42,14 @@ nav a:hover{
 /* ===== HEADER ===== */
 header{
   padding:120px 20px 80px;
-  position:relative;
-  z-index:10;
 }
 h1{
   font-size:80px;
   letter-spacing:8px;
   color:#d63384;
   font-family:'Playfair Display',serif;
-  position:relative;
   display:inline-block;
+  position:relative;
 }
 h1::after{
   content:"";
@@ -61,7 +58,7 @@ h1::after{
   right:-50px;
   width:50px;
   height:50px;
-  background-image:url('uwusite.png'); /* nœud */
+  background-image:url('uwusite.png');
   background-size:contain;
   background-repeat:no-repeat;
 }
@@ -76,8 +73,6 @@ h1::after{
   padding:60px 20px;
   max-width:1100px;
   margin:auto;
-  position:relative;
-  z-index:10;
 }
 .section h2{
   font-size:40px;
@@ -86,14 +81,49 @@ h1::after{
   margin-bottom:20px;
 }
 
+/* ===== PORTFOLIO ===== */
+.portfolio{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+  justify-items:center;
+}
+.portfolio img{
+  width:100%;
+  max-width:250px;
+  border:10px solid #fff;
+  border-bottom-width:30px;
+  border-radius:8px;
+  object-fit:cover;
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+  position:relative;
+}
+.portfolio img:hover{
+  transform:scale(1.05) rotate(-1deg);
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+/* Animations au survol des images */
+.portfolio img::after{
+  content:"❤ 🎀";
+  position:absolute;
+  top:5px;
+  right:5px;
+  font-size:18px;
+  opacity:0;
+  transition:opacity 0.3s;
+}
+.portfolio img:hover::after{
+  opacity:1;
+}
+
 /* ===== CITATION & SIGNATURE ===== */
 .citation{
   font-family:'Great Vibes',cursive;
   font-size:34px;
   margin-top:80px;
   color:#4d004d;
-  position:relative;
-  z-index:10;
 }
 .signature{
   font-family:'Cinzel',serif;
@@ -102,15 +132,9 @@ h1::after{
   max-width:900px;
   margin:auto;
   margin-bottom:40px;
-  position:relative;
-  z-index:10;
 }
 
 /* ===== CONTACT ===== */
-.contact{
-  position:relative;
-  z-index:10;
-}
 .contact a{
   display:block;
   margin:10px;
@@ -123,33 +147,6 @@ h1::after{
   font-size:12px;
   opacity:0.7;
   margin-bottom:40px;
-  position:relative;
-  z-index:10;
-}
-
-/* ===== PARTICULES / ANIMATIONS ===== */
-.particle, .heart, .bow{
-  position:absolute;
-  opacity:0.8;
-}
-.heart{color:#ff99cc;font-size:14px;}
-.bow{color:#ff66cc;font-size:16px;}
-.particle{width:6px;height:6px;background:rgba(255,255,255,0.5);border-radius:50%;}
-
-/* ===== PHOTOS EN ARRIÈRE-PLAN FIXES ===== */
-.bg-photo{
-  position:absolute;
-  z-index:1;
-  pointer-events:none;
-}
-.bg-photo img{
-  border:10px solid #fff;
-  border-bottom-width:30px;
-  border-radius:8px;
-  width:200px;
-  height:auto;
-  object-fit:cover;
-  box-shadow:0 5px 15px rgba(0,0,0,0.2);
 }
 
 /* ===== RESPONSIVE ===== */
@@ -160,7 +157,7 @@ h1::after{
   .citation{font-size:28px;}
   .signature{font-size:18px;}
   .contact a{font-size:18px;}
-  .bg-photo img{width:140px;}
+  .portfolio img{max-width:180px;}
 }
 
 @media (max-width:480px){
@@ -170,7 +167,7 @@ h1::after{
   .citation{font-size:22px;}
   .signature{font-size:16px;}
   .contact a{font-size:16px;}
-  .bg-photo img{width:100px;}
+  .portfolio img{max-width:140px;}
 }
 </style>
 </head>
@@ -178,6 +175,7 @@ h1::after{
 
 <nav>
 <a href="#about">À propos</a>
+<a href="#portfolio">Portfolio</a>
 <a href="#contact">Contact</a>
 </nav>
 
@@ -194,6 +192,26 @@ h1::after{
 <p>Merci de me soutenir chaque jour. Au revoir et n'oubliez pas, explorez votre créativité.</p>
 </section>
 
+<section id="portfolio" class="section">
+<h2>Mes réalisations</h2>
+<div class="portfolio">
+  <!-- Liste de toutes les photos -->
+  <img src="IMG_1057.jpg" alt="photo1">
+  <img src="IMG_1158.jpg" alt="photo2">
+  <img src="IMG_1367_1.jpg" alt="photo3">
+  <img src="IMG_1444v2.jpg" alt="photo4">
+  <img src="1.jpeg" alt="photo5">
+  <img src="2.jpeg" alt="photo6">
+  <img src="3.jpeg" alt="photo7">
+  <img src="4.jpeg" alt="photo8">
+  <img src="5.jpeg" alt="photo9">
+  <img src="6.jpeg" alt="photo10">
+  <img src="7.jpeg" alt="photo11">
+  <img src="8.jpeg" alt="photo12">
+  <img src="9.jpeg" alt="photo13">
+</div>
+</section>
+
 <p class="citation">
 Le meilleur des arts, c'est celui qu'on a au fond de soi.
 </p>
@@ -208,59 +226,8 @@ Le meilleur des arts, c'est celui qu'on a au fond de soi.
 </div>
 
 <p class="footer-note">
-Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles, ou des photos prises par mes amis, mais toujours avec moi ou de moi.
-La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
+Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles, ou des photos prises par mes amis, mais toujours avec moi ou de moi. La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
 </p>
-
-<script>
-// ===== POSITIONS FIXES DES PHOTOS EN ARRIÈRE-PLAN =====
-const bgPositions = [
-  {src:"IMG_1057.jpg",top:"5vh",left:"5vw",rot:-10},
-  {src:"IMG_1158.jpg",top:"5vh",left:"50vw",rot:12},
-  {src:"IMG_1367_1.jpg",top:"25vh",left:"20vw",rot:-5},
-  {src:"IMG_1444v2.jpg",top:"30vh",left:"65vw",rot:8},
-  {src:"1.jpeg",top:"50vh",left:"10vw",rot:-12},
-  {src:"2.jpeg",top:"55vh",left:"40vw",rot:5},
-  {src:"3.jpeg",top:"60vh",left:"70vw",rot:-8},
-  {src:"4.jpeg",top:"70vh",left:"20vw",rot:10},
-  {src:"5.jpeg",top:"75vh",left:"55vw",rot:-15},
-  {src:"6.jpeg",top:"80vh",left:"80vw",rot:5},
-  {src:"7.jpeg",top:"10vh",left:"75vw",rot:-5},
-  {src:"8.jpeg",top:"15vh",left:"35vw",rot:12},
-  {src:"9.jpeg",top:"40vh",left:"5vw",rot:0}
-];
-bgPositions.forEach(item=>{
-  const div=document.createElement('div');
-  div.className='bg-photo';
-  div.style.top=item.top;
-  div.style.left=item.left;
-  const img=document.createElement('img');
-  img.src=item.src;
-  img.style.transform='rotate('+item.rot+'deg)';
-  div.appendChild(img);
-  document.body.appendChild(div);
-});
-
-// ===== ANIMATIONS FLOTTANTES =====
-for(let i=0;i<60;i++){
-  let el=document.createElement("div");
-  let type=Math.random()>0.5?"heart":"bow";
-  el.className=type;
-  el.innerHTML=type==="heart"?"❤":"🎀";
-  el.style.left=Math.random()*100+"vw";
-  el.style.top=Math.random()*100+"vh";
-  el.style.animationDuration=(5+Math.random()*5)+"s";
-  document.body.appendChild(el);
-}
-for(let i=0;i<40;i++){
-  let p=document.createElement("div");
-  p.className="particle";
-  p.style.left=Math.random()*100+"vw";
-  p.style.top=Math.random()*100+"vh";
-  p.style.animationDuration=(8+Math.random()*5)+"s";
-  document.body.appendChild(p);
-}
-</script>
 
 </body>
 </html>
