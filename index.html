@@ -18,7 +18,7 @@ body{
   overflow-x:hidden;
   scroll-behavior:smooth;
   position:relative;
-  transition: background 0.8s, color 0.8s, filter 1s;
+  transition:background 0.8s, color 0.8s;
 }
 
 /* DARK MODE */
@@ -36,14 +36,20 @@ body.dark-mode nav a{
 body.dark-mode nav a:hover{
   color:#ff99cc;
 }
-body.dark-mode .landing-button, body.dark-mode #filter-toggle, body.dark-mode #dark-toggle{
+body.dark-mode .landing-button{
   background:#4d004d;
   color:#ffe6f0;
 }
-body.dark-mode .landing-button:hover, body.dark-mode #filter-toggle:hover, body.dark-mode #dark-toggle:hover{
+body.dark-mode .landing-button:hover{
   background:#ff66cc;
   color:#1a1a1a;
   box-shadow:0 0 20px #ff99cc,0 0 40px #ff66cc;
+}
+body.dark-mode .section h2{
+  color:#ff66cc;
+}
+body.dark-mode .contact a{
+  color:#ff99cc;
 }
 
 /* NAVIGATION */
@@ -115,7 +121,6 @@ nav a:hover{
 .button-row{
   display:flex;
   gap:30px;
-  flex-wrap:wrap;
 }
 .landing-button{
   background:#d63384;
@@ -135,10 +140,10 @@ nav a:hover{
 }
 
 /* Dark mode toggle */
-#dark-toggle, #filter-toggle{
+#dark-toggle{
   margin-top:20px;
   cursor:pointer;
-  font-size:18px;
+  font-size:20px;
   padding:10px 20px;
   border-radius:12px;
   border:none;
@@ -147,10 +152,10 @@ nav a:hover{
   box-shadow:0 5px 15px rgba(0,0,0,0.2);
   transition:0.3s;
 }
-#dark-toggle:hover, #filter-toggle:hover{
+#dark-toggle:hover{
   transform:scale(1.1);
   background:#4d004d;
-  box-shadow:0 0 25px #ff66cc,0 0 50px #ff99cc;
+  box-shadow:0 0 25px #ff66cc, 0 0 50px #ff99cc;
 }
 
 /* SECTIONS */
@@ -270,30 +275,24 @@ nav a:hover{
   .landing-button{font-size:18px; padding:10px 25px;}
 }
 
-/* EMOJIS FLOTANTS SUR LES COTES */
+/* ANIMATIONS FLOTANTES SUBTILES */
 @keyframes float{
   0%{transform:translateY(0);}
   50%{transform:translateY(-8px);}
   100%{transform:translateY(0);}
 }
-.float{
+.float-heart, .float-bow, .float-star, .float-palette, .float-paint{
   position:absolute;
   animation:float 5s ease-in-out infinite;
   pointer-events:none;
-  opacity:0.3;
+  opacity:0.3; /* beaucoup plus subtil */
   font-size:14px;
 }
-
-/* ANIMATION SCROLL */
-.section-element{
-  opacity:0;
-  transform:translateY(20px);
-  transition:all 0.8s ease-out;
-}
-.section-element.visible{
-  opacity:1;
-  transform:translateY(0);
-}
+.float-heart{color:#ff99cc;}
+.float-bow{color:#ff66cc;}
+.float-star{color:#FFD700;}
+.float-palette{color:#ffcc66;}
+.float-paint{color:#ff9966;}
 </style>
 </head>
 <body>
@@ -308,175 +307,8 @@ nav a:hover{
     <button class="landing-button" data-target="contact">Contact</button>
   </div>
   <button id="dark-toggle">Mode Dark / Light</button>
-  <button id="filter-toggle">Filtre artistique</button>
 </div>
 
 <!-- NAVIGATION -->
 <nav>
-  <a href="#" class="nav-link" data-target="landing">Accueil</a>
-  <a href="#" class="nav-link" data-target="about">À propos</a>
-  <a href="#" class="nav-link" data-target="portfolio">Portfolio</a>
-  <a href="#" class="nav-link" data-target="contact">Contact</a>
-</nav>
-
-<!-- À propos -->
-<section id="about" class="section">
-<h2>À propos de moi</h2>
-<p>Bonjour, je m'appelle Camille, j'ai 14 ans et je suis une jeune artiste photographe.</p>
-<p>Je suis passionnée par le monde de l'art et tout ce qui touche à la créativité.</p>
-<p>Si vous voulez suivre mon univers, je vous invite à venir sur mon compte Instagram en bas de la page.</p>
-<p>Merci de me soutenir chaque jour. Au revoir et n'oubliez pas, explorez votre créativité.</p>
-</section>
-
-<!-- Portfolio -->
-<section id="portfolio" class="section">
-<h2>Mes réalisations</h2>
-<div class="portfolio">
-  <img src="10.jpg" alt="">
-  <img src="11.jpg" alt="">
-  <img src="12.jpg" alt="">
-  <img src="13.jpg" alt="">
-  <img src="1.jpg" alt="">
-  <img src="2.jpg" alt="">
-  <img src="3.jpg" alt="">
-  <img src="4.jpg" alt="">
-  <img src="5.jpg" alt="">
-  <img src="6.jpg" alt="">
-  <img src="7.jpg" alt="">
-  <img src="8.jpg" alt="">
-  <img src="9.jpg" alt="">
-</div>
-</section>
-
-<!-- Citation -->
-<p class="citation">Le meilleur des arts, c'est celui qu'on a au fond de soi.</p>
-<p class="signature">— K4MILLZ</p>
-
-<!-- Contact -->
-<div id="contact" class="contact section">
-<a href="mailto:k4millzpro@gmail.com">k4millzpro@gmail.com</a>
-<a href="https://www.instagram.com/k4mill_z/" target="_blank">📸 Instagram : @k4mill_z</a>
-</div>
-
-<!-- Footer note -->
-<p class="footer-note">
-Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles, ou des photos prises par mes amis, mais toujours avec moi ou de moi. La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
-</p>
-
-<!-- Micro pop audio -->
-<audio id="click-sound" src="micro-pop.mp3" preload="auto"></audio>
-
-<script>
-// ================= NAVIGATION =================
-const sections = document.querySelectorAll('.section');
-const landing = document.getElementById('landing');
-const nav = document.querySelector('nav');
-
-function showSection(id){
-  if(id === 'landing'){
-    landing.style.display = 'flex';
-    nav.style.display = 'none';
-    sections.forEach(s=>s.style.display='none');
-  } else {
-    landing.style.display='none';
-    nav.style.display='flex';
-    sections.forEach(s=>{
-      s.style.display = (s.id===id)?'block':'none';
-      setTimeout(()=>s.classList.add('visible'),50);
-    });
-  }
-}
-
-// Landing buttons
-document.querySelectorAll('.landing-button').forEach(btn=>{
-  btn.addEventListener('click', ()=> showSection(btn.dataset.target));
-});
-
-// Nav links
-document.querySelectorAll('.nav-link').forEach(link=>{
-  link.addEventListener('click', e=>{
-    e.preventDefault();
-    showSection(link.dataset.target);
-  });
-});
-
-// ================= DARK MODE =================
-document.getElementById('dark-toggle').addEventListener('click', ()=>{
-  document.body.classList.toggle('dark-mode');
-});
-
-// ================= FILTER ARTISTIQUE =================
-document.getElementById('filter-toggle').addEventListener('click', ()=>{
-  document.body.classList.toggle('filter-active');
-});
-
-// ================= MICRO POP =================
-const interactiveButtons = document.querySelectorAll('.landing-button, #dark-toggle, #filter-toggle, nav a');
-interactiveButtons.forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const sound = document.getElementById('click-sound');
-    sound.volume = 0.05;
-    sound.currentTime=0;
-    sound.play();
-    btn.style.transform='scale(1.02)';
-    setTimeout(()=>{btn.style.transform='scale(1)';},200);
-  });
-});
-
-// ================= ANIMATIONS AU SCROLL =================
-const observer = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      entry.target.classList.add('visible');
-    }
-  });
-},{threshold:0.2});
-
-document.querySelectorAll('.section h2, .section p, .portfolio img').forEach(el=>{
-  el.classList.add('section-element');
-  observer.observe(el);
-});
-
-// ================= EMOJIS FLOTANTS SUR LES COTES =================
-const animTypes = [
-  {char:'❤', class:'float', color:'#ff99cc'},
-  {char:'🎀', class:'float', color:'#ff66cc'},
-  {char:'⭐', class:'float', color:'#FFD700'},
-  {char:'🎨', class:'float', color:'#ffcc66'},
-  {char:'🖌️', class:'float', color:'#ff9966'}
-];
-
-function createAnim(){
-  const el = document.createElement('div');
-  const type = animTypes[Math.floor(Math.random()*animTypes.length)];
-  el.className = type.class;
-  el.innerHTML = type.char;
-  el.style.color = type.color;
-  el.style.top=Math.random()*90+'%';
-  el.style.left=Math.random()<0.5?Math.random()*15+'%':(85+Math.random()*15)+'%'; // gauche ou droite
-  el.style.fontSize=(12+Math.random()*8)+'px';
-  el.style.opacity=0.2+Math.random()*0.2;
-  el.style.animation=`float ${5+Math.random()*5}s ease-in-out infinite`;
-  document.body.appendChild(el);
-}
-
-// Générer 12 emojis seulement (subtil)
-for(let i=0;i<12;i++){ createAnim(); }
-
-// ================= CURSOR EFFECT =================
-document.addEventListener('mousemove', e=>{
-  const emoji = document.createElement('div');
-  emoji.innerHTML = animTypes[Math.floor(Math.random()*animTypes.length)].char;
-  emoji.style.position='absolute';
-  emoji.style.top=(e.clientY + Math.random()*30 -15)+'px';
-  emoji.style.left=(e.clientX + Math.random()*30 -15)+'px';
-  emoji.style.fontSize='12px';
-  emoji.style.opacity='0.15';
-  emoji.style.pointerEvents='none';
-  document.body.appendChild(emoji);
-  setTimeout(()=>emoji.remove(),1000);
-});
-</script>
-
-</body>
-</html>
+  <a href
