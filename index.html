@@ -58,6 +58,7 @@ h1{
   font-family:'Playfair Display',serif;
   text-shadow:0 0 10px rgba(255,105,180,0.6),0 0 20px rgba(255,105,180,0.3);
   position:relative;
+  display:inline-block;
 }
 h1::after{
   content:'🎀';
@@ -85,6 +86,7 @@ h1::after{
   color:#d63384;
   font-family:'Playfair Display',serif;
   margin-bottom:20px;
+  position:relative;
 }
 
 /* GALERIE */
@@ -96,8 +98,8 @@ h1::after{
 }
 .gallery a{
   display:block;
-  border:4px solid white;
-  border-radius:10px;
+  border:6px double #FFD700; /* cadre doré avec effet moulure */
+  border-radius:12px;
   overflow:hidden;
   box-shadow:0 10px 25px rgba(0,0,0,0.2);
   transition:transform 0.3s, box-shadow 0.3s;
@@ -108,6 +110,8 @@ h1::after{
 }
 .gallery img{
   width:100%;
+  height:100%;
+  object-fit:cover; /* recadre correctement les images */
   display:block;
 }
 
@@ -143,7 +147,7 @@ h1::after{
 }
 
 /* PARTICULES / ANIMATIONS */
-.particle, .heart, .bow{
+.particle, .heart, .bow, .emoji{
   position:absolute;
   opacity:0.8;
   animation:float 10s linear infinite;
@@ -151,10 +155,22 @@ h1::after{
 .heart{color:#ff99cc;font-size:14px;}
 .bow{color:#ff66cc;font-size:16px;}
 .particle{width:6px;height:6px;background:rgba(255,255,255,0.5);border-radius:50%;}
+.emoji{font-size:18px;pointer-events:none;}
 
 @keyframes float{
   0%{transform:translateY(100vh) translateX(0);}
   100%{transform:translateY(-10vh) translateX(50px);}
+}
+
+/* À propos hover emojis */
+.section#about:hover::before{
+  content:'✨🎨🌸🎀';
+  font-size:24px;
+  position:absolute;
+  top:-20px;
+  left:50%;
+  transform:translateX(-50%);
+  animation:float 5s linear infinite alternate;
 }
 </style>
 </head>
@@ -216,7 +232,7 @@ La conception technique et certaines parties du code ont été réalisées avec 
 
 <!-- ANIMATIONS -->
 <script>
-// Générer plein de cœurs et de nœuds
+// Générer cœurs et nœuds
 for(let i=0;i<60;i++){
   let el=document.createElement("div");
   let type=Math.random()>0.5?"heart":"bow";
@@ -228,14 +244,30 @@ for(let i=0;i<60;i++){
   document.body.appendChild(el);
 }
 
-// Générer particules discrètes
-for(let i=0;i<30;i++){
+// Particules discrètes
+for(let i=0;i<40;i++){
   let p=document.createElement("div");
   p.className="particle";
   p.style.left=Math.random()*100+"vw";
   p.style.animationDuration=(8+Math.random()*5)+"s";
   document.body.appendChild(p);
 }
+
+// Emojis qui popent sur hover À propos
+const aboutSection=document.getElementById("about");
+aboutSection.addEventListener("mouseenter", ()=>{
+  for(let i=0;i<15;i++){
+    let e=document.createElement("div");
+    e.className="emoji";
+    const emojis=["✨","🎨","🌸","🎀"];
+    e.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
+    e.style.left=Math.random()*100+"%";
+    e.style.top=Math.random()*100+"%";
+    e.style.animationDuration=(2+Math.random()*3)+"s";
+    document.body.appendChild(e);
+    setTimeout(()=>{e.remove()},5000);
+  }
+});
 </script>
 
 </body>
