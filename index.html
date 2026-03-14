@@ -21,17 +21,6 @@ body{
   transition:background 0.8s, color 0.8s;
 }
 
-/* Dark mode */
-body.dark-mode{
-  background:#2e004f;
-  color:#f0c0f0;
-}
-body.dark-mode .landing-button{background:#ff66cc; color:#2e004f;}
-body.dark-mode nav a{color:#ff99cc;}
-body.dark-mode .section h2{color:#ff66cc;}
-body.dark-mode .portfolio img{border-color:#2e004f; border-bottom-color:#ff66cc;}
-body.dark-mode .footer-note{opacity:0.5;}
-
 /* NAVIGATION */
 nav{
   position:fixed;
@@ -52,6 +41,7 @@ nav a{
 nav a:hover{
   transform:scale(1.1);
   color:#4d004d;
+  text-shadow:0 0 8px #ff66cc;
 }
 
 /* LANDING PAGE */
@@ -70,16 +60,14 @@ nav a:hover{
   font-family:'Playfair Display',serif;
   position:relative;
   margin-bottom:20px;
-  cursor:pointer; /* easter egg */
+  cursor:pointer;
   animation: pulse 3s infinite alternate;
 }
-/* pulse + couleur dégradée */
 @keyframes pulse{
   0%{color:#d63384; transform:scale(1);}
   50%{color:#ff66cc; transform:scale(1.05);}
   100%{color:#d63384; transform:scale(1);}
 }
-
 #landing h1::after{
   content:"";
   position:absolute;
@@ -91,14 +79,12 @@ nav a:hover{
   background-size:contain;
   background-repeat:no-repeat;
 }
-
 #landing p{
   font-size:28px;
   font-style:italic;
   color:#4d004d;
   margin-bottom:40px;
 }
-
 /* boutons horizontaux */
 .button-row{
   display:flex;
@@ -120,17 +106,8 @@ nav a:hover{
   background:#4d004d;
   box-shadow:0 0 25px #ff66cc, 0 0 50px #ff99cc;
 }
-/* bounce au clic */
-@keyframes click-bounce {
-  0%{transform:scale(1);}
-  50%{transform:scale(1.2);}
-  100%{transform:scale(1);}
-}
-.landing-button:active {
-  animation: click-bounce 0.3s;
-}
 
-/* Dark mode toggle button */
+/* Dark mode toggle */
 #dark-toggle{
   margin-top:20px;
   cursor:pointer;
@@ -157,6 +134,7 @@ nav a:hover{
   display:none;
   opacity:0;
   transition:opacity 1s;
+  position:relative;
 }
 .section.visible{opacity:1;}
 .section h2{
@@ -169,7 +147,17 @@ nav a:hover{
   transition: all 1s;
 }
 .section h2.visible{opacity:1; transform:translateX(0);}
-.section p{margin-bottom:15px;}
+.section p{
+  margin-bottom:15px;
+  opacity:0;
+  transform:translateY(20px);
+  transition:all 0.8s ease-out;
+}
+.section p.visible{opacity:1; transform:translateY(0);}
+.section p:hover{
+  color:#ff66cc;
+  transform:scale(1.05);
+}
 
 /* PORTFOLIO */
 .portfolio{
@@ -191,19 +179,7 @@ nav a:hover{
 }
 .portfolio img:hover{
   transform:scale(1.05) rotate(-1deg);
-  box-shadow:0 10px 25px rgba(0,0,0,0.3);
-}
-.portfolio img::after{
-  content:"❤ 🎀";
-  position:absolute;
-  top:5px;
-  right:5px;
-  font-size:18px;
-  opacity:0;
-  transition:opacity 0.3s;
-}
-.portfolio img:hover::after{
-  opacity:1;
+  box-shadow:0 0 25px #ff66cc,0 0 50px #ff99cc;
 }
 
 /* CITATION & SIGNATURE */
@@ -228,9 +204,14 @@ nav a:hover{
   margin:10px;
   font-size:20px;
   color:#d63384;
+  transition:0.3s;
+}
+.contact a:hover{
+  color:#ff66cc;
+  text-shadow:0 0 8px #ff99cc;
 }
 
-/* FOOTER exact remis */
+/* FOOTER */
 .footer-note{
   font-size:12px;
   opacity:0.7;
@@ -242,6 +223,7 @@ nav a:hover{
   #landing h1{font-size:60px; letter-spacing:6px;}
   #landing p{font-size:22px;}
   .section h2{font-size:32px;}
+  .section p{font-size:18px;}
   .citation{font-size:28px;}
   .signature{font-size:18px;}
   .contact a{font-size:18px;}
@@ -253,6 +235,7 @@ nav a:hover{
   #landing h1{font-size:48px; letter-spacing:4px;}
   #landing p{font-size:18px;}
   .section h2{font-size:24px;}
+  .section p{font-size:16px;}
   .citation{font-size:22px;}
   .signature{font-size:16px;}
   .contact a{font-size:16px;}
@@ -260,7 +243,7 @@ nav a:hover{
   .landing-button{font-size:18px; padding:10px 25px;}
 }
 
-/* ANIMATIONS FLOTANTES SUR LES CÔTÉS */
+/* ANIMATIONS FLOTANTES */
 @keyframes float{
   0%{transform:translateY(0);}
   50%{transform:translateY(-10px);}
@@ -277,20 +260,18 @@ nav a:hover{
 .float-palette{color:#ffcc66; font-size:16px;}
 .float-paint{color:#ff9966; font-size:16px;}
 
-/* Easter egg message */
-#easter-msg{
-  position:fixed;
-  top:50%; left:50%;
-  transform:translate(-50%,-50%);
+/* TOOLTIP / POPUP */
+.tooltip{
+  position:absolute;
   background:#ff66cc;
-  color:#2e004f;
-  padding:20px 40px;
-  border-radius:20px;
-  font-size:24px;
-  font-family:'Great Vibes',cursive;
+  color:#fff;
+  padding:8px 15px;
+  border-radius:12px;
+  font-size:16px;
   opacity:0;
   pointer-events:none;
-  transition:opacity 0.5s;
+  transition:opacity 0.3s;
+  font-family:'Quicksand',sans-serif;
   z-index:200;
 }
 </style>
@@ -320,7 +301,7 @@ nav a:hover{
 <!-- À propos -->
 <section id="about" class="section">
 <h2>À propos de moi</h2>
-<p>Bonjour, je m'appelle Camille, j'ai 14 ans et je suis une jeune artiste photographe.</p>
+<p data-tooltip="Créativité sans limite!">Bonjour, je m'appelle Camille, j'ai 14 ans et je suis une jeune artiste photographe.</p>
 <p>Je suis passionnée par le monde de l'art et tout ce qui touche à la créativité.</p>
 <p>Si vous voulez suivre mon univers, je vous invite à venir sur mon compte Instagram en bas de la page.</p>
 <p>Merci de me soutenir chaque jour. Explorez votre créativité !</p>
@@ -332,7 +313,7 @@ nav a:hover{
 <section id="portfolio" class="section">
 <h2>Mes réalisations</h2>
 <div class="portfolio">
-  <img src="10.jpg" alt="">
+  <img src="10.jpg" alt="" data-tooltip="Favori du jour">
   <img src="11.jpg" alt="">
   <img src="12.jpg" alt="">
   <img src="13.jpg" alt="">
@@ -362,11 +343,12 @@ nav a:hover{
 Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles, ou des photos prises par mes amis, mais toujours avec moi ou de moi. La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
 </p>
 
-<!-- Easter egg message -->
-<div id="easter-msg">Aime-toi comme tu es 💖</div>
+<!-- Tooltip container -->
+<div id="tooltip" class="tooltip"></div>
 
 <!-- Animations flottantes + JS -->
 <script>
+/* Emoji flottants sur côtés */
 const animTypes = [
   {char:'❤', class:'float-heart', color:'#ff99cc'},
   {char:'🎀', class:'float-bow', color:'#ff66cc'},
@@ -390,20 +372,19 @@ function createAnim(){
 }
 for(let i=0;i<45;i++) createAnim();
 
-// Navigation landing -> sections + fade-in
+/* Navigation landing -> sections + fade-in */
 const buttons = document.querySelectorAll('.landing-button');
 const sections = document.querySelectorAll('.section');
 const nav = document.querySelector('nav');
 const landing = document.getElementById('landing');
-const title = document.getElementById('landing-title');
 buttons.forEach(btn=>{
   btn.addEventListener('click', ()=>{
     const target = btn.getAttribute('data-target');
     landing.style.display='none';
     nav.style.display='block';
     sections.forEach(sec=>{
-      if(sec.id===target){sec.style.display='block'; sec.classList.add('visible'); sec.querySelector('h2').classList.add('visible');}
-      else{sec.style.display='none'; sec.classList.remove('visible'); sec.querySelector('h2').classList.remove('visible');}
+      if(sec.id===target){sec.style.display='block'; sec.classList.add('visible'); sec.querySelector('h2').classList.add('visible'); sec.querySelectorAll('p').forEach(p=>p.classList.add('visible'));}
+      else{sec.style.display='none'; sec.classList.remove('visible'); sec.querySelector('h2').classList.remove('visible'); sec.querySelectorAll('p').forEach(p=>p.classList.remove('visible'));}
     });
   });
 });
@@ -414,29 +395,55 @@ nav.querySelectorAll('a').forEach(link=>{
     if(target==='landing'){
       landing.style.display='flex';
       nav.style.display='none';
-      sections.forEach(sec=>{sec.style.display='none'; sec.classList.remove('visible'); sec.querySelector('h2').classList.remove('visible');});
+      sections.forEach(sec=>{sec.style.display='none'; sec.classList.remove('visible'); sec.querySelector('h2').classList.remove('visible'); sec.querySelectorAll('p').forEach(p=>p.classList.remove('visible'))});
       window.scrollTo({top:0, behavior:'smooth'});
     } else {
       landing.style.display='none';
       sections.forEach(sec=>{
-        if(sec.id===target){sec.style.display='block'; sec.classList.add('visible'); sec.querySelector('h2').classList.add('visible');}
-        else{sec.style.display='none'; sec.classList.remove('visible'); sec.querySelector('h2').classList.remove('visible');}
+        if(sec.id===target){sec.style.display='block'; sec.classList.add('visible'); sec.querySelector('h2').classList.add('visible'); sec.querySelectorAll('p').forEach(p=>p.classList.add('visible'));}
+        else{sec.style.display='none'; sec.classList.remove('visible'); sec.querySelector('h2').classList.remove('visible'); sec.querySelectorAll('p').forEach(p=>p.classList.remove('visible'));}
       });
       nav.style.display='block';
     }
   });
 });
 
-// Dark/light toggle
+/* Dark/light toggle */
 document.getElementById('dark-toggle').addEventListener('click', ()=>{
   document.body.classList.toggle('dark-mode');
 });
 
-// Easter egg
-title.addEventListener('click', ()=>{
-  const msg = document.getElementById('easter-msg');
-  msg.style.opacity='1';
-  setTimeout(()=>{msg.style.opacity='0';},2000);
+/* Particle trail au curseur */
+document.addEventListener('mousemove', e=>{
+  const trail = document.createElement('div');
+  const type = animTypes[Math.floor(Math.random()*animTypes.length)];
+  trail.innerHTML = type.char;
+  trail.style.position='absolute';
+  trail.style.left=e.clientX+'px';
+  trail.style.top=e.clientY+'px';
+  trail.style.fontSize=(10+Math.random()*10)+'px';
+  trail.style.opacity=0.7;
+  trail.style.pointerEvents='none';
+  trail.style.color=type.color;
+  trail.className=type.class;
+  document.body.appendChild(trail);
+  setTimeout(()=>trail.remove(),2000);
+});
+
+/* Tooltip sur hover */
+const tooltip = document.getElementById('tooltip');
+document.querySelectorAll('[data-tooltip]').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    tooltip.innerHTML = el.getAttribute('data-tooltip');
+    tooltip.style.opacity=1;
+  });
+  el.addEventListener('mousemove', e=>{
+    tooltip.style.left=e.pageX+15+'px';
+    tooltip.style.top=e.pageY+15+'px';
+  });
+  el.addEventListener('mouseleave',()=>{
+    tooltip.style.opacity=0;
+  });
 });
 </script>
 </body>
