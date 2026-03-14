@@ -70,7 +70,7 @@ nav a:hover{
   font-family:'Playfair Display',serif;
   position:relative;
   margin-bottom:20px;
-  cursor:pointer; /* pour easter egg */
+  cursor:pointer; /* easter egg */
   animation: pulse 3s infinite alternate;
 }
 /* pulse + couleur dégradée */
@@ -164,7 +164,12 @@ nav a:hover{
   color:#d63384;
   font-family:'Playfair Display',serif;
   margin-bottom:20px;
+  opacity:0;
+  transform:translateX(-50px);
+  transition: all 1s;
 }
+.section h2.visible{opacity:1; transform:translateX(0);}
+.section p{margin-bottom:15px;}
 
 /* PORTFOLIO */
 .portfolio{
@@ -225,7 +230,7 @@ nav a:hover{
   color:#d63384;
 }
 
-/* FOOTER */
+/* FOOTER exact remis */
 .footer-note{
   font-size:12px;
   opacity:0.7;
@@ -352,15 +357,15 @@ nav a:hover{
 </div>
 </section>
 
-<!-- Footer note -->
+<!-- Footer exact -->
 <p class="footer-note">
-Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles. La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
+Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles, ou des photos prises par mes amis, mais toujours avec moi ou de moi. La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
 </p>
 
 <!-- Easter egg message -->
 <div id="easter-msg">Aime-toi comme tu es 💖</div>
 
-<!-- Animations flottantes -->
+<!-- Animations flottantes + JS -->
 <script>
 const animTypes = [
   {char:'❤', class:'float-heart', color:'#ff99cc'},
@@ -369,14 +374,12 @@ const animTypes = [
   {char:'🎨', class:'float-palette', color:'#ffcc66'},
   {char:'🖌️', class:'float-paint', color:'#ff9966'}
 ];
-
 function createAnim(){
   const el = document.createElement('div');
   const type = animTypes[Math.floor(Math.random()*animTypes.length)];
   el.className = type.class;
   el.innerHTML = type.char;
   el.style.position = 'absolute';
-  // gauche 0-20%, droite 80-100%
   el.style.left = Math.random()<0.5 ? Math.random()*20 + '%' : 80 + Math.random()*20 + '%';
   el.style.top = Math.random()*100 + '%';
   el.style.fontSize = (12+Math.random()*16)+'px';
@@ -385,30 +388,25 @@ function createAnim(){
   el.style.animation = `float ${5+Math.random()*5}s ease-in-out infinite`;
   document.body.appendChild(el);
 }
-
-// Générer 45 emojis flottants
 for(let i=0;i<45;i++) createAnim();
 
-// Navigation landing -> sections + fade-in + retour accueil
+// Navigation landing -> sections + fade-in
 const buttons = document.querySelectorAll('.landing-button');
 const sections = document.querySelectorAll('.section');
 const nav = document.querySelector('nav');
 const landing = document.getElementById('landing');
 const title = document.getElementById('landing-title');
-
 buttons.forEach(btn=>{
   btn.addEventListener('click', ()=>{
     const target = btn.getAttribute('data-target');
     landing.style.display='none';
     nav.style.display='block';
     sections.forEach(sec=>{
-      if(sec.id===target){sec.style.display='block'; sec.classList.add('visible');}
-      else{sec.style.display='none'; sec.classList.remove('visible');}
+      if(sec.id===target){sec.style.display='block'; sec.classList.add('visible'); sec.querySelector('h2').classList.add('visible');}
+      else{sec.style.display='none'; sec.classList.remove('visible'); sec.querySelector('h2').classList.remove('visible');}
     });
   });
 });
-
-// Nav links
 nav.querySelectorAll('a').forEach(link=>{
   link.addEventListener('click', e=>{
     e.preventDefault();
@@ -416,13 +414,13 @@ nav.querySelectorAll('a').forEach(link=>{
     if(target==='landing'){
       landing.style.display='flex';
       nav.style.display='none';
-      sections.forEach(sec=>{sec.style.display='none'; sec.classList.remove('visible');});
+      sections.forEach(sec=>{sec.style.display='none'; sec.classList.remove('visible'); sec.querySelector('h2').classList.remove('visible');});
       window.scrollTo({top:0, behavior:'smooth'});
     } else {
       landing.style.display='none';
       sections.forEach(sec=>{
-        if(sec.id===target){sec.style.display='block'; sec.classList.add('visible');}
-        else{sec.style.display='none'; sec.classList.remove('visible');}
+        if(sec.id===target){sec.style.display='block'; sec.classList.add('visible'); sec.querySelector('h2').classList.add('visible');}
+        else{sec.style.display='none'; sec.classList.remove('visible'); sec.querySelector('h2').classList.remove('visible');}
       });
       nav.style.display='block';
     }
