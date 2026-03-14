@@ -83,7 +83,6 @@ h1::after{
   color:#d63384;
   font-family:'Playfair Display',serif;
   margin-bottom:20px;
-  position:relative;
 }
 
 /* CITATION & SIGNATURE */
@@ -128,19 +127,18 @@ h1::after{
 }
 
 /* PARTICULES / ANIMATIONS */
-.particle, .heart, .bow, .emoji, .bg-photo{
+.particle, .heart, .bow{
   position:absolute;
   opacity:0.8;
 }
 .heart{color:#ff99cc;font-size:14px;}
 .bow{color:#ff66cc;font-size:16px;}
 .particle{width:6px;height:6px;background:rgba(255,255,255,0.5);border-radius:50%;}
-.emoji{font-size:18px;pointer-events:none;}
 
-/* Photos en arrière-plan */
+/* Photos en arrière-plan (fixes, effet tombant mais immobiles) */
 .bg-photo img{
   border:10px solid #fff;
-  border-bottom-width:30px; /* bord plus large en bas */
+  border-bottom-width:30px;
   border-radius:8px;
   width:200px;
   height:auto;
@@ -192,7 +190,7 @@ La conception technique et certaines parties du code ont été réalisées avec 
 </p>
 
 <script>
-// Photos en arrière-plan
+// Photos en arrière-plan fixes
 const bgPhotos = [
   "IMG_1057.jpg","IMG_1158.jpg","IMG_1367_1.jpg","IMG_1444v2.jpg",
   "1.jpeg","2.jpeg","3.jpeg","4.jpeg","5.jpeg","6.jpeg","7.jpeg","8.jpeg","9.jpeg"
@@ -209,7 +207,7 @@ bgPhotos.forEach((src)=>{
   document.body.appendChild(div);
 });
 
-// Animations flottantes
+// Animations flottantes (séparées des photos)
 for(let i=0;i<60;i++){
   let el=document.createElement("div");
   let type=Math.random()>0.5?"heart":"bow";
@@ -228,15 +226,6 @@ for(let i=0;i<40;i++){
   p.style.animationDuration=(8+Math.random()*5)+"s";
   document.body.appendChild(p);
 }
-
-// Scroll limité à la fin de la citation
-const citation = document.querySelector('.citation');
-window.addEventListener('scroll', () => {
-  const maxScroll = citation.offsetTop + citation.offsetHeight + 20; // marge 20px
-  if (window.scrollY > maxScroll) {
-    window.scrollTo(0, maxScroll);
-  }
-});
 </script>
 
 </body>
