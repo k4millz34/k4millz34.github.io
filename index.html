@@ -16,6 +16,7 @@ body{
   text-align:center;
   overflow-x:hidden;
   scroll-behavior:smooth;
+  position:relative;
 }
 
 /* ===== NAVIGATION ===== */
@@ -42,6 +43,7 @@ nav a:hover{
 /* ===== HEADER ===== */
 header{
   padding:120px 20px 80px;
+  position:relative;
 }
 h1{
   font-size:80px;
@@ -58,7 +60,7 @@ h1::after{
   right:-50px;
   width:50px;
   height:50px;
-  background-image:url('uwusite.png');
+  background-image:url('uwusite.png'); /* nœud */
   background-size:contain;
   background-repeat:no-repeat;
 }
@@ -103,8 +105,6 @@ h1::after{
   transform:scale(1.05) rotate(-1deg);
   box-shadow:0 10px 25px rgba(0,0,0,0.3);
 }
-
-/* Animations au survol des images */
 .portfolio img::after{
   content:"❤ 🎀";
   position:absolute;
@@ -117,6 +117,20 @@ h1::after{
 .portfolio img:hover::after{
   opacity:1;
 }
+
+/* ===== ANIMATIONS DE FOND ===== */
+@keyframes float{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-10px);}
+  100%{transform:translateY(0);}
+}
+.float-heart, .float-bow{
+  position:absolute;
+  font-size:16px;
+  animation:float 5s ease-in-out infinite;
+}
+.float-heart{color:#ff99cc;}
+.float-bow{color:#ff66cc;}
 
 /* ===== CITATION & SIGNATURE ===== */
 .citation{
@@ -173,17 +187,19 @@ h1::after{
 </head>
 <body>
 
+<!-- Navigation -->
 <nav>
-<a href="#about">À propos</a>
-<a href="#portfolio">Portfolio</a>
-<a href="#contact">Contact</a>
+  <a href="#about">À propos</a>
+  <a href="#portfolio">Portfolio</a>
+  <a href="#contact">Contact</a>
 </nav>
 
 <header>
-<h1>K4MILLZ</h1>
-<p class="tagline">L’ART EN IMAGE</p>
+  <h1>K4MILLZ</h1>
+  <p class="tagline">L’ART EN IMAGE</p>
 </header>
 
+<!-- À propos -->
 <section id="about" class="section">
 <h2>À propos de moi</h2>
 <p>Bonjour, je m'appelle Camille, j'ai 14 ans et je suis une jeune artiste photographe.</p>
@@ -192,42 +208,52 @@ h1::after{
 <p>Merci de me soutenir chaque jour. Au revoir et n'oubliez pas, explorez votre créativité.</p>
 </section>
 
+<!-- Portfolio -->
 <section id="portfolio" class="section">
 <h2>Mes réalisations</h2>
 <div class="portfolio">
-  <!-- Liste de toutes les photos -->
-  <img src="IMG_1057.jpg" alt="photo1">
-  <img src="IMG_1158.jpg" alt="photo2">
-  <img src="IMG_1367_1.jpg" alt="photo3">
-  <img src="IMG_1444v2.jpg" alt="photo4">
-  <img src="1.jpeg" alt="photo5">
-  <img src="2.jpeg" alt="photo6">
-  <img src="3.jpeg" alt="photo7">
-  <img src="4.jpeg" alt="photo8">
-  <img src="5.jpeg" alt="photo9">
-  <img src="6.jpeg" alt="photo10">
-  <img src="7.jpeg" alt="photo11">
-  <img src="8.jpeg" alt="photo12">
-  <img src="9.jpeg" alt="photo13">
+  <img src="IMG_1057.jpg" alt="">
+  <img src="IMG_1158.jpg" alt="">
+  <img src="IMG_1367_1.jpg" alt="">
+  <img src="IMG_1444v2.jpg" alt="">
+  <img src="1.jpg" alt="">
+  <img src="2.jpg" alt="">
+  <img src="3.jpg" alt="">
+  <img src="4.jpg" alt="">
+  <img src="5.jpg" alt="">
+  <img src="6.jpg" alt="">
+  <img src="7.jpg" alt="">
+  <img src="8.jpg" alt="">
+  <img src="9.jpg" alt="">
 </div>
 </section>
 
+<!-- Citation -->
 <p class="citation">
 Le meilleur des arts, c'est celui qu'on a au fond de soi.
 </p>
-
 <p class="signature">
 — K4MILLZ
 </p>
 
-<div class="contact">
+<!-- Contact -->
+<div id="contact" class="contact">
 <a href="mailto:k4millzpro@gmail.com">k4millzpro@gmail.com</a>
 <a href="https://www.instagram.com/k4mill_z/" target="_blank">📸 Instagram : @k4mill_z</a>
 </div>
 
+<!-- Footer note -->
 <p class="footer-note">
 Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles, ou des photos prises par mes amis, mais toujours avec moi ou de moi. La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
 </p>
+
+<!-- Animations flottantes en arrière-plan -->
+<div class="float-heart" style="top:10%; left:5%;">❤</div>
+<div class="float-heart" style="top:40%; left:80%;">❤</div>
+<div class="float-bow" style="top:20%; left:30%;">🎀</div>
+<div class="float-bow" style="top:60%; left:60%;">🎀</div>
+<div class="float-heart" style="top:70%; left:15%;">❤</div>
+<div class="float-bow" style="top:85%; left:40%;">🎀</div>
 
 </body>
 </html>
