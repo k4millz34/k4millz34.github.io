@@ -3,22 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>K4MILLZ - Portfolio</title>
+<title>uwusite - Portfolio</title>
 <link rel="icon" type="image/x-icon" href="K4M.ico">
-
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Playfair+Display:wght@600&family=Great+Vibes&family=Cinzel:wght@700&display=swap" rel="stylesheet">
 
 <style>
 body{
   margin:0;
-  background:#ffe6f0;
   font-family:'Quicksand',sans-serif;
+  background:#ffe6f0;
   color:#1a1a1a;
   text-align:center;
-  scroll-behavior:smooth;
   overflow-x:hidden;
+  scroll-behavior:smooth;
   position:relative;
+  max-height:100vh; /* scroll limité */
+  overflow-y:hidden;
 }
 
 /* NAVIGATION */
@@ -52,17 +51,19 @@ h1{
   letter-spacing:8px;
   color:#d63384;
   font-family:'Playfair Display',serif;
-  text-shadow:0 0 10px rgba(255,105,180,0.6),0 0 20px rgba(255,105,180,0.3);
-  display:inline-block;
   position:relative;
+  display:inline-block;
 }
 h1::after{
-  content:'🎀'; /* nœud sur le pseudo */
-  font-size:40px;
+  content:"";
   position:absolute;
-  top:10px;
+  top:-10px;
   right:-50px;
-  animation:float 6s linear infinite alternate;
+  width:50px;
+  height:50px;
+  background-image:url('uwusite.png'); /* ton nœud */
+  background-size:contain;
+  background-repeat:no-repeat;
 }
 .tagline{
   font-size:28px;
@@ -94,7 +95,7 @@ h1::after{
 }
 .gallery a{
   display:block;
-  border:6px double #FFD700; /* cadre doré */
+  border:6px double #FFD700; 
   border-radius:12px;
   overflow:hidden;
   box-shadow:0 10px 25px rgba(0,0,0,0.2);
@@ -107,7 +108,7 @@ h1::after{
 .gallery img{
   width:100%;
   height:100%;
-  object-fit:cover; /* recadrage propre */
+  object-fit:cover;
   display:block;
 }
 
@@ -128,7 +129,7 @@ h1::after{
 }
 .signature{
   font-family:'Cinzel',serif;
- 	font-size:22px;
+  font-size:22px;
   text-align:right;
   max-width:900px;
   margin:auto;
@@ -159,23 +160,19 @@ h1::after{
 }
 </style>
 </head>
-
 <body>
 
-<!-- NAV -->
 <nav>
 <a href="#about">À propos</a>
 <a href="#portfolio">Mes réalisations</a>
 <a href="#contact">Contact</a>
 </nav>
 
-<!-- HEADER -->
 <header>
-<h1>K4MILLZ</h1>
+<h1>uwusite</h1>
 <p class="tagline">L’ART EN IMAGE</p>
 </header>
 
-<!-- À PROPOS -->
 <section id="about" class="section">
 <h2>À propos de moi</h2>
 <p>Bonjour, je m'appelle Camille, j'ai 14 ans et je suis une jeune artiste photographe.</p>
@@ -184,38 +181,31 @@ h1::after{
 <p>Merci de me soutenir chaque jour. Au revoir et n'oubliez pas, explorez votre créativité.</p>
 </section>
 
-<!-- GALERIE -->
 <section id="portfolio" class="section">
 <h2>Mes réalisations</h2>
 <div class="gallery">
-<a href="IMG_1057.jpg" data-lightbox="portfolio"><img src="IMG_1057.jpg"></a>
-<a href="IMG_1158.jpg" data-lightbox="portfolio"><img src="IMG_1158.jpg"></a>
-<a href="IMG_1367_1.jpg" data-lightbox="portfolio"><img src="IMG_1367_1.jpg"></a>
-<a href="IMG_1444v2.jpg" data-lightbox="portfolio"><img src="IMG_1444v2.jpg"></a>
+<a href="IMG_1057.jpg"><img src="IMG_1057.jpg"></a>
+<a href="IMG_1158.jpg"><img src="IMG_1158.jpg"></a>
+<a href="IMG_1367_1.jpg"><img src="IMG_1367_1.jpg"></a>
+<a href="IMG_1444v2.jpg"><img src="IMG_1444v2.jpg"></a>
 </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact" class="section contact">
-<h2>Contact</h2>
-<a href="mailto:k4millzpro@gmail.com">k4millzpro@gmail.com</a>
-<a href="https://www.instagram.com/k4mill_z/" target="_blank">📸 Instagram</a>
-</section>
+<p class="citation">
+Le meilleur des arts, c'est celui qu'on a au fond de soi.
+</p>
 
-<!-- CITATION & SIGNATURE -->
-<p class="citation">Le meilleur des arts, c'est celui qu'on a au fond de soi.</p>
-<p class="signature">— K4MILLZ</p>
+<p class="signature">
+— uwusite
+</p>
 
-<!-- FOOTER NOTE -->
 <p class="footer-note">
 Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles.
 La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
 </p>
 
-<!-- ANIMATIONS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 <script>
-// Générer cœurs et nœuds flottants
+// Générer cœurs, nœuds et particules flottants
 for(let i=0;i<60;i++){
   let el=document.createElement("div");
   let type=Math.random()>0.5?"heart":"bow";
@@ -226,8 +216,6 @@ for(let i=0;i<60;i++){
   el.style.animationDuration=(5+Math.random()*5)+"s";
   document.body.appendChild(el);
 }
-
-// Générer particules discrètes
 for(let i=0;i<40;i++){
   let p=document.createElement("div");
   p.className="particle";
@@ -235,22 +223,6 @@ for(let i=0;i<40;i++){
   p.style.animationDuration=(8+Math.random()*5)+"s";
   document.body.appendChild(p);
 }
-
-// Emojis sur hover À propos
-const about=document.getElementById("about");
-about.addEventListener("mouseenter", ()=>{
-  for(let i=0;i<10;i++){
-    let e=document.createElement("div");
-    e.className="emoji";
-    const emojis=["✨","🎨","🌸"];
-    e.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
-    e.style.left=Math.random()*100+"%";
-    e.style.top=Math.random()*100+"%";
-    e.style.animationDuration=(2+Math.random()*2)+"s";
-    document.body.appendChild(e);
-    setTimeout(()=>{e.remove()},4000);
-  }
-});
 </script>
 
 </body>
