@@ -85,6 +85,7 @@ nav a:hover{
   color:#4d004d;
   margin-bottom:40px;
 }
+
 /* boutons horizontaux */
 .button-row{
   display:flex;
@@ -259,21 +260,6 @@ nav a:hover{
 .float-star{color:#FFD700; font-size:16px;}
 .float-palette{color:#ffcc66; font-size:16px;}
 .float-paint{color:#ff9966; font-size:16px;}
-
-/* TOOLTIP / POPUP */
-.tooltip{
-  position:absolute;
-  background:#ff66cc;
-  color:#fff;
-  padding:8px 15px;
-  border-radius:12px;
-  font-size:16px;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity 0.3s;
-  font-family:'Quicksand',sans-serif;
-  z-index:200;
-}
 </style>
 </head>
 <body>
@@ -301,7 +287,7 @@ nav a:hover{
 <!-- À propos -->
 <section id="about" class="section">
 <h2>À propos de moi</h2>
-<p data-tooltip="Créativité sans limite!">Bonjour, je m'appelle Camille, j'ai 14 ans et je suis une jeune artiste photographe.</p>
+<p>Bonjour, je m'appelle Camille, j'ai 14 ans et je suis une jeune artiste photographe.</p>
 <p>Je suis passionnée par le monde de l'art et tout ce qui touche à la créativité.</p>
 <p>Si vous voulez suivre mon univers, je vous invite à venir sur mon compte Instagram en bas de la page.</p>
 <p>Merci de me soutenir chaque jour. Explorez votre créativité !</p>
@@ -313,7 +299,7 @@ nav a:hover{
 <section id="portfolio" class="section">
 <h2>Mes réalisations</h2>
 <div class="portfolio">
-  <img src="10.jpg" alt="" data-tooltip="Favori du jour">
+  <img src="10.jpg" alt="">
   <img src="11.jpg" alt="">
   <img src="12.jpg" alt="">
   <img src="13.jpg" alt="">
@@ -343,12 +329,8 @@ nav a:hover{
 Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles, ou des photos prises par mes amis, mais toujours avec moi ou de moi. La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
 </p>
 
-<!-- Tooltip container -->
-<div id="tooltip" class="tooltip"></div>
-
-<!-- Animations flottantes + JS -->
 <script>
-/* Emoji flottants sur côtés */
+/* Emoji flottants sur côtés (moins nombreux) */
 const animTypes = [
   {char:'❤', class:'float-heart', color:'#ff99cc'},
   {char:'🎀', class:'float-bow', color:'#ff66cc'},
@@ -370,9 +352,10 @@ function createAnim(){
   el.style.animation = `float ${5+Math.random()*5}s ease-in-out infinite`;
   document.body.appendChild(el);
 }
-for(let i=0;i<45;i++) createAnim();
+// 25 emojis flottants au lieu de 45
+for(let i=0;i<25;i++) createAnim();
 
-/* Navigation landing -> sections + fade-in */
+/* Navigation landing -> sections */
 const buttons = document.querySelectorAll('.landing-button');
 const sections = document.querySelectorAll('.section');
 const nav = document.querySelector('nav');
@@ -413,8 +396,10 @@ document.getElementById('dark-toggle').addEventListener('click', ()=>{
   document.body.classList.toggle('dark-mode');
 });
 
-/* Particle trail au curseur */
+/* Particle trail au curseur (moins nombreux) */
+let trailCounter = 0;
 document.addEventListener('mousemove', e=>{
+  if(trailCounter++ % 5 !== 0) return; // réduire le nombre d'emojis
   const trail = document.createElement('div');
   const type = animTypes[Math.floor(Math.random()*animTypes.length)];
   trail.innerHTML = type.char;
@@ -428,22 +413,6 @@ document.addEventListener('mousemove', e=>{
   trail.className=type.class;
   document.body.appendChild(trail);
   setTimeout(()=>trail.remove(),2000);
-});
-
-/* Tooltip sur hover */
-const tooltip = document.getElementById('tooltip');
-document.querySelectorAll('[data-tooltip]').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{
-    tooltip.innerHTML = el.getAttribute('data-tooltip');
-    tooltip.style.opacity=1;
-  });
-  el.addEventListener('mousemove', e=>{
-    tooltip.style.left=e.pageX+15+'px';
-    tooltip.style.top=e.pageY+15+'px';
-  });
-  el.addEventListener('mouseleave',()=>{
-    tooltip.style.opacity=0;
-  });
 });
 </script>
 </body>
