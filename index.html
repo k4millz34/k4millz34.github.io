@@ -4,458 +4,303 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>K4MILLZ</title>
+
 <link rel="icon" type="image/x-icon" href="K4M.ico">
+
 <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Playfair+Display&family=Quicksand&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
-/* ===== GLOBAL ===== */
+
 body{
-  margin:0;
-  font-family:'Quicksand',sans-serif;
-  background:#ffe6f0;
-  color:#1a1a1a;
-  text-align:center;
-  overflow-x:hidden;
-  scroll-behavior:smooth;
-  position:relative;
-  transition: background 0.8s, color 0.8s;
+margin:0;
+font-family:'Quicksand',sans-serif;
+background:#ffe6f0;
+color:#1a1a1a;
+text-align:center;
+overflow-x:hidden;
+scroll-behavior:smooth;
+transition: background 0.6s, color 0.6s;
 }
 
-/* DARK MODE */
 body.dark-mode{
-  background:#1a1a1a;
-  color:#ffe6f0;
-}
-body.dark-mode nav{
-  background:#330033dd;
-  border-bottom:2px solid #ff66cc;
-}
-body.dark-mode nav a{
-  color:#ff66cc;
-}
-body.dark-mode nav a:hover{
-  color:#ff99cc;
-}
-body.dark-mode .landing-button, body.dark-mode #dark-toggle{
-  background:#4d004d;
-  color:#ffe6f0;
-}
-body.dark-mode .landing-button:hover, body.dark-mode #dark-toggle:hover{
-  background:#ff66cc;
-  color:#1a1a1a;
-  box-shadow:0 0 20px #ff99cc,0 0 40px #ff66cc;
+background:#1a1a1a;
+color:#ffe6f0;
 }
 
-/* NAVIGATION */
 nav{
-  position:fixed;
-  top:0;
-  width:100%;
-  background:#ffe6f0dd;
-  padding:12px;
-  border-bottom:2px solid #d63384;
-  z-index:100;
-  display:none;
+position:fixed;
+top:0;
+width:100%;
+background:#ffe6f0;
+padding:12px;
+border-bottom:2px solid #d63384;
+display:none;
+z-index:100;
 }
+
 nav a{
-  margin:0 20px;
-  font-weight:600;
-  color:#d63384;
-  transition:0.3s;
+margin:0 20px;
+font-weight:600;
+color:#d63384;
+text-decoration:none;
+transition:0.3s;
 }
+
 nav a:hover{
-  transform:scale(1.1);
-  color:#4d004d;
-  text-shadow:0 0 8px #ff66cc;
+transform:scale(1.1);
+color:#4d004d;
 }
 
-/* LANDING PAGE */
 #landing{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  padding:20px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+height:100vh;
 }
+
 #landing h1{
-  font-size:80px;
-  letter-spacing:8px;
-  color:#d63384;
-  font-family:'Playfair Display',serif;
-  position:relative;
-  margin-bottom:20px;
-  cursor:pointer;
-  animation: pulse 3s infinite alternate;
+font-size:80px;
+letter-spacing:8px;
+color:#d63384;
+font-family:'Playfair Display',serif;
 }
-@keyframes pulse{
-  0%{color:#d63384; transform:scale(1);}
-  50%{color:#ff66cc; transform:scale(1.05);}
-  100%{color:#d63384; transform:scale(1);}
-}
-#landing h1::after{
-  content:"";
-  position:absolute;
-  top:-10px;
-  right:-50px;
-  width:50px;
-  height:50px;
-  background-image:url('uwusite.png');
-  background-size:contain;
-  background-repeat:no-repeat;
-}
+
 #landing p{
-  font-size:28px;
-  font-style:italic;
-  color:#4d004d;
-  margin-bottom:40px;
+font-size:28px;
+font-style:italic;
+margin-bottom:40px;
 }
 
-/* boutons horizontaux */
 .button-row{
-  display:flex;
-  gap:30px;
-  flex-wrap:wrap;
+display:flex;
+gap:30px;
+flex-wrap:wrap;
 }
+
 .landing-button{
-  background:#d63384;
-  color:white;
-  border:none;
-  border-radius:12px;
-  padding:15px 40px;
-  font-size:22px;
-  cursor:pointer;
-  transition:0.3s, box-shadow 0.3s;
-  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+background:#d63384;
+color:white;
+border:none;
+border-radius:12px;
+padding:15px 40px;
+font-size:22px;
+cursor:pointer;
+transition:0.3s;
 }
+
 .landing-button:hover{
-  transform:scale(1.1);
-  background:#4d004d;
-  box-shadow:0 0 25px #ff66cc, 0 0 50px #ff99cc;
+transform:scale(1.1);
+background:#4d004d;
 }
 
-/* Dark mode toggle */
 #dark-toggle{
-  margin-top:20px;
-  cursor:pointer;
-  font-size:18px;
-  padding:10px 20px;
-  border-radius:12px;
-  border:none;
-  background:#d63384;
-  color:white;
-  box-shadow:0 5px 15px rgba(0,0,0,0.2);
-  transition:0.3s;
-}
-#dark-toggle:hover{
-  transform:scale(1.1);
-  background:#4d004d;
-  box-shadow:0 0 25px #ff66cc,0 0 50px #ff99cc;
+margin-top:25px;
+padding:10px 20px;
+border-radius:12px;
+border:none;
+background:#d63384;
+color:white;
+font-size:18px;
+cursor:pointer;
 }
 
-/* SECTIONS */
 .section{
-  padding:80px 20px;
-  max-width:1100px;
-  margin:auto;
-  display:none;
-  opacity:0;
-  transition:opacity 1s;
-  position:relative;
+padding:90px 20px;
+max-width:1000px;
+margin:auto;
+display:none;
+opacity:0;
+transition:opacity 0.8s;
 }
-.section.visible{opacity:1;}
+
+.section.visible{
+opacity:1;
+}
+
 .section h2{
-  font-size:40px;
-  color:#d63384;
-  font-family:'Playfair Display',serif;
-  margin-bottom:20px;
-  opacity:0;
-  transform:translateX(-50px);
-  transition: all 1s;
-}
-.section h2.visible{opacity:1; transform:translateX(0);}
-.section p{
-  margin-bottom:15px;
-  opacity:0;
-  transform:translateY(20px);
-  transition:all 0.8s ease-out;
-}
-.section p.visible{opacity:1; transform:translateY(0);}
-.section p:hover{
-  color:#ff66cc;
-  transform:scale(1.05);
+font-size:40px;
+color:#d63384;
+font-family:'Playfair Display',serif;
+margin-bottom:20px;
 }
 
-/* PORTFOLIO */
 .portfolio{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:30px;
-  justify-items:center;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:30px;
 }
+
 .portfolio img{
-  width:100%;
-  max-width:250px;
-  border:10px solid #fff;
-  border-bottom-width:30px;
-  border-radius:8px;
-  object-fit:cover;
-  box-shadow:0 5px 15px rgba(0,0,0,0.2);
-  transition: transform 0.3s, box-shadow 0.3s;
-  position:relative;
-}
-.portfolio img:hover{
-  transform:scale(1.05) rotate(-1deg);
-  box-shadow:0 0 25px #ff66cc,0 0 50px #ff99cc;
+width:100%;
+max-width:250px;
+border:10px solid white;
+border-bottom-width:30px;
+border-radius:8px;
+object-fit:cover;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* CITATION & SIGNATURE */
-.citation{
-  font-family:'Great Vibes',cursive;
-  font-size:34px;
-  margin-top:80px;
-  color:#4d004d;
-}
-.signature{
-  font-family:'Cinzel',serif;
-  font-size:22px;
-  text-align:right;
-  max-width:900px;
-  margin:auto;
-  margin-bottom:40px;
-}
-
-/* CONTACT */
 .contact a{
-  display:block;
-  margin:10px;
-  font-size:20px;
-  color:#d63384;
-  transition:0.3s;
-}
-.contact a:hover{
-  color:#ff66cc;
-  text-shadow:0 0 8px #ff99cc;
+display:block;
+margin:10px;
+font-size:20px;
+color:#d63384;
+text-decoration:none;
 }
 
-/* FOOTER */
 .footer-note{
-  font-size:12px;
-  opacity:0.7;
-  margin-bottom:40px;
+font-size:12px;
+opacity:0.7;
+margin:40px;
 }
 
-/* RESPONSIVE */
-@media (max-width:768px){
-  #landing h1{font-size:60px; letter-spacing:6px;}
-  #landing p{font-size:22px;}
-  .section h2{font-size:32px;}
-  .section p{font-size:18px;}
-  .citation{font-size:28px;}
-  .signature{font-size:18px;}
-  .contact a{font-size:18px;}
-  .portfolio img{max-width:180px;}
-  .landing-button{font-size:20px; padding:12px 30px;}
-  .button-row{gap:20px; flex-direction:column;}
-}
-@media (max-width:480px){
-  #landing h1{font-size:48px; letter-spacing:4px;}
-  #landing p{font-size:18px;}
-  .section h2{font-size:24px;}
-  .section p{font-size:16px;}
-  .citation{font-size:22px;}
-  .signature{font-size:16px;}
-  .contact a{font-size:16px;}
-  .portfolio img{max-width:140px;}
-  .landing-button{font-size:18px; padding:10px 25px;}
-}
-
-/* EMOJIS FLOTANTS SUR LES COTES */
-@keyframes float{
-  0%{transform:translateY(0);}
-  50%{transform:translateY(-8px);}
-  100%{transform:translateY(0);}
-}
-.float{
-  position:absolute;
-  animation:float 5s ease-in-out infinite;
-  pointer-events:none;
-  opacity:0.3;
-  font-size:14px;
-}
-
-/* ANIMATION SCROLL */
-.section-element{
-  opacity:0;
-  transform:translateY(20px);
-  transition:all 0.8s ease-out;
-}
-.section-element.visible{
-  opacity:1;
-  transform:translateY(0);
-}
 </style>
 </head>
+
 <body>
 
-<!-- LANDING PAGE -->
 <div id="landing">
-  <h1 id="landing-title">K4MILLZ</h1>
-  <p>L’art en image</p>
-  <div class="button-row">
-    <button class="landing-button" data-target="about">À propos</button>
-    <button class="landing-button" data-target="portfolio">Portfolio</button>
-    <button class="landing-button" data-target="contact">Contact</button>
-  </div>
-  <button id="dark-toggle">Mode Dark / Light</button>
+
+<h1>K4MILLZ</h1>
+
+<p>L’art en image</p>
+
+<div class="button-row">
+
+<button class="landing-button" data-target="about">À propos</button>
+
+<button class="landing-button" data-target="portfolio">Portfolio</button>
+
+<button class="landing-button" data-target="tarifs">Tarifs</button>
+
+<button class="landing-button" data-target="contact">Contact</button>
+
 </div>
 
-<!-- NAVIGATION -->
+<button id="dark-toggle">Mode Dark / Light</button>
+
+</div>
+
 <nav>
-  <a href="#" class="nav-link" data-target="landing">Accueil</a>
-  <a href="#" class="nav-link" data-target="about">À propos</a>
-  <a href="#" class="nav-link" data-target="portfolio">Portfolio</a>
-  <a href="#" class="nav-link" data-target="contact">Contact</a>
+
+<a href="#" class="nav-link" data-target="landing">Accueil</a>
+<a href="#" class="nav-link" data-target="about">À propos</a>
+<a href="#" class="nav-link" data-target="portfolio">Portfolio</a>
+<a href="#" class="nav-link" data-target="tarifs">Tarifs</a>
+<a href="#" class="nav-link" data-target="contact">Contact</a>
+
 </nav>
 
-<!-- À propos -->
 <section id="about" class="section">
+
 <h2>À propos de moi</h2>
+
 <p>Bonjour, je m'appelle Camille, j'ai 14 ans et je suis une jeune artiste photographe.</p>
-<p>Je suis passionnée par le monde de l'art et tout ce qui touche à la créativité.</p>
-<p>Si vous voulez suivre mon univers, je vous invite à venir sur mon compte Instagram en bas de la page.</p>
-<p>Merci de me soutenir chaque jour. Au revoir et n'oubliez pas, explorez votre créativité.</p>
+
+<p>Je suis passionnée par le monde de l'art et la créativité.</p>
+
+<p>Merci de me soutenir chaque jour.</p>
+
 </section>
 
-<!-- Portfolio -->
 <section id="portfolio" class="section">
+
 <h2>Mes réalisations</h2>
+
 <div class="portfolio">
-  <img src="10.jpg" alt="">
-  <img src="11.jpg" alt="">
-  <img src="12.jpg" alt="">
-  <img src="13.jpg" alt="">
-  <img src="1.jpg" alt="">
-  <img src="2.jpg" alt="">
-  <img src="3.jpg" alt="">
-  <img src="4.jpg" alt="">
-  <img src="5.jpg" alt="">
-  <img src="6.jpg" alt="">
-  <img src="7.jpg" alt="">
-  <img src="8.jpg" alt="">
-  <img src="9.jpg" alt="">
+
+<img src="1.jpg">
+<img src="2.jpg">
+<img src="3.jpg">
+<img src="4.jpg">
+<img src="5.jpg">
+<img src="6.jpg">
+<img src="7.jpg">
+<img src="8.jpg">
+
 </div>
+
 </section>
 
-<!-- Citation -->
-<p class="citation">Le meilleur des arts, c'est celui qu'on a au fond de soi.</p>
-<p class="signature">— K4MILLZ</p>
+<section id="tarifs" class="section">
 
-<!-- Contact -->
-<div id="contact" class="contact section">
+<h2>Tarifs</h2>
+
+<p><strong>📸 Prise de vue :</strong> 15€ pour environ 1 heure.</p>
+
+<p><strong>🖼 Photo retouchée :</strong> 5€ par photo finale.</p>
+
+<p><strong>🚗 Frais de déplacement :</strong></p>
+
+<p>0 à 5 km : Gratuit</p>
+<p>5 à 10 km : 5€</p>
+<p>10 à 20 km : 10€</p>
+<p>Plus de 20 km : 15€</p>
+
+<p>Les photos sont livrées en haute qualité après retouche.</p>
+
+</section>
+
+<section id="contact" class="section contact">
+
+<h2>Contact</h2>
+
 <a href="mailto:k4millzpro@gmail.com">k4millzpro@gmail.com</a>
-<a href="https://www.instagram.com/k4mill_z/" target="_blank">📸 Instagram : @k4mill_z</a>
-</div>
 
-<!-- Footer note -->
+<a href="https://www.instagram.com/k4mill_z/" target="_blank">📸 Instagram : @k4mill_z</a>
+
+</section>
+
 <p class="footer-note">
-Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles, ou des photos prises par mes amis, mais toujours avec moi ou de moi. La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
+Toutes les photographies présentées sur ce site sont mes réalisations personnelles.
 </p>
 
-<!-- Micro pop audio -->
-<audio id="click-sound" src="micro-pop.mp3" preload="auto"></audio>
-
 <script>
-// ================= NAVIGATION =================
+
 const sections = document.querySelectorAll('.section');
 const landing = document.getElementById('landing');
 const nav = document.querySelector('nav');
 
 function showSection(id){
-  if(id === 'landing'){
-    landing.style.display = 'flex';
-    nav.style.display = 'none';
-    sections.forEach(s=>s.style.display='none');
-  } else {
-    landing.style.display='none';
-    nav.style.display='flex';
-    sections.forEach(s=>{
-      s.style.display = (s.id===id)?'block':'none';
-      setTimeout(()=>s.classList.add('visible'),50);
-    });
-  }
+
+if(id === "landing"){
+
+landing.style.display="flex";
+nav.style.display="none";
+sections.forEach(s=>s.style.display="none");
+
+}else{
+
+landing.style.display="none";
+nav.style.display="flex";
+
+sections.forEach(s=>{
+
+s.style.display=(s.id===id)?"block":"none";
+setTimeout(()=>s.classList.add("visible"),50);
+
+});
+
 }
 
-// Landing buttons
-document.querySelectorAll('.landing-button').forEach(btn=>{
-  btn.addEventListener('click', ()=> showSection(btn.dataset.target));
-});
-
-// Nav links
-document.querySelectorAll('.nav-link').forEach(link=>{
-  link.addEventListener('click', e=>{
-    e.preventDefault();
-    showSection(link.dataset.target);
-  });
-});
-
-// ================= DARK MODE =================
-document.getElementById('dark-toggle').addEventListener('click', ()=>{
-  document.body.classList.toggle('dark-mode');
-});
-
-// ================= MICRO POP =================
-const interactiveButtons = document.querySelectorAll('.landing-button, #dark-toggle, nav a');
-interactiveButtons.forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const sound = document.getElementById('click-sound');
-    sound.volume = 0.05;
-    sound.currentTime=0;
-    sound.play();
-    btn.style.transform='scale(1.02)';
-    setTimeout(()=>{btn.style.transform='scale(1)';},200);
-  });
-});
-
-// ================= ANIMATIONS AU SCROLL =================
-const observer = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      entry.target.classList.add('visible');
-    }
-  });
-},{threshold:0.2});
-
-document.querySelectorAll('.section h2, .section p, .portfolio img').forEach(el=>{
-  el.classList.add('section-element');
-  observer.observe(el);
-});
-
-// ================= EMOJIS FLOTANTS SUR LES COTES =================
-const animTypes = [
-  {char:'❤', class:'float', color:'#ff99cc'},
-  {char:'🎀', class:'float', color:'#ff66cc'},
-  {char:'⭐', class:'float', color:'#FFD700'},
-  {char:'🎨', class:'float', color:'#ffcc66'},
-  {char:'🖌️', class:'float', color:'#ff9966'}
-];
-
-function createAnim(){
-  const el = document.createElement('div');
-  const type = animTypes[Math.floor(Math.random()*animTypes.length)];
-  el.className = type.class;
-  el.innerHTML = type.char;
-  el.style.color = type.color;
-  el.style.top=Math.random()*90+'%';
-  el.style.left=Math.random()<0.5?Math.random()*15+'%':(85+Math.random()*15)+'%';
-  el.style.fontSize=(12+Math.random()*8)+'px';
-  el.style.opacity=0.2+Math.random()*0.2;
-  el.style.animation=`float ${5+Math.random()*5}s ease-in-out infinite`;
-  document.body.appendChild(el);
 }
 
-// Générer 12 emojis seulement
-for(let i=0;i<12;i++){ createAnim(); }
+document.querySelectorAll(".landing-button").forEach(btn=>{
+btn.addEventListener("click",()=>showSection(btn.dataset.target));
+});
+
+document.querySelectorAll(".nav-link").forEach(link=>{
+link.addEventListener("click",(e)=>{
+e.preventDefault();
+showSection(link.dataset.target);
+});
+});
+
+document.getElementById("dark-toggle").addEventListener("click",()=>{
+document.body.classList.toggle("dark-mode");
+});
+
 </script>
 
 </body>
