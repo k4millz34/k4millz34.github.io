@@ -25,6 +25,32 @@ body.dark-mode{
 background:#1c261c;
 }
 
+/* LOADER */
+
+#loader{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#2f3e2f;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:2000;
+font-family:'Playfair Display',serif;
+font-size:40px;
+letter-spacing:4px;
+}
+
+.loader-hidden{
+opacity:0;
+pointer-events:none;
+transition:0.6s;
+}
+
+/* NAV */
+
 nav{
 position:fixed;
 top:0;
@@ -41,6 +67,8 @@ color:#f5ecd9;
 font-weight:600;
 text-decoration:none;
 }
+
+/* LANDING */
 
 #landing{
 height:100vh;
@@ -98,6 +126,8 @@ background:#8e6ccf;
 color:white;
 }
 
+/* DARK BUTTON */
+
 #dark-toggle{
 margin-top:25px;
 border:none;
@@ -112,6 +142,8 @@ body.dark-mode #dark-toggle{
 background:#8e6ccf;
 color:white;
 }
+
+/* SECTIONS */
 
 .section{
 max-width:1100px;
@@ -145,6 +177,8 @@ transition:transform 0.25s;
 transform:scale(1.03);
 }
 
+/* PORTFOLIO */
+
 .portfolio{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -155,14 +189,21 @@ gap:30px;
 width:100%;
 border-radius:30px;
 cursor:pointer;
-transition:0.4s;
+opacity:0;
+transform:translateY(40px);
+transition:0.6s;
+}
+
+.portfolio img.show{
+opacity:1;
+transform:translateY(0);
 }
 
 .portfolio img:hover{
 transform:scale(1.05);
 }
 
-/* LIGHTBOX PHOTO */
+/* LIGHTBOX */
 
 .lightbox{
 position:fixed;
@@ -189,14 +230,9 @@ pointer-events:auto;
 max-width:90%;
 max-height:90%;
 border-radius:20px;
-box-shadow:0 20px 60px rgba(0,0,0,0.6);
-animation:zoom 0.3s ease;
 }
 
-@keyframes zoom{
-from{transform:scale(0.8);}
-to{transform:scale(1);}
-}
+/* TARIFS */
 
 .tarif-form{
 margin-top:30px;
@@ -213,6 +249,8 @@ border-radius:20px;
 padding:10px;
 margin-bottom:10px;
 }
+
+/* CONTACT */
 
 .contact a{
 display:block;
@@ -233,6 +271,10 @@ opacity:0.7;
 
 <body>
 
+<div id="loader">K4MILLZ</div>
+
+<!-- LANDING -->
+
 <div id="landing">
 
 <h1>K4MILLZ</h1>
@@ -250,6 +292,8 @@ opacity:0.7;
 
 </div>
 
+<!-- NAV -->
+
 <nav>
 
 <a href="#" class="nav-link" data-target="landing">Accueil</a>
@@ -259,6 +303,8 @@ opacity:0.7;
 <a href="#" class="nav-link" data-target="contact">Contact</a>
 
 </nav>
+
+<!-- ABOUT -->
 
 <section id="about" class="section">
 
@@ -277,6 +323,8 @@ Le meilleur des arts, c’est celui qu’on a au fond de soi.
 </p>
 
 </section>
+
+<!-- PORTFOLIO -->
 
 <section id="portfolio" class="section">
 
@@ -301,6 +349,8 @@ Le meilleur des arts, c’est celui qu’on a au fond de soi.
 </div>
 
 </section>
+
+<!-- TARIFS -->
 
 <section id="tarifs" class="section">
 
@@ -335,15 +385,19 @@ Le meilleur des arts, c’est celui qu’on a au fond de soi.
 
 </section>
 
+<!-- CONTACT -->
+
 <section id="contact" class="section contact">
 
 <h2>Contact</h2>
 
-<a href="mailto:k4millzpro@gmail.com">k4millzpro@gmail.com</a>
+<p>📩 k4millzpro@gmail.com</p>
 
 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=k4millzpro@gmail.com" target="_blank">
-Envoyer un email
+<button class="landing-button">Envoyer un email</button>
 </a>
+
+<a href="https://www.instagram.com/k4mill_z/" target="_blank">
 Instagram : @k4mill_z
 </a>
 
@@ -366,6 +420,16 @@ Si des photos de personnes sont présentes sur le site, cela signifie qu’elles
 </div>
 
 <script>
+
+/* LOADER */
+
+window.addEventListener("load",()=>{
+setTimeout(()=>{
+document.getElementById("loader").classList.add("loader-hidden");
+},1200);
+});
+
+/* NAVIGATION */
 
 const sections=document.querySelectorAll('.section');
 const landing=document.getElementById('landing');
@@ -421,6 +485,20 @@ lightboxImg.src=img.src;
 
 lightbox.addEventListener("click",()=>{
 lightbox.classList.remove("active");
+});
+
+/* SCROLL ANIMATION */
+
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("show");
+}
+});
+});
+
+document.querySelectorAll(".portfolio img").forEach(img=>{
+observer.observe(img);
 });
 
 </script>
