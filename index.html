@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -12,7 +11,7 @@
 
 <style>
 
-/* ================= GLOBAL ================= */
+/* ===== GLOBAL ===== */
 
 body{
 margin:0;
@@ -21,28 +20,25 @@ background:#2f3e2f;
 color:#f5ecd9;
 text-align:center;
 overflow-x:hidden;
-scroll-behavior:smooth;
 transition:0.6s;
 }
 
-/* dark mode */
+/* DARK MODE */
 
 body.dark-mode{
 background:#1c261c;
-color:#f5ecd9;
 }
 
-/* ================= NAV ================= */
+/* ===== NAV ===== */
 
 nav{
 position:fixed;
 top:0;
 width:100%;
-backdrop-filter:blur(10px);
-background:rgba(47,62,47,0.6);
 padding:15px;
 display:none;
-z-index:100;
+background:rgba(0,0,0,0.25);
+backdrop-filter:blur(10px);
 }
 
 nav a{
@@ -54,10 +50,10 @@ transition:0.3s;
 }
 
 nav a:hover{
-opacity:0.7;
+opacity:0.6;
 }
 
-/* ================= LANDING ================= */
+/* ===== LANDING ===== */
 
 #landing{
 height:100vh;
@@ -65,29 +61,37 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-padding:20px;
 }
 
 #landing h1{
 font-size:80px;
-letter-spacing:8px;
+letter-spacing:6px;
 font-family:'Playfair Display',serif;
-margin-bottom:10px;
+position:relative;
 }
 
-#landing p{
-font-size:26px;
-opacity:0.8;
-margin-bottom:40px;
+/* petit PNG */
+
+#landing h1::after{
+content:"";
+position:absolute;
+width:50px;
+height:50px;
+background-image:url('uwusite.png');
+background-size:contain;
+background-repeat:no-repeat;
+top:-10px;
+right:-60px;
 }
 
-/* ================= BUTTONS ================= */
+/* ===== BUTTONS ===== */
 
 .button-row{
 display:flex;
-flex-wrap:wrap;
 gap:25px;
+flex-wrap:wrap;
 justify-content:center;
+margin-top:30px;
 }
 
 .landing-button{
@@ -95,30 +99,53 @@ background:#f5ecd9;
 color:#2f3e2f;
 border:none;
 padding:16px 40px;
+border-radius:60px;
 font-size:20px;
-border-radius:50px;
 cursor:pointer;
-transition:0.3s;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
+
+transition:
+transform 0.3s,
+box-shadow 0.3s,
+background 0.3s;
 }
 
+/* animation hover */
+
 .landing-button:hover{
-transform:translateY(-3px);
+transform:scale(1.08);
+box-shadow:
+0 10px 30px rgba(0,0,0,0.3),
+0 0 20px rgba(255,255,255,0.4);
 }
+
+/* DARK */
 
 body.dark-mode .landing-button{
 background:#8e6ccf;
 color:white;
 }
 
+body.dark-mode .landing-button:hover{
+box-shadow:
+0 0 20px #b89cff,
+0 0 40px #b89cff;
+}
+
+/* DARK BUTTON */
+
 #dark-toggle{
 margin-top:25px;
-background:#f5ecd9;
-color:#2f3e2f;
 border:none;
 padding:12px 30px;
-border-radius:40px;
+border-radius:50px;
 cursor:pointer;
+background:#f5ecd9;
+color:#2f3e2f;
+transition:0.3s;
+}
+
+#dark-toggle:hover{
+transform:scale(1.08);
 }
 
 body.dark-mode #dark-toggle{
@@ -126,13 +153,13 @@ background:#8e6ccf;
 color:white;
 }
 
-/* ================= SECTIONS ================= */
+/* ===== SECTIONS ===== */
 
 .section{
 max-width:1100px;
 margin:120px auto;
 padding:60px;
-border-radius:40px;
+border-radius:50px;
 background:rgba(255,255,255,0.05);
 backdrop-filter:blur(15px);
 display:none;
@@ -146,45 +173,42 @@ opacity:1;
 
 .section h2{
 font-size:42px;
-font-family:'Playfair Display',serif;
+font-family:'Playfair Display';
 margin-bottom:20px;
 }
 
 .section p{
 font-size:18px;
 line-height:1.7;
-opacity:0.9;
 }
 
-/* ================= PORTFOLIO ================= */
+/* ===== PORTFOLIO ===== */
 
 .portfolio{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:30px;
-margin-top:30px;
 }
 
 .portfolio img{
 width:100%;
 border-radius:30px;
-object-fit:cover;
 transition:0.4s;
-box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
 .portfolio img:hover{
-transform:scale(1.05);
+transform:scale(1.05) rotate(-1deg);
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
 }
 
-/* ================= FORM ================= */
+/* ===== FORM ===== */
 
 .tarif-form{
 margin-top:30px;
 text-align:left;
 background:rgba(0,0,0,0.15);
 padding:25px;
-border-radius:25px;
+border-radius:30px;
 }
 
 .tarif-form textarea{
@@ -193,10 +217,9 @@ border:none;
 border-radius:20px;
 padding:10px;
 margin-bottom:10px;
-font-family:'Quicksand';
 }
 
-/* ================= CONTACT ================= */
+/* ===== CONTACT ===== */
 
 .contact a{
 display:block;
@@ -210,12 +233,12 @@ font-size:20px;
 opacity:0.7;
 }
 
-/* ================= FOOTER ================= */
+/* ===== FOOTER ===== */
 
 .footer-note{
-margin:40px;
+margin:50px;
 font-size:12px;
-opacity:0.6;
+opacity:0.7;
 }
 
 </style>
@@ -228,6 +251,7 @@ opacity:0.6;
 <div id="landing">
 
 <h1>K4MILLZ</h1>
+
 <p>L’art en image</p>
 
 <div class="button-row">
@@ -312,11 +336,8 @@ Le meilleur des arts, c’est celui qu’on a au fond de soi.
 <p>🚗 Frais déplacement :</p>
 
 <p>0-5km : gratuit</p>
-
 <p>5-10km : 5€</p>
-
 <p>10-20km : 10€</p>
-
 <p>20km+ : 20€</p>
 
 <div class="tarif-form">
@@ -350,8 +371,15 @@ Instagram : @k4mill_z
 
 </section>
 
+<!-- FOOTER TEXTE COMPLET -->
+
 <p class="footer-note">
-Toutes les photographies présentées sur ce site sont mes créations personnelles.
+
+Toutes les photographies et créations artistiques présentées sur ce site sont mes réalisations personnelles,  
+ou des photos prises par mes amis, mais toujours avec moi ou de moi.  
+
+La conception technique et certaines parties du code ont été réalisées avec l’aide d’une intelligence artificielle.
+
 </p>
 
 <script>
