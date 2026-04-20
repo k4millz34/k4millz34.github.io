@@ -10,7 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Playfair+Display&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
-
 body{
 margin:0;
 font-family:'Quicksand',sans-serif;
@@ -20,130 +19,41 @@ text-align:center;
 overflow-x:hidden;
 transition:0.6s;
 }
-
-body.dark-mode{
-background:#1c261c;
-}
-
-/* LOADER */
+body.dark-mode{background:#1c261c;}
 
 #loader{
 position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+top:0;left:0;width:100%;height:100%;
 background:#2f3e2f;
-display:flex;
-justify-content:center;
-align-items:center;
+display:flex;justify-content:center;align-items:center;
 z-index:2000;
 font-family:'Playfair Display',serif;
 font-size:40px;
-letter-spacing:4px;
 }
 
-.loader-hidden{
-opacity:0;
-pointer-events:none;
-transition:0.3s;
-}
-
-/* NAV */
+.loader-hidden{opacity:0;pointer-events:none;transition:0.3s;}
 
 nav{
-position:fixed;
-top:0;
-width:100%;
-padding:15px;
-display:none;
+position:fixed;top:0;width:100%;
+padding:15px;display:none;
 background:rgba(0,0,0,0.25);
 backdrop-filter:blur(10px);
 }
-
-nav a{
-margin:0 20px;
-color:#f5ecd9;
-font-weight:600;
-text-decoration:none;
-}
-
-/* LANDING */
+nav a{margin:0 20px;color:#f5ecd9;text-decoration:none;font-weight:600;}
 
 #landing{
 height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
+display:flex;flex-direction:column;justify-content:center;align-items:center;
 }
-
-#landing h1{
-font-size:80px;
-letter-spacing:6px;
-font-family:'Playfair Display',serif;
-position:relative;
-}
-
-#landing h1::after{
-content:"";
-position:absolute;
-width:50px;
-height:50px;
-background-image:url('uwusite.png');
-background-size:contain;
-background-repeat:no-repeat;
-top:-10px;
-right:-60px;
-}
-
 .button-row{
-display:flex;
-gap:25px;
-flex-wrap:wrap;
-justify-content:center;
-margin-top:30px;
+display:flex;gap:25px;flex-wrap:wrap;justify-content:center;margin-top:30px;
 }
-
 .landing-button{
-background:#f5ecd9;
-color:#2f3e2f;
-border:none;
-padding:16px 40px;
-border-radius:60px;
-font-size:20px;
+background:#f5ecd9;color:#2f3e2f;
+padding:16px 40px;border:none;border-radius:60px;
 cursor:pointer;
-transition:0.3s;
 }
-
-.landing-button:hover{
-transform:scale(1.08);
-box-shadow:0 10px 30px rgba(0,0,0,0.3);
-}
-
-body.dark-mode .landing-button{
-background:#8e6ccf;
-color:white;
-}
-
-/* DARK BUTTON */
-
-#dark-toggle{
-margin-top:25px;
-border:none;
-padding:12px 30px;
-border-radius:50px;
-cursor:pointer;
-background:#f5ecd9;
-color:#2f3e2f;
-}
-
-body.dark-mode #dark-toggle{
-background:#8e6ccf;
-color:white;
-}
-
-/* SECTIONS */
+body.dark-mode .landing-button{background:#8e6ccf;color:white;}
 
 .section{
 max-width:1100px;
@@ -151,121 +61,22 @@ margin:120px auto;
 padding:60px;
 border-radius:50px;
 background:rgba(255,255,255,0.05);
-backdrop-filter:blur(15px);
-display:none;
-opacity:0;
-transition:0.6s;
+display:none;opacity:0;transition:0.6s;
 }
-
-.section.visible{
-opacity:1;
-}
-
-.section h2{
-font-size:42px;
-font-family:'Playfair Display';
-margin-bottom:20px;
-}
-
-.section p{
-font-size:18px;
-line-height:1.7;
-transition:transform 0.25s;
-}
-
-.section p:hover{
-transform:scale(1.03);
-}
-
-/* PORTFOLIO */
+.section.visible{opacity:1;}
 
 .portfolio{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:30px;
 }
-
 .portfolio img{
 width:100%;
 border-radius:30px;
 cursor:pointer;
-opacity:0;
-transform:translateY(40px);
-transition:0.6s;
 }
 
-.portfolio img.show{
-opacity:1;
-transform:translateY(0);
-}
-
-.portfolio img:hover{
-transform:scale(1.05);
-}
-
-/* LIGHTBOX */
-
-.lightbox{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.85);
-display:flex;
-justify-content:center;
-align-items:center;
-opacity:0;
-pointer-events:none;
-transition:0.3s;
-z-index:999;
-}
-
-.lightbox.active{
-opacity:1;
-pointer-events:auto;
-}
-
-.lightbox img{
-max-width:90%;
-max-height:90%;
-border-radius:20px;
-}
-
-/* TARIFS */
-
-.tarif-form{
-margin-top:30px;
-text-align:left;
-background:rgba(0,0,0,0.15);
-padding:25px;
-border-radius:30px;
-}
-
-.tarif-form textarea{
-width:100%;
-border:none;
-border-radius:20px;
-padding:10px;
-margin-bottom:10px;
-}
-
-/* CONTACT */
-
-.contact a{
-display:block;
-margin:10px;
-color:#f5ecd9;
-text-decoration:none;
-font-size:20px;
-}
-
-.footer-note{
-margin:50px;
-font-size:12px;
-opacity:0.7;
-}
-
+.footer-note{margin:50px;font-size:12px;opacity:0.7;}
 </style>
 </head>
 
@@ -273,12 +84,8 @@ opacity:0.7;
 
 <div id="loader">K4MILLZ</div>
 
-<!-- LANDING -->
-
 <div id="landing">
-
 <h1>K4MILLZ</h1>
-
 <p>L’art en image</p>
 
 <div class="button-row">
@@ -286,44 +93,29 @@ opacity:0.7;
 <button class="landing-button" data-target="portfolio">Portfolio</button>
 <button class="landing-button" data-target="tarifs">Tarifs</button>
 <button class="landing-button" data-target="contact">Contact</button>
-<button class="landing-button" data-target="lgbt">Association LGBT</button>
 </div>
 
-<button id="dark-toggle">Mode Dark / Light</button>
+<!-- bouton en bas -->
+<button class="landing-button" style="margin-top:40px;" data-target="lgbt">
+Association LGBTQIA+
+</button>
 
 </div>
-
-<!-- NAV -->
 
 <nav>
-
 <a href="#" class="nav-link" data-target="landing">Accueil</a>
 <a href="#" class="nav-link" data-target="about">À propos</a>
 <a href="#" class="nav-link" data-target="portfolio">Portfolio</a>
 <a href="#" class="nav-link" data-target="tarifs">Tarifs</a>
 <a href="#" class="nav-link" data-target="contact">Contact</a>
 <a href="#" class="nav-link" data-target="lgbt">LGBT</a>
-
 </nav>
 
-<!-- ABOUT -->
-
 <section id="about" class="section">
-<h2>À propos de moi</h2>
+<h2>À propos</h2>
 <p>Bonjour, je m'appelle Camille, j'ai 14 ans et je suis une jeune artiste photographe.</p>
 <p>Je suis passionnée par le monde de l'art et tout ce qui touche à la créativité.</p>
-<p>Merci de me soutenir chaque jour.</p>
-
-<p style="margin-top:30px;font-family:'Great Vibes';font-size:24px;">
-Le meilleur des arts, c’est celui qu’on a au fond de soi.
-</p>
-
-<p style="font-family:'Great Vibes';font-size:18px;opacity:0.7;margin-top:-10px;">
-– K4MILLZ
-</p>
 </section>
-
-<!-- PORTFOLIO -->
 
 <section id="portfolio" class="section">
 <h2>Mes réalisations</h2>
@@ -346,8 +138,6 @@ Le meilleur des arts, c’est celui qu’on a au fond de soi.
 
 </section>
 
-<!-- TARIFS -->
-
 <section id="tarifs" class="section">
 <h2>Tarifs</h2>
 
@@ -355,51 +145,35 @@ Le meilleur des arts, c’est celui qu’on a au fond de soi.
 <p>📸 Prise de vue : 15€ / 1h</p>
 <p>🖼 Photo retouchée : 5€</p>
 
-<h3>Packs photos</h3>
-<ul style="list-style:none; padding:0;">
-<li>• 1 photo : 2,50 €</li>
-<li>• 5 photos : 12€</li>
-<li>• 10 photos : 20 €</li>
-</ul>
+<p>🚗 Frais déplacement :</p>
+<p>0-5km : gratuit</p>
+<p>5-10km : 5€</p>
+<p>10-20km : 10€</p>
+<p>20-30km : 20€</p>
+<p>Plus de 30 km : accord par mail.</p>
+
 </section>
 
-<!-- CONTACT -->
-
-<section id="contact" class="section contact">
+<section id="contact" class="section">
 <h2>Contact</h2>
-<a href="https://mail.google.com/mail/?view=cm&fs=1&to=k4millzpro@gmail.com" target="_blank">
-<button class="landing-button">Envoyer un email</button>
-</a>
-
-<a href="https://www.instagram.com/k4mill_z/" target="_blank">
-Instagram : @k4mill_z
-</a>
+<p>Email : k4millzpro@gmail.com</p>
+<p>Instagram : @k4mill_z</p>
 </section>
-
-<!-- LGBT -->
 
 <section id="lgbt" class="section">
 <h2>Association LGBTQIA+</h2>
 
-<p style="font-size:22px;">Plutôt non</p>
-
-<p style="margin-top:30px;font-size:18px;opacity:0.8;">
-✨ Prochainement...
+<p style="margin-top:30px;font-size:18px;">
+✨ Projet en cours...
 </p>
 
-<p style="font-size:16px;opacity:0.6;">
-Un projet arrive bientôt autour de la communauté LGBTQIA+ 💜
+<p style="opacity:0.7;">
+Une association arrive prochainement 💜
 </p>
+
 </section>
 
 <script>
-
-window.addEventListener("load",()=>{
-setTimeout(()=>{
-document.getElementById("loader").classList.add("loader-hidden");
-},1200);
-});
-
 const sections=document.querySelectorAll('.section');
 const landing=document.getElementById('landing');
 const nav=document.querySelector('nav');
@@ -429,11 +203,6 @@ e.preventDefault();
 showSection(link.dataset.target);
 };
 });
-
-document.getElementById('dark-toggle').onclick=()=>{
-document.body.classList.toggle('dark-mode');
-};
-
 </script>
 
 </body>
