@@ -41,13 +41,6 @@ z-index:2000;
 font-family:'Playfair Display',serif;
 font-size:40px;
 letter-spacing:4px;
-animation:pulse 1.5s infinite ease-in-out;
-}
-
-@keyframes pulse{
-0%{transform:scale(1);opacity:1;}
-50%{transform:scale(1.05);opacity:0.8;}
-100%{transform:scale(1);opacity:1;}
 }
 
 /* NAV */
@@ -77,7 +70,6 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-animation:fadeIn 1.2s ease;
 }
 
 #landing h1{
@@ -85,13 +77,6 @@ font-size:80px;
 letter-spacing:6px;
 font-family:'Playfair Display',serif;
 position:relative;
-animation:float 4s ease-in-out infinite;
-}
-
-@keyframes float{
-0%{transform:translateY(0);}
-50%{transform:translateY(-8px);}
-100%{transform:translateY(0);}
 }
 
 .button-row{
@@ -134,13 +119,11 @@ background:rgba(255,255,255,0.05);
 backdrop-filter:blur(15px);
 display:none;
 opacity:0;
-transform:translateY(20px);
-transition:0.6s ease;
+transition:0.6s;
 }
 
 .section.visible{
 opacity:1;
-transform:translateY(0);
 }
 
 /* PORTFOLIO */
@@ -165,19 +148,41 @@ opacity:1;
 transform:translateY(0);
 }
 
+/* LIGHTBOX */
+
+.lightbox{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.85);
+display:flex;
+justify-content:center;
+align-items:center;
+opacity:0;
+pointer-events:none;
+transition:0.3s;
+z-index:999;
+}
+
+.lightbox.active{
+opacity:1;
+pointer-events:auto;
+}
+
+.lightbox img{
+max-width:90%;
+max-height:90%;
+border-radius:20px;
+}
+
 /* FOOTER */
 
 .footer-note{
 margin:50px;
 font-size:12px;
 opacity:0.7;
-}
-
-/* ANIMATION GENERALE */
-
-@keyframes fadeIn{
-from{opacity:0;}
-to{opacity:1;}
 }
 
 </style>
@@ -187,8 +192,12 @@ to{opacity:1;}
 
 <div id="loader">K4MILLZ</div>
 
+<!-- LANDING -->
+
 <div id="landing">
+
 <h1>K4MILLZ</h1>
+
 <p>L’art en image</p>
 
 <div class="button-row">
@@ -196,27 +205,43 @@ to{opacity:1;}
 <button class="landing-button" data-target="portfolio">Portfolio</button>
 <button class="landing-button" data-target="tarifs">Tarifs</button>
 <button class="landing-button" data-target="contact">Contact</button>
-</div>
+<button class="landing-button" data-target="lgbt">LGBTQIA+</button>
 </div>
 
+</div>
+
+<!-- NAV -->
+
 <nav>
+
 <a href="#" class="nav-link" data-target="landing">Accueil</a>
 <a href="#" class="nav-link" data-target="about">À propos</a>
 <a href="#" class="nav-link" data-target="portfolio">Portfolio</a>
 <a href="#" class="nav-link" data-target="tarifs">Tarifs</a>
 <a href="#" class="nav-link" data-target="contact">Contact</a>
+<a href="#" class="nav-link" data-target="lgbt">LGBTQIA+</a>
+
 </nav>
 
+<!-- ABOUT -->
+
 <section id="about" class="section">
-<h2>À propos</h2>
+
+<h2>À propos de moi</h2>
+
 <p>Bonjour, je m'appelle Camille, j'ai 14 ans et je suis une jeune artiste photographe.</p>
 <p>Je suis passionnée par le monde de l'art et tout ce qui touche à la créativité.</p>
+
 </section>
 
+<!-- PORTFOLIO -->
+
 <section id="portfolio" class="section">
+
 <h2>Mes réalisations</h2>
 
 <div class="portfolio">
+
 <img src="1.jpg">
 <img src="2.jpg">
 <img src="3.jpg">
@@ -230,11 +255,15 @@ to{opacity:1;}
 <img src="11.jpg">
 <img src="12.jpg">
 <img src="14.jpg">
+
 </div>
 
 </section>
 
+<!-- TARIFS -->
+
 <section id="tarifs" class="section">
+
 <h2>Tarifs</h2>
 
 <p>📍 localisation : Abeilhan</p>
@@ -250,21 +279,38 @@ to{opacity:1;}
 
 </section>
 
+<!-- CONTACT -->
+
 <section id="contact" class="section">
+
 <h2>Contact</h2>
+
 <p>Email : k4millzpro@gmail.com</p>
 <p>Instagram : @k4mill_z</p>
+
 </section>
+
+<!-- LGBT -->
+
+<section id="lgbt" class="section">
+
+<h2>Association LGBTQIA+</h2>
+
+<p>🌈 Projet en cours...</p>
+<p>Arrive prochainement 💜</p>
+
+</section>
+
+<!-- SCRIPT -->
 
 <script>
 
 /* FIX LOADER BUG */
 window.addEventListener("load", () => {
 setTimeout(() => {
-document.getElementById("loader").remove();
-}, 1200);
-
+document.getElementById("loader").style.display = "none";
 showSection("landing");
+}, 1200);
 });
 
 /* NAVIGATION */
