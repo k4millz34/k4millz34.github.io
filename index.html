@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Playfair+Display&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
+
 body{
 margin:0;
 font-family:'Quicksand',sans-serif;
@@ -19,41 +20,110 @@ text-align:center;
 overflow-x:hidden;
 transition:0.6s;
 }
-body.dark-mode{background:#1c261c;}
+
+body.dark-mode{
+background:#1c261c;
+}
+
+/* LOADER */
 
 #loader{
 position:fixed;
-top:0;left:0;width:100%;height:100%;
+top:0;
+left:0;
+width:100%;
+height:100%;
 background:#2f3e2f;
-display:flex;justify-content:center;align-items:center;
+display:flex;
+justify-content:center;
+align-items:center;
 z-index:2000;
 font-family:'Playfair Display',serif;
 font-size:40px;
+letter-spacing:4px;
+animation:pulse 1.5s infinite ease-in-out;
 }
 
-.loader-hidden{opacity:0;pointer-events:none;transition:0.3s;}
+@keyframes pulse{
+0%{transform:scale(1);opacity:1;}
+50%{transform:scale(1.05);opacity:0.8;}
+100%{transform:scale(1);opacity:1;}
+}
+
+/* NAV */
 
 nav{
-position:fixed;top:0;width:100%;
-padding:15px;display:none;
+position:fixed;
+top:0;
+width:100%;
+padding:15px;
+display:none;
 background:rgba(0,0,0,0.25);
 backdrop-filter:blur(10px);
 }
-nav a{margin:0 20px;color:#f5ecd9;text-decoration:none;font-weight:600;}
+
+nav a{
+margin:0 20px;
+color:#f5ecd9;
+font-weight:600;
+text-decoration:none;
+}
+
+/* LANDING */
 
 #landing{
 height:100vh;
-display:flex;flex-direction:column;justify-content:center;align-items:center;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+animation:fadeIn 1.2s ease;
 }
+
+#landing h1{
+font-size:80px;
+letter-spacing:6px;
+font-family:'Playfair Display',serif;
+position:relative;
+animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0);}
+50%{transform:translateY(-8px);}
+100%{transform:translateY(0);}
+}
+
 .button-row{
-display:flex;gap:25px;flex-wrap:wrap;justify-content:center;margin-top:30px;
+display:flex;
+gap:25px;
+flex-wrap:wrap;
+justify-content:center;
+margin-top:30px;
 }
+
 .landing-button{
-background:#f5ecd9;color:#2f3e2f;
-padding:16px 40px;border:none;border-radius:60px;
+background:#f5ecd9;
+color:#2f3e2f;
+border:none;
+padding:16px 40px;
+border-radius:60px;
+font-size:20px;
 cursor:pointer;
+transition:0.3s;
 }
-body.dark-mode .landing-button{background:#8e6ccf;color:white;}
+
+.landing-button:hover{
+transform:scale(1.08);
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+body.dark-mode .landing-button{
+background:#8e6ccf;
+color:white;
+}
+
+/* SECTIONS */
 
 .section{
 max-width:1100px;
@@ -61,22 +131,55 @@ margin:120px auto;
 padding:60px;
 border-radius:50px;
 background:rgba(255,255,255,0.05);
-display:none;opacity:0;transition:0.6s;
+backdrop-filter:blur(15px);
+display:none;
+opacity:0;
+transform:translateY(20px);
+transition:0.6s ease;
 }
-.section.visible{opacity:1;}
+
+.section.visible{
+opacity:1;
+transform:translateY(0);
+}
+
+/* PORTFOLIO */
 
 .portfolio{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:30px;
 }
+
 .portfolio img{
 width:100%;
 border-radius:30px;
 cursor:pointer;
+opacity:0;
+transform:translateY(40px);
+transition:0.6s;
 }
 
-.footer-note{margin:50px;font-size:12px;opacity:0.7;}
+.portfolio img.show{
+opacity:1;
+transform:translateY(0);
+}
+
+/* FOOTER */
+
+.footer-note{
+margin:50px;
+font-size:12px;
+opacity:0.7;
+}
+
+/* ANIMATION GENERALE */
+
+@keyframes fadeIn{
+from{opacity:0;}
+to{opacity:1;}
+}
+
 </style>
 </head>
 
@@ -94,12 +197,6 @@ cursor:pointer;
 <button class="landing-button" data-target="tarifs">Tarifs</button>
 <button class="landing-button" data-target="contact">Contact</button>
 </div>
-
-<!-- bouton en bas -->
-<button class="landing-button" style="margin-top:40px;" data-target="lgbt">
-Association LGBTQIA+
-</button>
-
 </div>
 
 <nav>
@@ -108,7 +205,6 @@ Association LGBTQIA+
 <a href="#" class="nav-link" data-target="portfolio">Portfolio</a>
 <a href="#" class="nav-link" data-target="tarifs">Tarifs</a>
 <a href="#" class="nav-link" data-target="contact">Contact</a>
-<a href="#" class="nav-link" data-target="lgbt">LGBT</a>
 </nav>
 
 <section id="about" class="section">
@@ -160,25 +256,25 @@ Association LGBTQIA+
 <p>Instagram : @k4mill_z</p>
 </section>
 
-<section id="lgbt" class="section">
-<h2>Association LGBTQIA+</h2>
-
-<p style="margin-top:30px;font-size:18px;">
-✨ Projet en cours...
-</p>
-
-<p style="opacity:0.7;">
-Une association arrive prochainement 💜
-</p>
-
-</section>
-
 <script>
+
+/* FIX LOADER BUG */
+window.addEventListener("load", () => {
+setTimeout(() => {
+document.getElementById("loader").remove();
+}, 1200);
+
+showSection("landing");
+});
+
+/* NAVIGATION */
+
 const sections=document.querySelectorAll('.section');
 const landing=document.getElementById('landing');
 const nav=document.querySelector('nav');
 
 function showSection(id){
+
 if(id==='landing'){
 landing.style.display='flex';
 nav.style.display='none';
@@ -186,6 +282,7 @@ sections.forEach(s=>s.style.display='none');
 }else{
 landing.style.display='none';
 nav.style.display='block';
+
 sections.forEach(s=>{
 s.style.display=(s.id===id)?'block':'none';
 setTimeout(()=>s.classList.add('visible'),50);
@@ -203,6 +300,7 @@ e.preventDefault();
 showSection(link.dataset.target);
 };
 });
+
 </script>
 
 </body>
