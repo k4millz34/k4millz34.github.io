@@ -22,20 +22,41 @@
 
       <section class="profile-stage" aria-label="Profil public">
         <div class="profile-card">
-          <p id="statusPill" class="status-pill">k4mlz profile</p>
-          <h1 id="displayName">k4mlz</h1>
+          <div class="window-bar" aria-hidden="true">
+            <span class="traffic red"></span>
+            <span class="traffic yellow"></span>
+            <span class="traffic green"></span>
+            <span id="windowTitle" class="window-title">k4mlz://profile</span>
+          </div>
+
+          <div class="profile-top">
+            <div id="avatarInitial" class="avatar-tile" aria-hidden="true">K</div>
+            <div class="identity-stack">
+              <p id="statusPill" class="status-pill">k4mlz profile</p>
+              <h1 id="displayName">k4mlz</h1>
+              <div class="profile-meta" aria-label="Informations du profil">
+                <span>public profile</span>
+                <span>custom links</span>
+                <span>audio ready</span>
+              </div>
+            </div>
+          </div>
+
           <p id="displayBio">Chargement du profil...</p>
 
           <div id="linksPreview" class="links-preview" aria-label="Liens du profil"></div>
 
-          <div class="music-player">
-            <button id="playPauseBtn" class="icon-button" type="button" aria-label="Lecture ou pause">
-              <span id="playPauseIcon">▶</span>
-            </button>
-            <div class="track-meta">
-              <span>Sound</span>
-              <strong id="trackLabel">Aucune musique</strong>
+          <div class="profile-actions">
+            <div class="music-player">
+              <button id="playPauseBtn" class="icon-button" type="button" aria-label="Lecture ou pause">
+                <span id="playPauseIcon">▶</span>
+              </button>
+              <div class="track-meta">
+                <span>Sound</span>
+                <strong id="trackLabel">Aucune musique</strong>
+              </div>
             </div>
+            <button id="copyProfileBtn" class="mini-action" type="button">Copier le lien</button>
           </div>
         </div>
       </section>
@@ -53,6 +74,13 @@
         </div>
 
         <form id="profileForm" class="control-stack hidden">
+          <div class="theme-presets" aria-label="Themes rapides">
+            <button type="button" data-theme="aqua">Aqua</button>
+            <button type="button" data-theme="rose">Rose</button>
+            <button type="button" data-theme="volt">Volt</button>
+            <button type="button" data-theme="mono">Mono</button>
+          </div>
+
           <fieldset>
             <legend>Profil</legend>
             <label>

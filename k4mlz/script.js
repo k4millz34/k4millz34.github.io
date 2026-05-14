@@ -26,6 +26,8 @@ const elements = {
   image: document.querySelector("#backgroundImage"),
   overlay: document.querySelector("#readabilityOverlay"),
   statusPill: document.querySelector("#statusPill"),
+  windowTitle: document.querySelector("#windowTitle"),
+  avatarInitial: document.querySelector("#avatarInitial"),
   displayName: document.querySelector("#displayName"),
   displayBio: document.querySelector("#displayBio"),
   linksPreview: document.querySelector("#linksPreview"),
@@ -33,6 +35,7 @@ const elements = {
   playPauseBtn: document.querySelector("#playPauseBtn"),
   playPauseIcon: document.querySelector("#playPauseIcon"),
   trackLabel: document.querySelector("#trackLabel"),
+  copyProfileBtn: document.querySelector("#copyProfileBtn"),
   loginBox: document.querySelector("#loginBox"),
   profileForm: document.querySelector("#profileForm"),
   logoutBtn: document.querySelector("#logoutBtn"),
@@ -57,6 +60,7 @@ const elements = {
   adminPanel: document.querySelector("#adminPanel"),
   adminList: document.querySelector("#adminList"),
   refreshAdminBtn: document.querySelector("#refreshAdminBtn"),
+  themePresetBtns: document.querySelectorAll("[data-theme]"),
 };
 
 init();
@@ -78,6 +82,7 @@ async function init() {
 
 function bindEvents() {
   elements.playPauseBtn.addEventListener("click", toggleAudio);
+  elements.copyProfileBtn.addEventListener("click", copyProfileLink);
   elements.audio.addEventListener("play", () => {
     elements.playPauseIcon.textContent = "II";
   });
@@ -95,6 +100,16 @@ function bindEvents() {
   elements.linkTitleInput.addEventListener("keydown", submitLinkWithEnter);
   elements.linkUrlInput.addEventListener("keydown", submitLinkWithEnter);
   elements.refreshAdminBtn.addEventListener("click", loadAdminPanel);
+
+  elements.profileForm.querySelectorAll("input, textarea").forEach((input) => {
+    if (input === elements.linkTitleInput || input === elements.linkUrlInput) return;
+    input.addEventListener("input", previewDraft);
+    input.addEventListener("change", previewDraft);
+  });
+
+  elements.themePresetBtns.forEach((button) => {
+    button.addEventListener("click", () => applyThemePreset(button.dataset.theme));
+  });
 }
 
 async function loadDashboard() {
@@ -185,8 +200,12 @@ function createDefaultProfile() {
 function renderProfile(profile) {
   const safeProfile = { ...defaults, ...profile };
   const displayName = safeProfile.display_name || safeProfile.username || "k4mlz";
+  const username = safeProfile.username || "";
 
-  elements.statusPill.textContent = safeProfile.username ? `/${safeProfile.username}` : "k4mlz profile";
+  elements.statusPill.textContent = username ? `/${username}` : "k4mlz profile";
+  elements.statusPill.dataset.username = username;
+  elements.windowTitle.textContent = username ? `k4mlz://${username}` : "k4mlz://profile";
+  elements.avatarInitial.textContent = getInitials(displayName);
   elements.displayName.textContent = displayName;
   elements.displayBio.textContent = safeProfile.bio || "Aucune bio pour le moment.";
   elements.displayName.style.color = safeProfile.name_color;
@@ -235,6 +254,40 @@ function renderEditor(profile) {
   elements.publicLink.href = safeProfile.username ? `/k4mlz/${safeProfile.username}` : "/k4mlz/";
 
   renderEditorLinks();
+}
+
+function previewDraft() {
+  if (elements.profileForm.classList.contains("hidden")) return;
+
+  renderProfile({
+    ...currentProfile,
+    username: normalizeUsername(elements.usernameInput.value),
+    display_name: elements.displayNameInput.value.trim() || elements.usernameInput.value.trim(),
+    bio: elements.bioInput.value.trim(),
+    name_color: elements.nameColorInput.value,
+    name_size: Number(elements.nameSizeInput.value),
+    video_url: elements.videoUrlInput.value.trim(),
+    image_url: elements.imageUrlInput.value.trim() || "../9.jpg",
+    music_url: elements.musicUrlInput.value.trim(),
+    overlay: Number(elements.overlayInput.value),
+    blur: elements.blurInput.checked,
+    links: draftLinks,
+  });
+}
+
+function applyThemePreset(theme) {
+  const themes = {
+    aqua: { color: "#7df9ff", overlay: 0.52, blur: true },
+    rose: { color: "#ff4fd8", overlay: 0.58, blur: true },
+    volt: { color: "#b9ff5f", overlay: 0.5, blur: false },
+    mono: { color: "#f7f8fb", overlay: 0.62, blur: true },
+  };
+  const selected = themes[theme] || themes.aqua;
+
+  elements.nameColorInput.value = selected.color;
+  elements.overlayInput.value = selected.overlay;
+  elements.blurInput.checked = selected.blur;
+  previewDraft();
 }
 
 function showEditor() {
@@ -302,11 +355,13 @@ function addLink() {
   elements.linkTitleInput.value = "";
   elements.linkUrlInput.value = "";
   renderEditorLinks();
+  previewDraft();
 }
 
 function removeLink(index) {
   draftLinks.splice(index, 1);
   renderEditorLinks();
+  previewDraft();
 }
 
 function renderEditorLinks() {
@@ -391,6 +446,18 @@ async function toggleAudio() {
   }
 }
 
+async function copyProfileLink() {
+  const username = elements.statusPill.dataset.username;
+  if (!username) return;
+
+  const link = `${window.location.origin}/k4mlz/${username}`;
+  await navigator.clipboard?.writeText(link).catch(() => {});
+  elements.copyProfileBtn.textContent = "Copie";
+  window.setTimeout(() => {
+    elements.copyProfileBtn.textContent = "Copier le lien";
+  }, 1400);
+}
+
 function setVideo(src) {
   if (elements.video.getAttribute("src") === src) return;
 
@@ -430,6 +497,14 @@ function getRequestedUsername() {
   }
 
   return "";
+}
+
+function getInitials(value) {
+  const clean = value.trim();
+  if (!clean) return "K";
+
+  const parts = clean.split(/\s+/).slice(0, 2);
+  return parts.map((part) => part[0]).join("").toUpperCase();
 }
 
 function normalizeUsername(value) {
