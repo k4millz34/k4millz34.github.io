@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Page speciale k4mlz pour k4millz : profil neon interactif personnalisable."
+      content="Profils publics k4mlz pour k4millz.com."
     />
     <title>k4mlz | k4millz</title>
     <link rel="icon" type="image/x-icon" href="../K4M.ico" />
@@ -20,16 +20,13 @@
     <main class="special-shell">
       <a class="back-link" href="/">k4millz.com</a>
 
-      <section class="profile-stage" aria-label="Page speciale">
+      <section class="profile-stage" aria-label="Profil public">
         <div class="profile-card">
-          <p class="status-pill">k4mlz signal</p>
+          <p id="statusPill" class="status-pill">k4mlz profile</p>
           <h1 id="displayName">k4mlz</h1>
-          <p id="displayBio">
-            Bio personnalisable, liens stylés, musique et ambiance cyber pour
-            une page statique prête à publier.
-          </p>
+          <p id="displayBio">Chargement du profil...</p>
 
-          <div id="linksPreview" class="links-preview" aria-label="Liens personnalises"></div>
+          <div id="linksPreview" class="links-preview" aria-label="Liens du profil"></div>
 
           <div class="music-player">
             <button id="playPauseBtn" class="icon-button" type="button" aria-label="Lecture ou pause">
@@ -39,36 +36,36 @@
               <span>Sound</span>
               <strong id="trackLabel">Aucune musique</strong>
             </div>
-            <input
-              id="volumeControl"
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              value="0.55"
-              aria-label="Volume"
-            />
           </div>
         </div>
       </section>
 
-      <aside class="editor-panel" aria-label="Personnalisation">
+      <aside id="accountPanel" class="editor-panel" aria-label="Compte et personnalisation">
         <div class="panel-heading">
-          <p>Local editor</p>
-          <h2>Modifier</h2>
-          <button id="resetBtn" type="button" class="ghost-button">Reset</button>
+          <p id="panelKicker">Compte</p>
+          <h2 id="panelTitle">Connexion</h2>
+          <button id="logoutBtn" type="button" class="ghost-button hidden">Logout</button>
         </div>
 
-        <form class="control-stack">
+        <div id="loginBox" class="control-stack">
+          <p class="helper-text">Connecte-toi pour creer ou modifier ton profil.</p>
+          <a class="primary-link" href="/">Connexion / inscription</a>
+        </div>
+
+        <form id="profileForm" class="control-stack hidden">
           <fieldset>
             <legend>Profil</legend>
             <label>
-              Nom / pseudo
-              <input id="nameInput" type="text" maxlength="36" placeholder="k4mlz" />
+              Pseudo public
+              <input id="usernameInput" type="text" maxlength="24" placeholder="tonpseudo" />
+            </label>
+            <label>
+              Nom affiche
+              <input id="displayNameInput" type="text" maxlength="36" placeholder="Ton nom" />
             </label>
             <label>
               Bio
-              <textarea id="bioInput" rows="4" maxlength="260" placeholder="Ta description..."></textarea>
+              <textarea id="bioInput" rows="4" maxlength="320" placeholder="Ta description..."></textarea>
             </label>
             <div class="split-controls">
               <label>
@@ -121,11 +118,26 @@
             </div>
             <div id="linksEditor" class="links-editor"></div>
           </fieldset>
+
+          <button class="primary-link" type="submit">Sauvegarder</button>
+          <a id="publicLink" class="secondary-link" href="/k4mlz/" target="_blank" rel="noreferrer">
+            Voir mon profil public
+          </a>
+          <p id="saveMessage" class="message" role="status"></p>
         </form>
+
+        <section id="adminPanel" class="admin-panel hidden" aria-label="Administration">
+          <div class="panel-heading compact">
+            <p>Admin</p>
+            <h2>Moderation</h2>
+            <button id="refreshAdminBtn" class="ghost-button" type="button">Refresh</button>
+          </div>
+          <div id="adminList" class="admin-list"></div>
+        </section>
       </aside>
     </main>
 
     <audio id="audioPlayer" preload="metadata"></audio>
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>

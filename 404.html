@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirection | k4millz</title>
+    <script>
+      const path = window.location.pathname;
+      const match = path.match(/^\/k4mlz\/([^/]+)\/?$/);
+
+      if (match) {
+        window.location.replace(`/k4mlz/?u=${encodeURIComponent(match[1])}`);
+      } else {
+        window.location.replace("/");
+      }
+    </script>
+  </head>
+  <body>
+    Redirection...
+  </body>
+</html>

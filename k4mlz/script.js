@@ -1,30 +1,31 @@
-const STORAGE_KEY = "k4millz-k4mlz-profile";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "../supabase-config.js";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const defaults = {
-  name: "k4mlz",
-  bio: "Bio personnalisable, liens styles, musique et ambiance cyber pour une page statique prete a publier.",
-  nameColor: "#7df9ff",
-  nameSize: 78,
-  videoSrc: "",
-  imageSrc: "../9.jpg",
-  musicSrc: "",
-  musicLabel: "",
+  username: "",
+  display_name: "k4mlz",
+  bio: "Profil k4mlz personnalisable.",
+  name_color: "#7df9ff",
+  name_size: 78,
+  video_url: "",
+  image_url: "../9.jpg",
+  music_url: "",
   overlay: 0.52,
   blur: false,
-  volume: 0.55,
-  links: [
-    { title: "Instagram", url: "https://instagram.com" },
-    { title: "TikTok", url: "https://tiktok.com" },
-    { title: "YouTube", url: "https://youtube.com" },
-  ],
+  links: [],
 };
 
-let state = loadState();
+let session = null;
+let currentProfile = null;
+let draftLinks = [];
 
 const elements = {
   video: document.querySelector("#backgroundVideo"),
   image: document.querySelector("#backgroundImage"),
   overlay: document.querySelector("#readabilityOverlay"),
+  statusPill: document.querySelector("#statusPill"),
   displayName: document.querySelector("#displayName"),
   displayBio: document.querySelector("#displayBio"),
   linksPreview: document.querySelector("#linksPreview"),
@@ -32,9 +33,13 @@ const elements = {
   playPauseBtn: document.querySelector("#playPauseBtn"),
   playPauseIcon: document.querySelector("#playPauseIcon"),
   trackLabel: document.querySelector("#trackLabel"),
-  volume: document.querySelector("#volumeControl"),
-  resetBtn: document.querySelector("#resetBtn"),
-  nameInput: document.querySelector("#nameInput"),
+  loginBox: document.querySelector("#loginBox"),
+  profileForm: document.querySelector("#profileForm"),
+  logoutBtn: document.querySelector("#logoutBtn"),
+  panelKicker: document.querySelector("#panelKicker"),
+  panelTitle: document.querySelector("#panelTitle"),
+  usernameInput: document.querySelector("#usernameInput"),
+  displayNameInput: document.querySelector("#displayNameInput"),
   bioInput: document.querySelector("#bioInput"),
   nameColorInput: document.querySelector("#nameColorInput"),
   nameSizeInput: document.querySelector("#nameSizeInput"),
@@ -47,81 +52,31 @@ const elements = {
   linkUrlInput: document.querySelector("#linkUrlInput"),
   addLinkBtn: document.querySelector("#addLinkBtn"),
   linksEditor: document.querySelector("#linksEditor"),
+  publicLink: document.querySelector("#publicLink"),
+  saveMessage: document.querySelector("#saveMessage"),
+  adminPanel: document.querySelector("#adminPanel"),
+  adminList: document.querySelector("#adminList"),
+  refreshAdminBtn: document.querySelector("#refreshAdminBtn"),
 };
 
 init();
 
-function init() {
+async function init() {
   bindEvents();
-  render();
-}
+  const { data } = await supabase.auth.getSession();
+  session = data.session;
 
-function loadState() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    return { ...defaults, ...saved, links: saved?.links || defaults.links };
-  } catch {
-    return { ...defaults };
+  const requestedUsername = getRequestedUsername();
+  if (requestedUsername) {
+    await loadPublicProfile(requestedUsername);
+    await maybeLoadEditor();
+    return;
   }
-}
 
-function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  await loadDashboard();
 }
 
 function bindEvents() {
-  elements.nameInput.addEventListener("input", (event) => {
-    state.name = event.target.value;
-    commit();
-  });
-
-  elements.bioInput.addEventListener("input", (event) => {
-    state.bio = event.target.value;
-    commit();
-  });
-
-  elements.nameColorInput.addEventListener("input", (event) => {
-    state.nameColor = event.target.value;
-    commit();
-  });
-
-  elements.nameSizeInput.addEventListener("input", (event) => {
-    state.nameSize = Number(event.target.value);
-    commit();
-  });
-
-  elements.videoUrlInput.addEventListener("change", (event) => {
-    state.videoSrc = event.target.value.trim();
-    commit();
-  });
-
-  elements.imageUrlInput.addEventListener("change", (event) => {
-    state.imageSrc = event.target.value.trim();
-    commit();
-  });
-
-  elements.overlayInput.addEventListener("input", (event) => {
-    state.overlay = Number(event.target.value);
-    commit();
-  });
-
-  elements.blurInput.addEventListener("change", (event) => {
-    state.blur = event.target.checked;
-    commit();
-  });
-
-  elements.musicUrlInput.addEventListener("change", (event) => {
-    state.musicSrc = event.target.value.trim();
-    state.musicLabel = state.musicSrc ? getFileName(state.musicSrc) : "";
-    commit();
-  });
-
-  elements.volume.addEventListener("input", (event) => {
-    state.volume = Number(event.target.value);
-    elements.audio.volume = state.volume;
-    saveState();
-  });
-
   elements.playPauseBtn.addEventListener("click", toggleAudio);
   elements.audio.addEventListener("play", () => {
     elements.playPauseIcon.textContent = "II";
@@ -130,15 +85,293 @@ function bindEvents() {
     elements.playPauseIcon.textContent = "▶";
   });
 
+  elements.logoutBtn.addEventListener("click", async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/";
+  });
+
+  elements.profileForm.addEventListener("submit", saveProfile);
   elements.addLinkBtn.addEventListener("click", addLink);
   elements.linkTitleInput.addEventListener("keydown", submitLinkWithEnter);
   elements.linkUrlInput.addEventListener("keydown", submitLinkWithEnter);
+  elements.refreshAdminBtn.addEventListener("click", loadAdminPanel);
+}
 
-  elements.resetBtn.addEventListener("click", () => {
-    state = { ...defaults, links: [...defaults.links] };
-    localStorage.removeItem(STORAGE_KEY);
-    render();
+async function loadDashboard() {
+  if (!session) {
+    renderProfile(defaults);
+    showLoggedOut();
+    return;
+  }
+
+  currentProfile = await getMyProfile();
+  if (!currentProfile) {
+    currentProfile = createDefaultProfile();
+  }
+
+  renderProfile(currentProfile);
+  renderEditor(currentProfile);
+  showEditor();
+
+  if (currentProfile.is_admin) {
+    await loadAdminPanel();
+  }
+}
+
+async function maybeLoadEditor() {
+  if (!session) return;
+  currentProfile = await getMyProfile();
+
+  if (!currentProfile) {
+    currentProfile = createDefaultProfile();
+  }
+
+  renderEditor(currentProfile);
+  showEditor();
+
+  if (currentProfile.is_admin) {
+    await loadAdminPanel();
+  }
+}
+
+async function loadPublicProfile(username) {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("username", normalizeUsername(username))
+    .maybeSingle();
+
+  if (error || !data || data.hidden) {
+    renderProfile({
+      ...defaults,
+      display_name: "Profil introuvable",
+      bio: "Ce profil n'existe pas ou a ete masque par moderation.",
+      links: [],
+    });
+    showLoggedOut();
+    return;
+  }
+
+  renderProfile(data);
+  document.title = `${data.username} | k4mlz`;
+}
+
+async function getMyProfile() {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", session.user.id)
+    .maybeSingle();
+
+  if (error) {
+    setMessage(error.message, "error");
+  }
+
+  return data;
+}
+
+function createDefaultProfile() {
+  const metadataUsername = normalizeUsername(session.user.user_metadata?.username || "");
+  const fallback = normalizeUsername(session.user.email?.split("@")[0] || "user");
+
+  return {
+    ...defaults,
+    id: session.user.id,
+    username: metadataUsername || fallback,
+    display_name: metadataUsername || fallback,
+  };
+}
+
+function renderProfile(profile) {
+  const safeProfile = { ...defaults, ...profile };
+  const displayName = safeProfile.display_name || safeProfile.username || "k4mlz";
+
+  elements.statusPill.textContent = safeProfile.username ? `/${safeProfile.username}` : "k4mlz profile";
+  elements.displayName.textContent = displayName;
+  elements.displayBio.textContent = safeProfile.bio || "Aucune bio pour le moment.";
+  elements.displayName.style.color = safeProfile.name_color;
+  document.documentElement.style.setProperty("--accent", safeProfile.name_color);
+  document.documentElement.style.setProperty("--name-size", `${safeProfile.name_size}px`);
+
+  elements.overlay.style.background = `rgba(2, 4, 12, ${safeProfile.overlay})`;
+  elements.overlay.style.backdropFilter = safeProfile.blur ? "blur(8px)" : "blur(0)";
+  elements.image.style.backgroundImage = safeProfile.image_url
+    ? `linear-gradient(135deg, rgba(7, 10, 22, 0.1), rgba(7, 10, 22, 0.48)), url("${cssUrl(safeProfile.image_url)}")`
+    : "";
+
+  setVideo(safeProfile.video_url);
+  setAudio(safeProfile.music_url);
+  renderPreviewLinks(Array.isArray(safeProfile.links) ? safeProfile.links : []);
+}
+
+function renderPreviewLinks(links) {
+  elements.linksPreview.innerHTML = "";
+
+  links.forEach((link) => {
+    const previewLink = document.createElement("a");
+    previewLink.className = "profile-link";
+    previewLink.href = normalizeUrl(link.url);
+    previewLink.target = "_blank";
+    previewLink.rel = "noreferrer";
+    previewLink.innerHTML = `<span>${escapeHtml(link.title)}</span>`;
+    elements.linksPreview.appendChild(previewLink);
   });
+}
+
+function renderEditor(profile) {
+  const safeProfile = { ...defaults, ...profile };
+  draftLinks = Array.isArray(safeProfile.links) ? [...safeProfile.links] : [];
+
+  elements.usernameInput.value = safeProfile.username;
+  elements.displayNameInput.value = safeProfile.display_name;
+  elements.bioInput.value = safeProfile.bio;
+  elements.nameColorInput.value = safeProfile.name_color;
+  elements.nameSizeInput.value = safeProfile.name_size;
+  elements.videoUrlInput.value = safeProfile.video_url;
+  elements.imageUrlInput.value = safeProfile.image_url;
+  elements.overlayInput.value = safeProfile.overlay;
+  elements.blurInput.checked = safeProfile.blur;
+  elements.musicUrlInput.value = safeProfile.music_url;
+  elements.publicLink.href = safeProfile.username ? `/k4mlz/${safeProfile.username}` : "/k4mlz/";
+
+  renderEditorLinks();
+}
+
+function showEditor() {
+  elements.loginBox.classList.add("hidden");
+  elements.profileForm.classList.remove("hidden");
+  elements.logoutBtn.classList.remove("hidden");
+  elements.panelKicker.textContent = currentProfile?.is_admin ? "Admin connecte" : "Connecte";
+  elements.panelTitle.textContent = "Mon profil";
+}
+
+function showLoggedOut() {
+  elements.loginBox.classList.remove("hidden");
+  elements.profileForm.classList.add("hidden");
+  elements.logoutBtn.classList.add("hidden");
+  elements.adminPanel.classList.add("hidden");
+  elements.panelKicker.textContent = "Compte";
+  elements.panelTitle.textContent = "Connexion";
+}
+
+async function saveProfile(event) {
+  event.preventDefault();
+  if (!session) return;
+
+  const payload = {
+    id: session.user.id,
+    username: normalizeUsername(elements.usernameInput.value),
+    display_name: elements.displayNameInput.value.trim() || elements.usernameInput.value.trim(),
+    bio: elements.bioInput.value.trim(),
+    name_color: elements.nameColorInput.value,
+    name_size: Number(elements.nameSizeInput.value),
+    video_url: elements.videoUrlInput.value.trim(),
+    image_url: elements.imageUrlInput.value.trim() || "../9.jpg",
+    music_url: elements.musicUrlInput.value.trim(),
+    overlay: Number(elements.overlayInput.value),
+    blur: elements.blurInput.checked,
+    links: draftLinks,
+  };
+
+  if (!payload.username) {
+    setMessage("Ton pseudo doit contenir lettres, chiffres, _ ou -.", "error");
+    return;
+  }
+
+  setMessage("Sauvegarde...");
+  const { data, error } = await supabase.from("profiles").upsert(payload).select("*").single();
+
+  if (error) {
+    setMessage(error.message, "error");
+    return;
+  }
+
+  currentProfile = data;
+  renderProfile(currentProfile);
+  renderEditor(currentProfile);
+  setMessage(`Sauvegarde OK. Ton lien : /k4mlz/${currentProfile.username}`, "success");
+}
+
+function addLink() {
+  const title = elements.linkTitleInput.value.trim();
+  const url = elements.linkUrlInput.value.trim();
+
+  if (!title || !url) return;
+
+  draftLinks.push({ title, url: normalizeUrl(url) });
+  elements.linkTitleInput.value = "";
+  elements.linkUrlInput.value = "";
+  renderEditorLinks();
+}
+
+function removeLink(index) {
+  draftLinks.splice(index, 1);
+  renderEditorLinks();
+}
+
+function renderEditorLinks() {
+  elements.linksEditor.innerHTML = "";
+
+  draftLinks.forEach((link, index) => {
+    const row = document.createElement("div");
+    row.className = "link-row";
+    row.innerHTML = `
+      <a href="${escapeAttribute(normalizeUrl(link.url))}" target="_blank" rel="noreferrer">
+        ${escapeHtml(link.title)}
+      </a>
+      <button type="button">Supprimer</button>
+    `;
+    row.querySelector("button").addEventListener("click", () => removeLink(index));
+    elements.linksEditor.appendChild(row);
+  });
+}
+
+async function loadAdminPanel() {
+  if (!currentProfile?.is_admin) return;
+
+  elements.adminPanel.classList.remove("hidden");
+  elements.adminList.innerHTML = "<p class=\"helper-text\">Chargement...</p>";
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, username, display_name, hidden, is_admin, created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    elements.adminList.innerHTML = `<p class="message error">${escapeHtml(error.message)}</p>`;
+    return;
+  }
+
+  elements.adminList.innerHTML = "";
+  data.forEach((profile) => {
+    const row = document.createElement("div");
+    row.className = "admin-row";
+    row.innerHTML = `
+      <a href="/k4mlz/${escapeAttribute(profile.username)}" target="_blank" rel="noreferrer">
+        ${escapeHtml(profile.username)}${profile.hidden ? " (masque)" : ""}
+      </a>
+      <div class="admin-actions">
+        <button type="button" data-action="toggle">${profile.hidden ? "Afficher" : "Masquer"}</button>
+        <button type="button" data-action="delete">Supprimer</button>
+      </div>
+    `;
+    row.querySelector('[data-action="toggle"]').addEventListener("click", () => toggleHidden(profile));
+    row.querySelector('[data-action="delete"]').addEventListener("click", () => deleteProfile(profile));
+    elements.adminList.appendChild(row);
+  });
+}
+
+async function toggleHidden(profile) {
+  await supabase.from("profiles").update({ hidden: !profile.hidden }).eq("id", profile.id);
+  await loadAdminPanel();
+}
+
+async function deleteProfile(profile) {
+  const ok = window.confirm(`Supprimer le profil ${profile.username} ?`);
+  if (!ok) return;
+
+  await supabase.from("profiles").delete().eq("id", profile.id);
+  await loadAdminPanel();
 }
 
 function submitLinkWithEnter(event) {
@@ -148,128 +381,63 @@ function submitLinkWithEnter(event) {
   }
 }
 
-function commit() {
-  saveState();
-  render();
-}
-
-function render() {
-  renderInputs();
-  renderProfile();
-  renderMedia();
-  renderLinks();
-}
-
-function renderInputs() {
-  elements.nameInput.value = state.name;
-  elements.bioInput.value = state.bio;
-  elements.nameColorInput.value = state.nameColor;
-  elements.nameSizeInput.value = state.nameSize;
-  elements.videoUrlInput.value = state.videoSrc;
-  elements.imageUrlInput.value = state.imageSrc;
-  elements.overlayInput.value = state.overlay;
-  elements.blurInput.checked = state.blur;
-  elements.musicUrlInput.value = state.musicSrc;
-  elements.volume.value = state.volume;
-}
-
-function renderProfile() {
-  elements.displayName.textContent = state.name.trim() || "k4mlz";
-  elements.displayBio.textContent = state.bio.trim() || "Ajoute une bio pour personnaliser cette zone.";
-  elements.displayName.style.color = state.nameColor;
-  document.documentElement.style.setProperty("--accent", state.nameColor);
-  document.documentElement.style.setProperty("--name-size", `${state.nameSize}px`);
-}
-
-function renderMedia() {
-  elements.overlay.style.background = `rgba(2, 4, 12, ${state.overlay})`;
-  elements.overlay.style.backdropFilter = state.blur ? "blur(8px)" : "blur(0)";
-
-  elements.image.style.backgroundImage = state.imageSrc
-    ? `linear-gradient(135deg, rgba(7, 10, 22, 0.1), rgba(7, 10, 22, 0.48)), url("${cssUrl(state.imageSrc)}")`
-    : "";
-
-  if (elements.video.getAttribute("src") !== state.videoSrc) {
-    if (state.videoSrc) {
-      elements.video.src = state.videoSrc;
-    } else {
-      elements.video.removeAttribute("src");
-      elements.video.load();
-    }
-    elements.video.style.display = state.videoSrc ? "block" : "none";
-    if (state.videoSrc) {
-      elements.video.play().catch(() => {});
-    }
-  }
-
-  if (elements.audio.getAttribute("src") !== state.musicSrc) {
-    const wasPlaying = !elements.audio.paused;
-    if (state.musicSrc) {
-      elements.audio.src = state.musicSrc;
-    } else {
-      elements.audio.removeAttribute("src");
-      elements.audio.load();
-    }
-    elements.audio.volume = state.volume;
-    if (wasPlaying && state.musicSrc) {
-      elements.audio.play().catch(() => {});
-    }
-  }
-
-  elements.trackLabel.textContent = state.musicLabel || "Aucune musique";
-}
-
-function renderLinks() {
-  elements.linksPreview.innerHTML = "";
-  elements.linksEditor.innerHTML = "";
-
-  state.links.forEach((link, index) => {
-    const previewLink = document.createElement("a");
-    previewLink.className = "profile-link";
-    previewLink.href = normalizeUrl(link.url);
-    previewLink.target = "_blank";
-    previewLink.rel = "noreferrer";
-    previewLink.innerHTML = `<span>${escapeHtml(link.title)}</span>`;
-    elements.linksPreview.appendChild(previewLink);
-
-    const row = document.createElement("div");
-    row.className = "link-row";
-    row.innerHTML = `
-      <a href="${escapeAttribute(normalizeUrl(link.url))}" target="_blank" rel="noreferrer">
-        ${escapeHtml(link.title)}
-      </a>
-      <button type="button" data-index="${index}">Supprimer</button>
-    `;
-    row.querySelector("button").addEventListener("click", () => removeLink(index));
-    elements.linksEditor.appendChild(row);
-  });
-}
-
-function addLink() {
-  const title = elements.linkTitleInput.value.trim();
-  const url = elements.linkUrlInput.value.trim();
-
-  if (!title || !url) return;
-
-  state.links.push({ title, url: normalizeUrl(url) });
-  elements.linkTitleInput.value = "";
-  elements.linkUrlInput.value = "";
-  commit();
-}
-
-function removeLink(index) {
-  state.links.splice(index, 1);
-  commit();
-}
-
 async function toggleAudio() {
-  if (!state.musicSrc) return;
+  if (!elements.audio.getAttribute("src")) return;
 
   if (elements.audio.paused) {
     await elements.audio.play().catch(() => {});
   } else {
     elements.audio.pause();
   }
+}
+
+function setVideo(src) {
+  if (elements.video.getAttribute("src") === src) return;
+
+  if (src) {
+    elements.video.src = src;
+  } else {
+    elements.video.removeAttribute("src");
+    elements.video.load();
+  }
+
+  elements.video.style.display = src ? "block" : "none";
+  if (src) {
+    elements.video.play().catch(() => {});
+  }
+}
+
+function setAudio(src) {
+  if (elements.audio.getAttribute("src") === src) return;
+
+  if (src) {
+    elements.audio.src = src;
+  } else {
+    elements.audio.removeAttribute("src");
+    elements.audio.load();
+  }
+
+  elements.trackLabel.textContent = src ? getFileName(src) : "Aucune musique";
+}
+
+function getRequestedUsername() {
+  const fromQuery = new URLSearchParams(window.location.search).get("u");
+  if (fromQuery) return normalizeUsername(fromQuery);
+
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  if (parts[0] === "k4mlz" && parts[1]) {
+    return normalizeUsername(parts[1]);
+  }
+
+  return "";
+}
+
+function normalizeUsername(value) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]/g, "")
+    .slice(0, 24);
 }
 
 function normalizeUrl(url) {
@@ -290,8 +458,13 @@ function cssUrl(value) {
   return value.replaceAll("\\", "\\\\").replaceAll('"', '\\"');
 }
 
+function setMessage(text, type = "") {
+  elements.saveMessage.textContent = text;
+  elements.saveMessage.className = `message ${type}`.trim();
+}
+
 function escapeHtml(value) {
-  return value
+  return String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")

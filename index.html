@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Site officiel k4millz avec une page interactive neon personnalisable."
+      content="Cree ton profil public k4mlz sur k4millz.com."
     />
     <title>k4millz</title>
     <link rel="icon" type="image/x-icon" href="K4M.ico" />
@@ -15,43 +15,88 @@
     <main class="home">
       <nav class="topbar" aria-label="Navigation principale">
         <a class="brand" href="/">k4millz</a>
-        <a class="nav-link" href="/k4mlz/">Page speciale</a>
+        <div class="nav-actions">
+          <a class="nav-link" href="/k4mlz/">Mon profil</a>
+        </div>
       </nav>
 
       <section class="hero" aria-labelledby="site-title">
-        <p class="eyebrow">Official domain</p>
-        <h1 id="site-title">k4millz</h1>
-        <p class="intro">
-          Une porte d'entree simple, propre et moderne vers une page interactive
-          plus immersive.
-        </p>
-        <div class="actions">
-          <a class="primary-button" href="/k4mlz/">Entrer dans /k4mlz/</a>
-          <a class="secondary-button" href="https://github.com/" target="_blank" rel="noreferrer">
-            GitHub Pages ready
-          </a>
+        <div>
+          <p class="eyebrow">k4mlz profiles</p>
+          <h1 id="site-title">k4millz</h1>
+          <p class="intro">
+            Cree un compte, personnalise ta page et partage ton lien public en
+            <strong>k4millz.com/k4mlz/tonpseudo</strong>.
+          </p>
+          <div class="actions">
+            <a class="primary-button" href="/k4mlz/">Ouvrir mon espace</a>
+            <a class="secondary-button" href="/k4mlz/k4mlz">Voir un exemple</a>
+          </div>
         </div>
+
+        <section class="auth-panel" aria-label="Compte utilisateur">
+          <div class="tabs" role="tablist" aria-label="Connexion ou inscription">
+            <button class="tab-button active" id="showLogin" type="button">Connexion</button>
+            <button class="tab-button" id="showSignup" type="button">Inscription</button>
+          </div>
+
+          <form id="loginForm" class="auth-form">
+            <label>
+              Email
+              <input id="loginEmail" type="email" autocomplete="email" required />
+            </label>
+            <label>
+              Mot de passe
+              <input id="loginPassword" type="password" autocomplete="current-password" required />
+            </label>
+            <button class="primary-button" type="submit">Se connecter</button>
+          </form>
+
+          <form id="signupForm" class="auth-form hidden">
+            <label>
+              Pseudo public
+              <input id="signupUsername" type="text" autocomplete="username" maxlength="24" required />
+            </label>
+            <label>
+              Email
+              <input id="signupEmail" type="email" autocomplete="email" required />
+            </label>
+            <label>
+              Mot de passe
+              <input
+                id="signupPassword"
+                type="password"
+                autocomplete="new-password"
+                minlength="8"
+                required
+              />
+            </label>
+            <button class="primary-button" type="submit">Creer mon compte</button>
+          </form>
+
+          <p id="authMessage" class="message" role="status"></p>
+        </section>
       </section>
 
-      <section class="quick-info" aria-label="Informations">
+      <section class="quick-info" aria-label="Fonctionnalites">
         <article>
           <span>01</span>
-          <h2>Clean</h2>
-          <p>Une page principale rapide, lisible et compatible mobile.</p>
+          <h2>Compte</h2>
+          <p>Chaque personne se connecte avec son email et son mot de passe.</p>
         </article>
         <article>
           <span>02</span>
-          <h2>Neon</h2>
-          <p>Une page secondaire cyber avec musique, liens et bio.</p>
+          <h2>Profil</h2>
+          <p>Chaque pseudo a son lien public, par exemple /k4mlz/camille.</p>
         </article>
         <article>
           <span>03</span>
-          <h2>Static</h2>
-          <p>Aucun backend, aucun framework, parfait pour GitHub Pages.</p>
+          <h2>Admin</h2>
+          <p>Le compte admin peut masquer ou supprimer les profils abusifs.</p>
         </article>
       </section>
     </main>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>

@@ -1,0 +1,101 @@
+create table if not exists public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  username text not null unique check (username ~ '^[a-z0-9_-]{3,24}$'),
+  display_name text not null default '',
+  bio text not null default '',
+  name_color text not null default '#7df9ff',
+  name_size integer not null default 78 check (name_size between 42 and 112),
+  image_url text not null default '../9.jpg',
+  video_url text not null default '',
+  music_url text not null default '',
+  overlay numeric not null default 0.52 check (overlay >= 0 and overlay <= 0.9),
+  blur boolean not null default false,
+  links jsonb not null default '[]'::jsonb,
+  hidden boolean not null default false,
+  is_admin boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.profiles enable row level security;
+
+create or replace function public.is_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.profiles
+    where id = auth.uid()
+      and is_admin = true
+  );
+$$;
+
+create or replace function public.touch_updated_at()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
+create or replace function public.protect_profile_flags()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if public.is_admin() then
+    return new;
+  end if;
+
+  new.id = old.id;
+  new.is_admin = old.is_admin;
+  new.hidden = old.hidden;
+  return new;
+end;
+$$;
+
+drop trigger if exists profiles_touch_updated_at on public.profiles;
+create trigger profiles_touch_updated_at
+before update on public.profiles
+for each row execute function public.touch_updated_at();
+
+drop trigger if exists profiles_protect_flags on public.profiles;
+create trigger profiles_protect_flags
+before update on public.profiles
+for each row execute function public.protect_profile_flags();
+
+drop policy if exists "Public can read visible profiles" on public.profiles;
+create policy "Public can read visible profiles"
+on public.profiles
+for select
+using (hidden = false or id = auth.uid() or public.is_admin());
+
+drop policy if exists "Users can create own profile" on public.profiles;
+create policy "Users can create own profile"
+on public.profiles
+for insert
+with check (id = auth.uid() and hidden = false and is_admin = false);
+
+drop policy if exists "Owners and admins can update profiles" on public.profiles;
+create policy "Owners and admins can update profiles"
+on public.profiles
+for update
+using (id = auth.uid() or public.is_admin())
+with check (id = auth.uid() or public.is_admin());
+
+drop policy if exists "Owners and admins can delete profiles" on public.profiles;
+create policy "Owners and admins can delete profiles"
+on public.profiles
+for delete
+using (id = auth.uid() or public.is_admin());
+
+-- Apres avoir cree ton compte sur le site avec le pseudo k4millz,
+-- lance cette ligne une seule fois pour devenir admin :
+-- update public.profiles set is_admin = true where username = 'k4millz';
