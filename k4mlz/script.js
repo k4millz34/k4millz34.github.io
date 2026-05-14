@@ -9,10 +9,12 @@ const defaults = {
   username: "",
   display_name: "k4mlz",
   bio: "Profil k4mlz personnalisable.",
+  avatar_url: "",
   name_color: "#7df9ff",
   name_size: 78,
+  theme: "aqua",
   video_url: "",
-  image_url: "../9.jpg",
+  image_url: "",
   music_url: "",
   overlay: 0.52,
   blur: false,
@@ -22,6 +24,7 @@ const defaults = {
 let session = null;
 let currentProfile = null;
 let draftLinks = [];
+let pendingAvatarObjectUrl = "";
 
 const elements = {
   video: document.querySelector("#backgroundVideo"),
@@ -30,6 +33,8 @@ const elements = {
   statusPill: document.querySelector("#statusPill"),
   windowTitle: document.querySelector("#windowTitle"),
   avatarInitial: document.querySelector("#avatarInitial"),
+  avatarImage: document.querySelector("#avatarImage"),
+  avatarFallback: document.querySelector("#avatarFallback"),
   displayName: document.querySelector("#displayName"),
   displayBio: document.querySelector("#displayBio"),
   linksPreview: document.querySelector("#linksPreview"),
@@ -55,6 +60,8 @@ const elements = {
   usernameInput: document.querySelector("#usernameInput"),
   displayNameInput: document.querySelector("#displayNameInput"),
   bioInput: document.querySelector("#bioInput"),
+  avatarUrlInput: document.querySelector("#avatarUrlInput"),
+  avatarFileInput: document.querySelector("#avatarFileInput"),
   nameColorInput: document.querySelector("#nameColorInput"),
   nameSizeInput: document.querySelector("#nameSizeInput"),
   videoUrlInput: document.querySelector("#videoUrlInput"),
@@ -130,8 +137,19 @@ function bindEvents() {
 
   elements.profileForm.querySelectorAll("input, textarea").forEach((input) => {
     if (input === elements.linkTitleInput || input === elements.linkUrlInput) return;
+    if (input === elements.avatarFileInput) return;
     input.addEventListener("input", previewDraft);
     input.addEventListener("change", previewDraft);
+  });
+
+  elements.avatarFileInput.addEventListener("change", () => {
+    const file = elements.avatarFileInput.files?.[0];
+    if (!file || !file.type.startsWith("image/")) return;
+    if (pendingAvatarObjectUrl) {
+      URL.revokeObjectURL(pendingAvatarObjectUrl);
+    }
+    pendingAvatarObjectUrl = URL.createObjectURL(file);
+    renderAvatar(pendingAvatarObjectUrl, elements.displayNameInput.value || elements.usernameInput.value);
   });
 
   elements.themePresetBtns.forEach((button) => {
@@ -208,7 +226,9 @@ async function createProfileIfNeeded(userId, username) {
       username,
       display_name: username,
       bio: "Nouveau profil k4mlz.",
-      image_url: "../9.jpg",
+      avatar_url: "",
+      image_url: "",
+      theme: "aqua",
       links: [],
     },
     { onConflict: "id" },
@@ -312,7 +332,7 @@ function renderProfile(profile) {
   elements.statusPill.textContent = username ? "profil public" : "k4mlz profile";
   elements.statusPill.dataset.username = username;
   elements.windowTitle.textContent = username ? "k4mlz://profile" : "k4mlz://preview";
-  elements.avatarInitial.textContent = getInitials(displayName);
+  renderAvatar(safeProfile.avatar_url, displayName);
   elements.displayName.textContent = displayName;
   elements.displayBio.textContent = safeProfile.bio || "Aucune bio pour le moment.";
   elements.displayName.style.color = safeProfile.name_color;
@@ -321,13 +341,28 @@ function renderProfile(profile) {
 
   elements.overlay.style.background = `rgba(2, 4, 12, ${safeProfile.overlay})`;
   elements.overlay.style.backdropFilter = safeProfile.blur ? "blur(8px)" : "blur(0)";
-  elements.image.style.backgroundImage = safeProfile.image_url
-    ? `linear-gradient(135deg, rgba(7, 10, 22, 0.1), rgba(7, 10, 22, 0.48)), url("${cssUrl(safeProfile.image_url)}")`
+  const backgroundImage = sanitizeLocalBackground(safeProfile.image_url);
+  document.body.dataset.theme = safeProfile.theme || "aqua";
+  elements.image.style.backgroundImage = backgroundImage
+    ? `linear-gradient(135deg, rgba(7, 10, 22, 0.1), rgba(7, 10, 22, 0.48)), url("${cssUrl(backgroundImage)}")`
     : "";
 
   setVideo(safeProfile.video_url);
   setAudio(safeProfile.music_url);
   renderPreviewLinks(Array.isArray(safeProfile.links) ? safeProfile.links : []);
+}
+
+function renderAvatar(avatarUrl, displayName) {
+  const cleanUrl = avatarUrl?.trim();
+  elements.avatarFallback.textContent = getInitials(displayName);
+  elements.avatarImage.classList.toggle("visible", Boolean(cleanUrl));
+  elements.avatarFallback.classList.toggle("hidden", Boolean(cleanUrl));
+
+  if (cleanUrl) {
+    elements.avatarImage.src = cleanUrl;
+  } else {
+    elements.avatarImage.removeAttribute("src");
+  }
 }
 
 function renderPreviewLinks(links) {
@@ -351,10 +386,11 @@ function renderEditor(profile) {
   elements.usernameInput.value = safeProfile.username;
   elements.displayNameInput.value = safeProfile.display_name;
   elements.bioInput.value = safeProfile.bio;
+  elements.avatarUrlInput.value = safeProfile.avatar_url;
   elements.nameColorInput.value = safeProfile.name_color;
   elements.nameSizeInput.value = safeProfile.name_size;
   elements.videoUrlInput.value = safeProfile.video_url;
-  elements.imageUrlInput.value = safeProfile.image_url;
+  elements.imageUrlInput.value = sanitizeLocalBackground(safeProfile.image_url);
   elements.overlayInput.value = safeProfile.overlay;
   elements.blurInput.checked = safeProfile.blur;
   elements.musicUrlInput.value = safeProfile.music_url;
@@ -371,10 +407,12 @@ function previewDraft() {
     username: normalizeUsername(elements.usernameInput.value),
     display_name: elements.displayNameInput.value.trim() || elements.usernameInput.value.trim(),
     bio: elements.bioInput.value.trim(),
+    avatar_url: elements.avatarUrlInput.value.trim() || pendingAvatarObjectUrl || currentProfile?.avatar_url || "",
     name_color: elements.nameColorInput.value,
     name_size: Number(elements.nameSizeInput.value),
+    theme: document.body.dataset.theme || "aqua",
     video_url: elements.videoUrlInput.value.trim(),
-    image_url: elements.imageUrlInput.value.trim() || "../9.jpg",
+    image_url: sanitizeLocalBackground(elements.imageUrlInput.value.trim()),
     music_url: elements.musicUrlInput.value.trim(),
     overlay: Number(elements.overlayInput.value),
     blur: elements.blurInput.checked,
@@ -384,21 +422,22 @@ function previewDraft() {
 
 function applyThemePreset(theme) {
   const themes = {
-    aqua: { color: "#7df9ff", overlay: 0.52, blur: true, image: "../9.jpg" },
-    rose: { color: "#ff4fd8", overlay: 0.58, blur: true, image: "../13.jpg" },
-    volt: { color: "#b9ff5f", overlay: 0.5, blur: false, image: "../6.jpg" },
-    mono: { color: "#f7f8fb", overlay: 0.62, blur: true, image: "../11.jpg" },
-    aurora: { color: "#8cf7b5", overlay: 0.48, blur: true, image: "../10.jpg" },
-    velvet: { color: "#c7a4ff", overlay: 0.64, blur: true, image: "../8.jpg" },
-    ghost: { color: "#dfe8f8", overlay: 0.72, blur: true, image: "../12.jpg" },
-    solar: { color: "#ffd166", overlay: 0.46, blur: false, image: "../14.jpg" },
+    aqua: { color: "#7df9ff", overlay: 0.52, blur: true },
+    rose: { color: "#ff4fd8", overlay: 0.58, blur: true },
+    volt: { color: "#b9ff5f", overlay: 0.5, blur: false },
+    mono: { color: "#f7f8fb", overlay: 0.62, blur: true },
+    aurora: { color: "#8cf7b5", overlay: 0.48, blur: true },
+    velvet: { color: "#c7a4ff", overlay: 0.64, blur: true },
+    ghost: { color: "#dfe8f8", overlay: 0.72, blur: true },
+    solar: { color: "#ffd166", overlay: 0.46, blur: false },
   };
   const selected = themes[theme] || themes.aqua;
 
   elements.nameColorInput.value = selected.color;
   elements.overlayInput.value = selected.overlay;
   elements.blurInput.checked = selected.blur;
-  elements.imageUrlInput.value = selected.image;
+  elements.imageUrlInput.value = "";
+  document.body.dataset.theme = theme;
   previewDraft();
 }
 
@@ -423,15 +462,20 @@ async function saveProfile(event) {
   event.preventDefault();
   if (!session) return;
 
+  const avatarUrl = await getAvatarUrlForSave();
+  if (avatarUrl === null) return;
+
   const payload = {
     id: session.user.id,
     username: normalizeUsername(elements.usernameInput.value),
     display_name: elements.displayNameInput.value.trim() || elements.usernameInput.value.trim(),
     bio: elements.bioInput.value.trim(),
+    avatar_url: avatarUrl,
     name_color: elements.nameColorInput.value,
     name_size: Number(elements.nameSizeInput.value),
+    theme: document.body.dataset.theme || "aqua",
     video_url: elements.videoUrlInput.value.trim(),
-    image_url: elements.imageUrlInput.value.trim() || "../9.jpg",
+    image_url: sanitizeLocalBackground(elements.imageUrlInput.value.trim()),
     music_url: elements.musicUrlInput.value.trim(),
     overlay: Number(elements.overlayInput.value),
     blur: elements.blurInput.checked,
@@ -452,9 +496,48 @@ async function saveProfile(event) {
   }
 
   currentProfile = data;
+  elements.avatarFileInput.value = "";
+  if (pendingAvatarObjectUrl) {
+    URL.revokeObjectURL(pendingAvatarObjectUrl);
+    pendingAvatarObjectUrl = "";
+  }
   renderProfile(currentProfile);
   renderEditor(currentProfile);
   setMessage(`Sauvegarde OK. Ton lien : /k4mlz/${currentProfile.username}`, "success");
+}
+
+async function getAvatarUrlForSave() {
+  const file = elements.avatarFileInput.files?.[0];
+  if (!file) return elements.avatarUrlInput.value.trim();
+
+  if (!file.type.startsWith("image/")) {
+    setMessage("La photo doit etre une image.", "error");
+    return null;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    setMessage("La photo doit faire moins de 5 Mo.", "error");
+    return null;
+  }
+
+  setMessage("Upload de la photo...");
+  const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
+  const safeExtension = ["jpg", "jpeg", "png", "webp", "gif"].includes(extension) ? extension : "jpg";
+  const path = `${session.user.id}/avatar-${Date.now()}.${safeExtension}`;
+  const { error } = await supabase.storage.from("avatars").upload(path, file, {
+    cacheControl: "3600",
+    contentType: file.type,
+    upsert: true,
+  });
+
+  if (error) {
+    setMessage("Upload impossible. Lance le fichier supabase-profile-upgrade.sql dans Supabase.", "error");
+    return null;
+  }
+
+  const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+  elements.avatarUrlInput.value = data.publicUrl;
+  return data.publicUrl;
 }
 
 function addLink() {
@@ -650,6 +733,12 @@ function getFileName(url) {
   } catch {
     return "Musique URL";
   }
+}
+
+function sanitizeLocalBackground(url) {
+  const clean = url.trim();
+  if (/^\.\.\/\d+\.jpg$/i.test(clean)) return "";
+  return clean;
 }
 
 function cssUrl(value) {

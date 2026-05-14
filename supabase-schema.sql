@@ -3,9 +3,11 @@ create table if not exists public.profiles (
   username text not null unique check (username ~ '^[a-z0-9_-]{3,24}$'),
   display_name text not null default '',
   bio text not null default '',
+  avatar_url text not null default '',
   name_color text not null default '#7df9ff',
   name_size integer not null default 78 check (name_size between 42 and 112),
-  image_url text not null default '../9.jpg',
+  theme text not null default 'aqua',
+  image_url text not null default '',
   video_url text not null default '',
   music_url text not null default '',
   overlay numeric not null default 0.52 check (overlay >= 0 and overlay <= 0.9),
@@ -95,6 +97,60 @@ create policy "Owners and admins can delete profiles"
 on public.profiles
 for delete
 using (id = auth.uid() or public.is_admin());
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'avatars',
+  'avatars',
+  true,
+  5242880,
+  array['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+)
+on conflict (id) do update
+set
+  public = true,
+  file_size_limit = 5242880,
+  allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+drop policy if exists "Avatar images are public" on storage.objects;
+create policy "Avatar images are public"
+on storage.objects
+for select
+using (bucket_id = 'avatars');
+
+drop policy if exists "Users can upload own avatars" on storage.objects;
+create policy "Users can upload own avatars"
+on storage.objects
+for insert
+to authenticated
+with check (
+  bucket_id = 'avatars'
+  and auth.uid()::text = (storage.foldername(name))[1]
+);
+
+drop policy if exists "Users can update own avatars" on storage.objects;
+create policy "Users can update own avatars"
+on storage.objects
+for update
+to authenticated
+using (
+  bucket_id = 'avatars'
+  and auth.uid()::text = (storage.foldername(name))[1]
+)
+with check (
+  bucket_id = 'avatars'
+  and auth.uid()::text = (storage.foldername(name))[1]
+);
+
+drop policy if exists "Users can delete own avatars" on storage.objects;
+create policy "Users can delete own avatars"
+on storage.objects
+for delete
+to authenticated
+using (
+  bucket_id = 'avatars'
+  and auth.uid()::text = (storage.foldername(name))[1]
+);
 
 -- Apres avoir cree ton compte sur le site avec le pseudo k4millz,
 -- lance cette ligne une seule fois pour devenir admin :

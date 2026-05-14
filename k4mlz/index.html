@@ -38,7 +38,10 @@
           </div>
 
           <div class="profile-top">
-            <div id="avatarInitial" class="avatar-tile" aria-hidden="true">K</div>
+            <div id="avatarInitial" class="avatar-tile" aria-hidden="true">
+              <img id="avatarImage" alt="" />
+              <span id="avatarFallback">K</span>
+            </div>
             <div class="identity-stack">
               <p id="statusPill" class="status-pill">k4mlz profile</p>
               <h1 id="displayName">k4mlz</h1>
@@ -158,6 +161,14 @@
             <label>
               Bio
               <textarea id="bioInput" rows="4" maxlength="320" placeholder="Ta description..."></textarea>
+            </label>
+            <label>
+              Photo de profil URL
+              <input id="avatarUrlInput" type="url" placeholder="https://.../avatar.png" />
+            </label>
+            <label>
+              Photo depuis ton appareil
+              <input id="avatarFileInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
             </label>
             <div class="split-controls">
               <label>

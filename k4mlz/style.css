@@ -65,8 +65,62 @@ button {
 .background-image {
   z-index: -5;
   background:
-    linear-gradient(135deg, rgba(7, 10, 22, 0.08), rgba(7, 10, 22, 0.54)),
-    url("../9.jpg") center / cover;
+    radial-gradient(circle at 20% 18%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 32%),
+    radial-gradient(circle at 82% 22%, rgba(255, 79, 216, 0.2), transparent 34%),
+    radial-gradient(circle at 48% 88%, rgba(185, 255, 95, 0.1), transparent 30%),
+    linear-gradient(135deg, #050711 0%, #0d1324 48%, #05060b 100%);
+  background-position: center;
+  background-size: cover;
+}
+
+body[data-theme="rose"] .background-image {
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255, 79, 216, 0.32), transparent 34%),
+    radial-gradient(circle at 78% 28%, rgba(255, 154, 168, 0.22), transparent 32%),
+    linear-gradient(135deg, #130613 0%, #251023 52%, #07060b 100%);
+}
+
+body[data-theme="volt"] .background-image {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(185, 255, 95, 0.28), transparent 34%),
+    radial-gradient(circle at 78% 18%, rgba(125, 249, 255, 0.16), transparent 30%),
+    linear-gradient(135deg, #071008 0%, #111d13 52%, #050807 100%);
+}
+
+body[data-theme="mono"] .background-image {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.18), transparent 34%),
+    radial-gradient(circle at 80% 18%, rgba(120, 130, 150, 0.16), transparent 34%),
+    linear-gradient(135deg, #050608 0%, #161923 52%, #030406 100%);
+}
+
+body[data-theme="aurora"] .background-image {
+  background:
+    radial-gradient(circle at 15% 22%, rgba(140, 247, 181, 0.3), transparent 34%),
+    radial-gradient(circle at 78% 18%, rgba(125, 249, 255, 0.22), transparent 34%),
+    radial-gradient(circle at 50% 86%, rgba(199, 164, 255, 0.18), transparent 32%),
+    linear-gradient(135deg, #04100d 0%, #091c22 52%, #05060b 100%);
+}
+
+body[data-theme="velvet"] .background-image {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(199, 164, 255, 0.28), transparent 35%),
+    radial-gradient(circle at 82% 22%, rgba(255, 79, 216, 0.2), transparent 34%),
+    linear-gradient(135deg, #100717 0%, #1c1230 52%, #05060b 100%);
+}
+
+body[data-theme="ghost"] .background-image {
+  background:
+    radial-gradient(circle at 18% 16%, rgba(223, 232, 248, 0.16), transparent 34%),
+    radial-gradient(circle at 80% 22%, rgba(154, 167, 187, 0.13), transparent 34%),
+    linear-gradient(135deg, #06080d 0%, #111623 52%, #030406 100%);
+}
+
+body[data-theme="solar"] .background-image {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 209, 102, 0.28), transparent 34%),
+    radial-gradient(circle at 80% 20%, rgba(255, 122, 89, 0.18), transparent 34%),
+    linear-gradient(135deg, #120c05 0%, #24180d 52%, #060504 100%);
 }
 
 .readability-overlay {
@@ -302,10 +356,12 @@ body.public-view .profile-card {
 }
 
 .avatar-tile {
+  position: relative;
   display: grid;
   width: 104px;
   aspect-ratio: 1;
   place-items: center;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 8px;
   color: #061018;
@@ -317,6 +373,24 @@ body.public-view .profile-card {
     0 20px 60px color-mix(in srgb, var(--accent) 26%, transparent);
   font-size: clamp(2rem, 6vw, 3.2rem);
   font-weight: 950;
+}
+
+.avatar-tile img {
+  position: absolute;
+  inset: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-tile img.visible {
+  display: block;
+}
+
+.avatar-tile span {
+  position: relative;
+  z-index: 1;
 }
 
 .identity-stack {
