@@ -17,6 +17,14 @@
     <div id="readabilityOverlay" class="readability-overlay"></div>
     <div class="scanlines" aria-hidden="true"></div>
 
+    <header id="publicTopBar" class="public-topbar hidden" aria-label="Actions rapides">
+      <a class="topbar-brand" href="/">k4millz</a>
+      <div class="topbar-actions">
+        <a href="/profil/">Creer mon profil</a>
+        <button id="topCopyBtn" type="button">Copier</button>
+      </div>
+    </header>
+
     <main class="special-shell">
       <a class="back-link" href="/">k4millz.com</a>
 
@@ -54,6 +62,18 @@
               <div class="track-meta">
                 <span>Sound</span>
                 <strong id="trackLabel">Aucune musique</strong>
+                <label class="volume-control">
+                  <span>Volume</span>
+                  <input
+                    id="volumeControl"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value="0.65"
+                    aria-label="Volume de la musique"
+                  />
+                </label>
               </div>
             </div>
             <button id="copyProfileBtn" class="mini-action" type="button">Copier le lien</button>
@@ -115,10 +135,14 @@
 
         <form id="profileForm" class="control-stack hidden">
           <div class="theme-presets" aria-label="Themes rapides">
-            <button type="button" data-theme="aqua">Aqua</button>
-            <button type="button" data-theme="rose">Rose</button>
-            <button type="button" data-theme="volt">Volt</button>
-            <button type="button" data-theme="mono">Mono</button>
+            <button type="button" data-theme="aqua"><span>Aqua</span></button>
+            <button type="button" data-theme="rose"><span>Rose</span></button>
+            <button type="button" data-theme="volt"><span>Volt</span></button>
+            <button type="button" data-theme="mono"><span>Mono</span></button>
+            <button type="button" data-theme="aurora"><span>Aurora</span></button>
+            <button type="button" data-theme="velvet"><span>Velvet</span></button>
+            <button type="button" data-theme="ghost"><span>Ghost</span></button>
+            <button type="button" data-theme="solar"><span>Solar</span></button>
           </div>
 
           <fieldset>

@@ -89,6 +89,62 @@ button {
   animation: drift 20s linear infinite;
 }
 
+.public-topbar {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  left: 16px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: min(520px, calc(100% - 32px));
+  margin-left: auto;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(10, 12, 22, 0.62);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(24px) saturate(1.35);
+}
+
+.topbar-brand,
+.topbar-actions a,
+.topbar-actions button {
+  min-height: 34px;
+  border-radius: 8px;
+  color: var(--text);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.topbar-brand {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.topbar-actions a,
+.topbar-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border: 1px solid rgba(125, 249, 255, 0.34);
+  background: rgba(125, 249, 255, 0.08);
+}
+
+.topbar-actions a {
+  color: #061018;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+}
+
 .special-shell {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(340px, 450px);
@@ -97,6 +153,25 @@ button {
   min-height: 100vh;
   margin: 0 auto;
   padding: 24px 0;
+}
+
+body.public-view .special-shell {
+  grid-template-columns: 1fr;
+  width: min(980px, calc(100% - 32px));
+  padding-top: 76px;
+}
+
+body.public-view .back-link,
+body.public-view .editor-panel {
+  display: none;
+}
+
+body.public-view .profile-stage {
+  min-height: calc(100vh - 100px);
+}
+
+body.public-view .profile-card {
+  width: min(820px, 100%);
 }
 
 .back-link {
@@ -152,6 +227,20 @@ button {
     linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent),
     linear-gradient(135deg, color-mix(in srgb, var(--accent) 25%, transparent), transparent 45%);
   opacity: 0.55;
+}
+
+.profile-card::after {
+  position: absolute;
+  top: -35%;
+  left: -20%;
+  width: 45%;
+  height: 170%;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+  opacity: 0.35;
+  transform: rotate(18deg);
+  animation: reflectionSweep 8s ease-in-out infinite;
 }
 
 .window-bar {
@@ -409,6 +498,24 @@ button {
   white-space: nowrap;
 }
 
+.volume-control {
+  display: grid;
+  grid-template-columns: auto minmax(90px, 1fr);
+  gap: 10px;
+  align-items: center;
+  margin-top: 6px;
+  color: rgba(223, 232, 248, 0.72);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.volume-control input {
+  min-height: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
 .editor-panel {
   align-self: start;
   max-height: calc(100vh - 48px);
@@ -508,10 +615,50 @@ button {
 }
 
 .theme-presets button {
+  position: relative;
   min-height: 42px;
+  overflow: hidden;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04)),
     rgba(255, 255, 255, 0.06);
+}
+
+.theme-presets button::before {
+  display: block;
+  width: 100%;
+  height: 12px;
+  margin-bottom: 6px;
+  border-radius: 999px;
+  content: "";
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.theme-presets [data-theme="rose"]::before {
+  background: linear-gradient(90deg, #ff4fd8, #ff9aa8);
+}
+
+.theme-presets [data-theme="volt"]::before {
+  background: linear-gradient(90deg, #b9ff5f, #7df9ff);
+}
+
+.theme-presets [data-theme="mono"]::before {
+  background: linear-gradient(90deg, #f7f8fb, #6f7689);
+}
+
+.theme-presets [data-theme="aurora"]::before {
+  background: linear-gradient(90deg, #8cf7b5, #7df9ff, #c7a4ff);
+}
+
+.theme-presets [data-theme="velvet"]::before {
+  background: linear-gradient(90deg, #c7a4ff, #ff4fd8);
+}
+
+.theme-presets [data-theme="ghost"]::before {
+  background: linear-gradient(90deg, #dfe8f8, #9aa7bb);
+}
+
+.theme-presets [data-theme="solar"]::before {
+  background: linear-gradient(90deg, #ffd166, #ff7a59);
 }
 
 fieldset {
@@ -671,6 +818,17 @@ input[type="range"] {
   }
 }
 
+@keyframes reflectionSweep {
+  0%,
+  70% {
+    transform: translateX(-120%) rotate(18deg);
+  }
+
+  100% {
+    transform: translateX(320%) rotate(18deg);
+  }
+}
+
 @media (max-width: 940px) {
   .special-shell {
     grid-template-columns: 1fr;
@@ -696,6 +854,24 @@ input[type="range"] {
     width: fit-content;
   }
 
+  .public-topbar {
+    position: sticky;
+    top: 10px;
+    right: auto;
+    left: auto;
+    width: min(100% - 24px, 520px);
+    margin: 10px auto 0;
+  }
+
+  .topbar-actions {
+    width: 100%;
+  }
+
+  .topbar-actions a,
+  .topbar-actions button {
+    flex: 1;
+  }
+
   .profile-card,
   .editor-panel {
     padding: 14px;
@@ -708,6 +884,7 @@ input[type="range"] {
   .profile-top,
   .profile-actions,
   .music-player,
+  .volume-control,
   .link-builder,
   .split-controls,
   .link-row,

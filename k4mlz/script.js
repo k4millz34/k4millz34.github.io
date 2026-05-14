@@ -3,6 +3,7 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL } from "../supabase-config.js";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const isDashboardPath = window.location.pathname.replace(/\/+$/, "") === "/profil";
+const VOLUME_STORAGE_KEY = "k4mlz-audio-volume";
 
 const defaults = {
   username: "",
@@ -36,7 +37,11 @@ const elements = {
   playPauseBtn: document.querySelector("#playPauseBtn"),
   playPauseIcon: document.querySelector("#playPauseIcon"),
   trackLabel: document.querySelector("#trackLabel"),
+  volumeControl: document.querySelector("#volumeControl"),
   copyProfileBtn: document.querySelector("#copyProfileBtn"),
+  topCopyBtn: document.querySelector("#topCopyBtn"),
+  publicTopBar: document.querySelector("#publicTopBar"),
+  accountPanel: document.querySelector("#accountPanel"),
   loginBox: document.querySelector("#loginBox"),
   loginForm: document.querySelector("#loginForm"),
   signupForm: document.querySelector("#signupForm"),
@@ -96,6 +101,11 @@ async function init() {
 function bindEvents() {
   elements.playPauseBtn.addEventListener("click", toggleAudio);
   elements.copyProfileBtn.addEventListener("click", copyProfileLink);
+  elements.topCopyBtn.addEventListener("click", copyProfileLink);
+  elements.volumeControl.addEventListener("input", (event) => {
+    elements.audio.volume = Number(event.target.value);
+    localStorage.setItem(VOLUME_STORAGE_KEY, event.target.value);
+  });
   elements.showLogin.addEventListener("click", () => setAuthMode("login"));
   elements.showSignup.addEventListener("click", () => setAuthMode("signup"));
   elements.loginForm.addEventListener("submit", login);
@@ -206,6 +216,8 @@ async function createProfileIfNeeded(userId, username) {
 }
 
 async function loadDashboard() {
+  setPublicMode(false);
+
   if (!session) {
     renderProfile(defaults);
     showLoggedOut();
@@ -243,6 +255,8 @@ async function maybeLoadEditor() {
 }
 
 async function loadPublicProfile(username) {
+  setPublicMode(true);
+
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
@@ -261,7 +275,7 @@ async function loadPublicProfile(username) {
   }
 
   renderProfile(data);
-  document.title = `${data.username} | k4mlz`;
+  document.title = `${data.display_name || data.username} | k4mlz`;
 }
 
 async function getMyProfile() {
@@ -295,9 +309,9 @@ function renderProfile(profile) {
   const displayName = safeProfile.display_name || safeProfile.username || "k4mlz";
   const username = safeProfile.username || "";
 
-  elements.statusPill.textContent = username ? `/${username}` : "k4mlz profile";
+  elements.statusPill.textContent = username ? "profil public" : "k4mlz profile";
   elements.statusPill.dataset.username = username;
-  elements.windowTitle.textContent = username ? `k4mlz://${username}` : "k4mlz://profile";
+  elements.windowTitle.textContent = username ? "k4mlz://profile" : "k4mlz://preview";
   elements.avatarInitial.textContent = getInitials(displayName);
   elements.displayName.textContent = displayName;
   elements.displayBio.textContent = safeProfile.bio || "Aucune bio pour le moment.";
@@ -370,16 +384,21 @@ function previewDraft() {
 
 function applyThemePreset(theme) {
   const themes = {
-    aqua: { color: "#7df9ff", overlay: 0.52, blur: true },
-    rose: { color: "#ff4fd8", overlay: 0.58, blur: true },
-    volt: { color: "#b9ff5f", overlay: 0.5, blur: false },
-    mono: { color: "#f7f8fb", overlay: 0.62, blur: true },
+    aqua: { color: "#7df9ff", overlay: 0.52, blur: true, image: "../9.jpg" },
+    rose: { color: "#ff4fd8", overlay: 0.58, blur: true, image: "../13.jpg" },
+    volt: { color: "#b9ff5f", overlay: 0.5, blur: false, image: "../6.jpg" },
+    mono: { color: "#f7f8fb", overlay: 0.62, blur: true, image: "../11.jpg" },
+    aurora: { color: "#8cf7b5", overlay: 0.48, blur: true, image: "../10.jpg" },
+    velvet: { color: "#c7a4ff", overlay: 0.64, blur: true, image: "../8.jpg" },
+    ghost: { color: "#dfe8f8", overlay: 0.72, blur: true, image: "../12.jpg" },
+    solar: { color: "#ffd166", overlay: 0.46, blur: false, image: "../14.jpg" },
   };
   const selected = themes[theme] || themes.aqua;
 
   elements.nameColorInput.value = selected.color;
   elements.overlayInput.value = selected.overlay;
   elements.blurInput.checked = selected.blur;
+  elements.imageUrlInput.value = selected.image;
   previewDraft();
 }
 
@@ -546,8 +565,10 @@ async function copyProfileLink() {
   const link = `${window.location.origin}/k4mlz/${username}`;
   await navigator.clipboard?.writeText(link).catch(() => {});
   elements.copyProfileBtn.textContent = "Copie";
+  elements.topCopyBtn.textContent = "Copie";
   window.setTimeout(() => {
     elements.copyProfileBtn.textContent = "Copier le lien";
+    elements.topCopyBtn.textContent = "Copier";
   }, 1400);
 }
 
@@ -577,7 +598,16 @@ function setAudio(src) {
     elements.audio.load();
   }
 
-  elements.trackLabel.textContent = src ? getFileName(src) : "Aucune musique";
+  const savedVolume = Number(localStorage.getItem(VOLUME_STORAGE_KEY) || "0.65");
+  elements.audio.volume = Number.isFinite(savedVolume) ? savedVolume : 0.65;
+  elements.volumeControl.value = elements.audio.volume;
+  elements.trackLabel.textContent = src ? "Musique du profil" : "Aucune musique";
+}
+
+function setPublicMode(isPublic) {
+  document.body.classList.toggle("public-view", isPublic);
+  elements.publicTopBar.classList.toggle("hidden", !isPublic);
+  elements.accountPanel.classList.toggle("hidden", isPublic);
 }
 
 function getRequestedUsername() {
