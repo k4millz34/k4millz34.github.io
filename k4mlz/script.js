@@ -2,6 +2,7 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "../supabase-config.js";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const isDashboardPath = window.location.pathname.replace(/\/+$/, "") === "/profil";
 
 const defaults = {
   username: "",
@@ -37,6 +38,11 @@ const elements = {
   trackLabel: document.querySelector("#trackLabel"),
   copyProfileBtn: document.querySelector("#copyProfileBtn"),
   loginBox: document.querySelector("#loginBox"),
+  loginForm: document.querySelector("#loginForm"),
+  signupForm: document.querySelector("#signupForm"),
+  showLogin: document.querySelector("#showLogin"),
+  showSignup: document.querySelector("#showSignup"),
+  authMessage: document.querySelector("#authMessage"),
   profileForm: document.querySelector("#profileForm"),
   logoutBtn: document.querySelector("#logoutBtn"),
   panelKicker: document.querySelector("#panelKicker"),
@@ -73,7 +79,14 @@ async function init() {
   const requestedUsername = getRequestedUsername();
   if (requestedUsername) {
     await loadPublicProfile(requestedUsername);
-    await maybeLoadEditor();
+    if (isDashboardPath) {
+      await maybeLoadEditor();
+    }
+    return;
+  }
+
+  if (!isDashboardPath) {
+    window.location.replace("/profil/");
     return;
   }
 
@@ -83,6 +96,10 @@ async function init() {
 function bindEvents() {
   elements.playPauseBtn.addEventListener("click", toggleAudio);
   elements.copyProfileBtn.addEventListener("click", copyProfileLink);
+  elements.showLogin.addEventListener("click", () => setAuthMode("login"));
+  elements.showSignup.addEventListener("click", () => setAuthMode("signup"));
+  elements.loginForm.addEventListener("submit", login);
+  elements.signupForm.addEventListener("submit", signup);
   elements.audio.addEventListener("play", () => {
     elements.playPauseIcon.textContent = "II";
   });
@@ -92,7 +109,7 @@ function bindEvents() {
 
   elements.logoutBtn.addEventListener("click", async () => {
     await supabase.auth.signOut();
-    window.location.href = "/";
+    window.location.href = "/profil/";
   });
 
   elements.profileForm.addEventListener("submit", saveProfile);
@@ -110,6 +127,82 @@ function bindEvents() {
   elements.themePresetBtns.forEach((button) => {
     button.addEventListener("click", () => applyThemePreset(button.dataset.theme));
   });
+}
+
+async function login(event) {
+  event.preventDefault();
+  setAuthMessage("Connexion...");
+
+  const email = document.querySelector("#loginEmail").value.trim();
+  const password = document.querySelector("#loginPassword").value;
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    setAuthMessage(error.message, "error");
+    return;
+  }
+
+  session = data.session;
+  window.history.replaceState(null, "", "/profil/");
+  await loadDashboard();
+}
+
+async function signup(event) {
+  event.preventDefault();
+  setAuthMessage("Creation du compte...");
+
+  const username = normalizeUsername(document.querySelector("#signupUsername").value);
+  const email = document.querySelector("#signupEmail").value.trim();
+  const password = document.querySelector("#signupPassword").value;
+
+  if (!username) {
+    setAuthMessage("Choisis un pseudo avec lettres, chiffres, _ ou -.", "error");
+    return;
+  }
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { data: { username } },
+  });
+
+  if (error) {
+    setAuthMessage(error.message, "error");
+    return;
+  }
+
+  if (data.session) {
+    session = data.session;
+    await createProfileIfNeeded(data.user.id, username);
+    window.history.replaceState(null, "", "/profil/");
+    await loadDashboard();
+    return;
+  }
+
+  setAuthMessage("Compte cree. Confirme ton email si Supabase te le demande, puis connecte-toi.", "success");
+}
+
+function setAuthMode(mode) {
+  const isLogin = mode === "login";
+  elements.loginForm.classList.toggle("hidden", !isLogin);
+  elements.signupForm.classList.toggle("hidden", isLogin);
+  elements.showLogin.classList.toggle("active", isLogin);
+  elements.showSignup.classList.toggle("active", !isLogin);
+  setAuthMessage("");
+}
+
+async function createProfileIfNeeded(userId, username) {
+  await supabase.from("profiles").upsert(
+    {
+      id: userId,
+      username,
+      display_name: username,
+      bio: "Nouveau profil k4mlz.",
+      image_url: "../9.jpg",
+      links: [],
+    },
+    { onConflict: "id" },
+  );
 }
 
 async function loadDashboard() {
@@ -536,6 +629,11 @@ function cssUrl(value) {
 function setMessage(text, type = "") {
   elements.saveMessage.textContent = text;
   elements.saveMessage.className = `message ${type}`.trim();
+}
+
+function setAuthMessage(text, type = "") {
+  elements.authMessage.textContent = text;
+  elements.authMessage.className = `message ${type}`.trim();
 }
 
 function escapeHtml(value) {

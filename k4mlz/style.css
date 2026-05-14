@@ -475,6 +475,32 @@ button {
   gap: 14px;
 }
 
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.tab-button {
+  min-height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.07);
+  font-weight: 900;
+}
+
+.tab-button.active {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.auth-form {
+  display: grid;
+  gap: 12px;
+}
+
 .theme-presets {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
