@@ -13,6 +13,14 @@ const defaults = {
   name_color: "#7df9ff",
   name_size: 78,
   theme: "aqua",
+  font_family: "system",
+  card_shape: "window",
+  avatar_shape: "rounded",
+  link_style: "glass",
+  background_effect: "grid",
+  profile_animation: "float",
+  name_effect: "glow",
+  sticker_text: "",
   video_url: "",
   image_url: "",
   music_url: "",
@@ -32,6 +40,7 @@ const elements = {
   overlay: document.querySelector("#readabilityOverlay"),
   statusPill: document.querySelector("#statusPill"),
   windowTitle: document.querySelector("#windowTitle"),
+  stickerBadge: document.querySelector("#stickerBadge"),
   avatarInitial: document.querySelector("#avatarInitial"),
   avatarImage: document.querySelector("#avatarImage"),
   avatarFallback: document.querySelector("#avatarFallback"),
@@ -64,6 +73,14 @@ const elements = {
   avatarFileInput: document.querySelector("#avatarFileInput"),
   nameColorInput: document.querySelector("#nameColorInput"),
   nameSizeInput: document.querySelector("#nameSizeInput"),
+  fontInput: document.querySelector("#fontInput"),
+  cardShapeInput: document.querySelector("#cardShapeInput"),
+  avatarShapeInput: document.querySelector("#avatarShapeInput"),
+  linkStyleInput: document.querySelector("#linkStyleInput"),
+  backgroundEffectInput: document.querySelector("#backgroundEffectInput"),
+  profileAnimationInput: document.querySelector("#profileAnimationInput"),
+  nameEffectInput: document.querySelector("#nameEffectInput"),
+  stickerInput: document.querySelector("#stickerInput"),
   videoUrlInput: document.querySelector("#videoUrlInput"),
   imageUrlInput: document.querySelector("#imageUrlInput"),
   overlayInput: document.querySelector("#overlayInput"),
@@ -135,7 +152,7 @@ function bindEvents() {
   elements.linkUrlInput.addEventListener("keydown", submitLinkWithEnter);
   elements.refreshAdminBtn.addEventListener("click", loadAdminPanel);
 
-  elements.profileForm.querySelectorAll("input, textarea").forEach((input) => {
+  elements.profileForm.querySelectorAll("input, textarea, select").forEach((input) => {
     if (input === elements.linkTitleInput || input === elements.linkUrlInput) return;
     if (input === elements.avatarFileInput) return;
     input.addEventListener("input", previewDraft);
@@ -229,6 +246,14 @@ async function createProfileIfNeeded(userId, username) {
       avatar_url: "",
       image_url: "",
       theme: "aqua",
+      font_family: "system",
+      card_shape: "window",
+      avatar_shape: "rounded",
+      link_style: "glass",
+      background_effect: "grid",
+      profile_animation: "float",
+      name_effect: "glow",
+      sticker_text: "",
       links: [],
     },
     { onConflict: "id" },
@@ -343,6 +368,15 @@ function renderProfile(profile) {
   elements.overlay.style.backdropFilter = safeProfile.blur ? "blur(8px)" : "blur(0)";
   const backgroundImage = sanitizeLocalBackground(safeProfile.image_url);
   document.body.dataset.theme = safeProfile.theme || "aqua";
+  document.body.dataset.font = safeProfile.font_family || "system";
+  document.body.dataset.card = safeProfile.card_shape || "window";
+  document.body.dataset.avatar = safeProfile.avatar_shape || "rounded";
+  document.body.dataset.links = safeProfile.link_style || "glass";
+  document.body.dataset.bgEffect = safeProfile.background_effect || "grid";
+  document.body.dataset.motion = safeProfile.profile_animation || "float";
+  document.body.dataset.nameEffect = safeProfile.name_effect || "glow";
+  elements.stickerBadge.textContent = safeProfile.sticker_text || "";
+  elements.stickerBadge.classList.toggle("hidden", !safeProfile.sticker_text);
   elements.image.style.backgroundImage = backgroundImage
     ? `linear-gradient(135deg, rgba(7, 10, 22, 0.1), rgba(7, 10, 22, 0.48)), url("${cssUrl(backgroundImage)}")`
     : "";
@@ -389,6 +423,14 @@ function renderEditor(profile) {
   elements.avatarUrlInput.value = safeProfile.avatar_url;
   elements.nameColorInput.value = safeProfile.name_color;
   elements.nameSizeInput.value = safeProfile.name_size;
+  elements.fontInput.value = safeProfile.font_family;
+  elements.cardShapeInput.value = safeProfile.card_shape;
+  elements.avatarShapeInput.value = safeProfile.avatar_shape;
+  elements.linkStyleInput.value = safeProfile.link_style;
+  elements.backgroundEffectInput.value = safeProfile.background_effect;
+  elements.profileAnimationInput.value = safeProfile.profile_animation;
+  elements.nameEffectInput.value = safeProfile.name_effect;
+  elements.stickerInput.value = safeProfile.sticker_text;
   elements.videoUrlInput.value = safeProfile.video_url;
   elements.imageUrlInput.value = sanitizeLocalBackground(safeProfile.image_url);
   elements.overlayInput.value = safeProfile.overlay;
@@ -411,6 +453,14 @@ function previewDraft() {
     name_color: elements.nameColorInput.value,
     name_size: Number(elements.nameSizeInput.value),
     theme: document.body.dataset.theme || "aqua",
+    font_family: elements.fontInput.value,
+    card_shape: elements.cardShapeInput.value,
+    avatar_shape: elements.avatarShapeInput.value,
+    link_style: elements.linkStyleInput.value,
+    background_effect: elements.backgroundEffectInput.value,
+    profile_animation: elements.profileAnimationInput.value,
+    name_effect: elements.nameEffectInput.value,
+    sticker_text: elements.stickerInput.value.trim(),
     video_url: elements.videoUrlInput.value.trim(),
     image_url: sanitizeLocalBackground(elements.imageUrlInput.value.trim()),
     music_url: elements.musicUrlInput.value.trim(),
@@ -430,6 +480,214 @@ function applyThemePreset(theme) {
     velvet: { color: "#c7a4ff", overlay: 0.64, blur: true },
     ghost: { color: "#dfe8f8", overlay: 0.72, blur: true },
     solar: { color: "#ffd166", overlay: 0.46, blur: false },
+    xp: {
+      color: "#2f72ff",
+      overlay: 0.24,
+      blur: false,
+      font: "system",
+      card: "xp",
+      avatar: "square",
+      links: "xp",
+      effect: "bubbles",
+      motion: "xp-pop",
+      nameEffect: "chrome",
+      sticker: "XP",
+    },
+    emoji: {
+      color: "#ffd166",
+      overlay: 0.38,
+      blur: true,
+      font: "rounded",
+      card: "bubble",
+      avatar: "blob",
+      links: "pill",
+      effect: "emoji",
+      motion: "bounce",
+      nameEffect: "rainbow",
+      sticker: "✦💿",
+    },
+    hacker: {
+      color: "#73ff8f",
+      overlay: 0.6,
+      blur: false,
+      font: "mono",
+      card: "sharp",
+      avatar: "square",
+      links: "outline",
+      effect: "scan",
+      motion: "glow",
+      nameEffect: "glitch",
+      sticker: "0101",
+    },
+    candy: {
+      color: "#ff8edb",
+      overlay: 0.42,
+      blur: true,
+      font: "hand",
+      card: "soft",
+      avatar: "circle",
+      links: "solid",
+      effect: "stars",
+      motion: "wobble",
+      nameEffect: "wave",
+      sticker: "♡",
+    },
+    midnight: {
+      color: "#8aa4ff",
+      overlay: 0.66,
+      blur: true,
+      font: "serif",
+      card: "soft",
+      avatar: "rounded",
+      links: "glass",
+      effect: "stars",
+      motion: "float",
+      nameEffect: "glow",
+      sticker: "☾",
+    },
+    ocean: {
+      color: "#52d6ff",
+      overlay: 0.44,
+      blur: true,
+      font: "rounded",
+      card: "bubble",
+      avatar: "circle",
+      links: "pill",
+      effect: "bubbles",
+      motion: "float",
+      nameEffect: "wave",
+      sticker: "≈",
+    },
+    sunset: {
+      color: "#ff9f6e",
+      overlay: 0.42,
+      blur: true,
+      font: "serif",
+      card: "soft",
+      avatar: "squircle",
+      links: "solid",
+      effect: "stars",
+      motion: "pulse",
+      nameEffect: "fire",
+      sticker: "☀",
+    },
+    sakura: {
+      color: "#ffb7d5",
+      overlay: 0.46,
+      blur: true,
+      font: "hand",
+      card: "bubble",
+      avatar: "circle",
+      links: "pill",
+      effect: "emoji",
+      motion: "wobble",
+      nameEffect: "wave",
+      sticker: "❀",
+    },
+    cyber: {
+      color: "#00e5ff",
+      overlay: 0.55,
+      blur: false,
+      font: "mono",
+      card: "sharp",
+      avatar: "square",
+      links: "outline",
+      effect: "grid",
+      motion: "tilt",
+      nameEffect: "glitch",
+      sticker: "⌁",
+    },
+    forest: {
+      color: "#7cff9b",
+      overlay: 0.5,
+      blur: true,
+      font: "rounded",
+      card: "soft",
+      avatar: "blob",
+      links: "glass",
+      effect: "bubbles",
+      motion: "float",
+      nameEffect: "glow",
+      sticker: "✿",
+    },
+    lava: {
+      color: "#ff5c33",
+      overlay: 0.58,
+      blur: false,
+      font: "system",
+      card: "sharp",
+      avatar: "squircle",
+      links: "solid",
+      effect: "scan",
+      motion: "pulse",
+      nameEffect: "fire",
+      sticker: "◆",
+    },
+    ice: {
+      color: "#bdf7ff",
+      overlay: 0.36,
+      blur: true,
+      font: "serif",
+      card: "soft",
+      avatar: "circle",
+      links: "glass",
+      effect: "stars",
+      motion: "soft-spin",
+      nameEffect: "ice",
+      sticker: "✧",
+    },
+    gold: {
+      color: "#ffd66e",
+      overlay: 0.48,
+      blur: true,
+      font: "serif",
+      card: "window",
+      avatar: "rounded",
+      links: "solid",
+      effect: "grid",
+      motion: "glow",
+      nameEffect: "chrome",
+      sticker: "✦",
+    },
+    grape: {
+      color: "#b57cff",
+      overlay: 0.56,
+      blur: true,
+      font: "rounded",
+      card: "bubble",
+      avatar: "blob",
+      links: "pill",
+      effect: "emoji",
+      motion: "wobble",
+      nameEffect: "rainbow",
+      sticker: "✺",
+    },
+    terminal: {
+      color: "#39ff88",
+      overlay: 0.7,
+      blur: false,
+      font: "mono",
+      card: "sharp",
+      avatar: "square",
+      links: "pixel",
+      effect: "scan",
+      motion: "glow",
+      nameEffect: "glitch",
+      sticker: ">_",
+    },
+    notebook: {
+      color: "#5e78ff",
+      overlay: 0.28,
+      blur: false,
+      font: "hand",
+      card: "sharp",
+      avatar: "square",
+      links: "outline",
+      effect: "none",
+      motion: "none",
+      nameEffect: "typing",
+      sticker: "✎",
+    },
   };
   const selected = themes[theme] || themes.aqua;
 
@@ -437,6 +695,14 @@ function applyThemePreset(theme) {
   elements.overlayInput.value = selected.overlay;
   elements.blurInput.checked = selected.blur;
   elements.imageUrlInput.value = "";
+  if (selected.font) elements.fontInput.value = selected.font;
+  if (selected.card) elements.cardShapeInput.value = selected.card;
+  if (selected.avatar) elements.avatarShapeInput.value = selected.avatar;
+  if (selected.links) elements.linkStyleInput.value = selected.links;
+  if (selected.effect) elements.backgroundEffectInput.value = selected.effect;
+  if (selected.motion) elements.profileAnimationInput.value = selected.motion;
+  if (selected.nameEffect) elements.nameEffectInput.value = selected.nameEffect;
+  if (selected.sticker) elements.stickerInput.value = selected.sticker;
   document.body.dataset.theme = theme;
   previewDraft();
 }
@@ -474,6 +740,14 @@ async function saveProfile(event) {
     name_color: elements.nameColorInput.value,
     name_size: Number(elements.nameSizeInput.value),
     theme: document.body.dataset.theme || "aqua",
+    font_family: elements.fontInput.value,
+    card_shape: elements.cardShapeInput.value,
+    avatar_shape: elements.avatarShapeInput.value,
+    link_style: elements.linkStyleInput.value,
+    background_effect: elements.backgroundEffectInput.value,
+    profile_animation: elements.profileAnimationInput.value,
+    name_effect: elements.nameEffectInput.value,
+    sticker_text: elements.stickerInput.value.trim(),
     video_url: elements.videoUrlInput.value.trim(),
     image_url: sanitizeLocalBackground(elements.imageUrlInput.value.trim()),
     music_url: elements.musicUrlInput.value.trim(),

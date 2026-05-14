@@ -5,6 +5,30 @@ alter table public.profiles
 add column if not exists theme text not null default 'aqua';
 
 alter table public.profiles
+add column if not exists font_family text not null default 'system';
+
+alter table public.profiles
+add column if not exists card_shape text not null default 'window';
+
+alter table public.profiles
+add column if not exists avatar_shape text not null default 'rounded';
+
+alter table public.profiles
+add column if not exists link_style text not null default 'glass';
+
+alter table public.profiles
+add column if not exists background_effect text not null default 'grid';
+
+alter table public.profiles
+add column if not exists profile_animation text not null default 'float';
+
+alter table public.profiles
+add column if not exists name_effect text not null default 'glow';
+
+alter table public.profiles
+add column if not exists sticker_text text not null default '';
+
+alter table public.profiles
 alter column image_url set default '';
 
 update public.profiles

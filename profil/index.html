@@ -36,6 +36,7 @@
             <span class="traffic green"></span>
             <span id="windowTitle" class="window-title">k4mlz://profile</span>
           </div>
+          <div id="stickerBadge" class="sticker-badge hidden" aria-hidden="true"></div>
 
           <div class="profile-top">
             <div id="avatarInitial" class="avatar-tile" aria-hidden="true">
@@ -146,6 +147,22 @@
             <button type="button" data-theme="velvet"><span>Velvet</span></button>
             <button type="button" data-theme="ghost"><span>Ghost</span></button>
             <button type="button" data-theme="solar"><span>Solar</span></button>
+            <button type="button" data-theme="xp"><span>XP</span></button>
+            <button type="button" data-theme="emoji"><span>Emoji</span></button>
+            <button type="button" data-theme="hacker"><span>Hacker</span></button>
+            <button type="button" data-theme="candy"><span>Candy</span></button>
+            <button type="button" data-theme="midnight"><span>Midnight</span></button>
+            <button type="button" data-theme="ocean"><span>Ocean</span></button>
+            <button type="button" data-theme="sunset"><span>Sunset</span></button>
+            <button type="button" data-theme="sakura"><span>Sakura</span></button>
+            <button type="button" data-theme="cyber"><span>Cyber</span></button>
+            <button type="button" data-theme="forest"><span>Forest</span></button>
+            <button type="button" data-theme="lava"><span>Lava</span></button>
+            <button type="button" data-theme="ice"><span>Ice</span></button>
+            <button type="button" data-theme="gold"><span>Gold</span></button>
+            <button type="button" data-theme="grape"><span>Grape</span></button>
+            <button type="button" data-theme="terminal"><span>Terminal</span></button>
+            <button type="button" data-theme="notebook"><span>Notebook</span></button>
           </div>
 
           <fieldset>
@@ -178,6 +195,103 @@
               <label>
                 Taille nom
                 <input id="nameSizeInput" type="range" min="42" max="112" value="78" />
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Style avance</legend>
+            <div class="split-controls">
+              <label>
+                Police
+                <select id="fontInput">
+                  <option value="system">System</option>
+                  <option value="rounded">Rounded</option>
+                  <option value="serif">Serif</option>
+                  <option value="mono">Mono</option>
+                  <option value="pixel">Pixel</option>
+                  <option value="hand">Hand</option>
+                </select>
+              </label>
+              <label>
+                Forme carte
+                <select id="cardShapeInput">
+                  <option value="window">Fenetre</option>
+                  <option value="soft">Soft</option>
+                  <option value="sharp">Carree</option>
+                  <option value="bubble">Bubble</option>
+                  <option value="circle">Ronde</option>
+                  <option value="xp">Windows XP</option>
+                </select>
+              </label>
+            </div>
+            <div class="split-controls">
+              <label>
+                Avatar
+                <select id="avatarShapeInput">
+                  <option value="rounded">Arrondi</option>
+                  <option value="circle">Rond</option>
+                  <option value="square">Carre</option>
+                  <option value="squircle">Squircle</option>
+                  <option value="blob">Blob</option>
+                </select>
+              </label>
+              <label>
+                Boutons
+                <select id="linkStyleInput">
+                  <option value="glass">Glass</option>
+                  <option value="pill">Pill</option>
+                  <option value="solid">Solid</option>
+                  <option value="outline">Outline</option>
+                  <option value="pixel">Pixel</option>
+                  <option value="xp">Windows XP</option>
+                </select>
+              </label>
+            </div>
+            <div class="split-controls">
+              <label>
+                Effet fond
+                <select id="backgroundEffectInput">
+                  <option value="grid">Grid</option>
+                  <option value="stars">Stars</option>
+                  <option value="emoji">Emoji</option>
+                  <option value="bubbles">Bubbles</option>
+                  <option value="scan">Scan</option>
+                  <option value="none">Aucun</option>
+                </select>
+              </label>
+              <label>
+                Sticker / emoji
+                <input id="stickerInput" type="text" maxlength="12" placeholder="★ ✦ 💿 XP" />
+              </label>
+            </div>
+            <div class="split-controls">
+              <label>
+                Animation carte
+                <select id="profileAnimationInput">
+                  <option value="none">Aucune</option>
+                  <option value="float">Float</option>
+                  <option value="pulse">Pulse</option>
+                  <option value="tilt">Tilt</option>
+                  <option value="bounce">Bounce</option>
+                  <option value="glow">Glow</option>
+                  <option value="xp-pop">XP Pop</option>
+                  <option value="wobble">Wobble</option>
+                  <option value="soft-spin">Soft Spin</option>
+                </select>
+              </label>
+              <label>
+                Animation du nom
+                <select id="nameEffectInput">
+                  <option value="glow">Glow</option>
+                  <option value="rainbow">Rainbow</option>
+                  <option value="glitch">Glitch</option>
+                  <option value="wave">Wave</option>
+                  <option value="typing">Typing</option>
+                  <option value="chrome">Chrome</option>
+                  <option value="fire">Fire</option>
+                  <option value="ice">Ice</option>
+                </select>
               </label>
             </div>
           </fieldset>
