@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Page speciale k4mlz pour k4millz : profil neon interactif personnalisable."
+    />
+    <title>k4mlz | k4millz</title>
+    <link rel="icon" type="image/x-icon" href="../K4M.ico" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <video id="backgroundVideo" class="background-video" autoplay loop muted playsinline></video>
+    <div id="backgroundImage" class="background-image" aria-hidden="true"></div>
+    <div id="readabilityOverlay" class="readability-overlay"></div>
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <main class="special-shell">
+      <a class="back-link" href="/">k4millz.com</a>
+
+      <section class="profile-stage" aria-label="Page speciale">
+        <div class="profile-card">
+          <p class="status-pill">k4mlz signal</p>
+          <h1 id="displayName">k4mlz</h1>
+          <p id="displayBio">
+            Bio personnalisable, liens stylés, musique et ambiance cyber pour
+            une page statique prête à publier.
+          </p>
+
+          <div id="linksPreview" class="links-preview" aria-label="Liens personnalises"></div>
+
+          <div class="music-player">
+            <button id="playPauseBtn" class="icon-button" type="button" aria-label="Lecture ou pause">
+              <span id="playPauseIcon">▶</span>
+            </button>
+            <div class="track-meta">
+              <span>Sound</span>
+              <strong id="trackLabel">Aucune musique</strong>
+            </div>
+            <input
+              id="volumeControl"
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0.55"
+              aria-label="Volume"
+            />
+          </div>
+        </div>
+      </section>
+
+      <aside class="editor-panel" aria-label="Personnalisation">
+        <div class="panel-heading">
+          <p>Local editor</p>
+          <h2>Modifier</h2>
+          <button id="resetBtn" type="button" class="ghost-button">Reset</button>
+        </div>
+
+        <form class="control-stack">
+          <fieldset>
+            <legend>Profil</legend>
+            <label>
+              Nom / pseudo
+              <input id="nameInput" type="text" maxlength="36" placeholder="k4mlz" />
+            </label>
+            <label>
+              Bio
+              <textarea id="bioInput" rows="4" maxlength="260" placeholder="Ta description..."></textarea>
+            </label>
+            <div class="split-controls">
+              <label>
+                Couleur nom
+                <input id="nameColorInput" type="color" value="#7df9ff" />
+              </label>
+              <label>
+                Taille nom
+                <input id="nameSizeInput" type="range" min="42" max="112" value="78" />
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Fond</legend>
+            <label>
+              URL video
+              <input id="videoUrlInput" type="url" placeholder="https://.../video.mp4" />
+            </label>
+            <label>
+              URL image
+              <input id="imageUrlInput" type="url" placeholder="https://.../image.jpg" />
+            </label>
+            <div class="split-controls">
+              <label>
+                Overlay
+                <input id="overlayInput" type="range" min="0" max="0.9" step="0.01" value="0.52" />
+              </label>
+              <label class="toggle-row">
+                Flou
+                <input id="blurInput" type="checkbox" />
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Musique</legend>
+            <label>
+              URL audio
+              <input id="musicUrlInput" type="url" placeholder="https://.../music.mp3" />
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Liens</legend>
+            <div class="link-builder">
+              <input id="linkTitleInput" type="text" placeholder="Titre" />
+              <input id="linkUrlInput" type="url" placeholder="https://..." />
+              <button id="addLinkBtn" type="button">Ajouter</button>
+            </div>
+            <div id="linksEditor" class="links-editor"></div>
+          </fieldset>
+        </form>
+      </aside>
+    </main>
+
+    <audio id="audioPlayer" preload="metadata"></audio>
+    <script src="script.js"></script>
+  </body>
+</html>
